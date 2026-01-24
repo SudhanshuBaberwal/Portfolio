@@ -1,0 +1,81 @@
+/* --- HERO STYLES --- */
+.hero-section {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
+  position: relative;
+}
+
+/* Hacker Text */
+.glitch-name {
+  font-family: 'Courier New', monospace; /* Monospace is best for hacker effect */
+  font-size: 5rem;
+  font-weight: 900;
+  color: #fff;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+/* Background Shapes */
+.shapes-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+.shape {
+  position: absolute;
+  background: linear-gradient(45deg, #00f2ff, #0044ff);
+  opacity: 0.3;
+  border-radius: 50%;
+  filter: blur(40px);
+}
+.shape-0 { width: 300px; height: 300px; top: 10%; left: 10%; }
+.shape-1 { width: 200px; height: 200px; bottom: 20%; right: 10%; background: #bd00ff; }
+.shape-2 { width: 100px; height: 100px; top: 50%; left: 50%; }
+
+/* Avatar Glow */
+.hero-avatar-wrapper { position: relative; perspective: 1000px; }
+.glow-effect {
+  position: absolute; width: 100%; height: 100%;
+  background: #00f2ff; filter: blur(80px); opacity: 0.4; z-index: -1;
+}
+.avatar-3d { width: 400px; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5)); }
+
+/* --- ABOUT 3D CARDS --- */
+.skill-card-3d {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 40px;
+  border-radius: 15px;
+  text-align: center;
+  margin-bottom: 20px;
+  transform-style: preserve-3d; /* Critical for 3D tilt */
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.skill-card-3d h4 { font-size: 2rem; color: #fff; margin-bottom: 5px; transform: translateZ(30px); /* Text pops out */ }
+.skill-card-3d p { color: #aaa; transform: translateZ(20px); }
+
+/* Card Colors */
+.mern-card { border-bottom: 4px solid #00f2ff; }
+.java-card { border-bottom: 4px solid #ff5e00; }
+.dsa-card { border-bottom: 4px solid #bd00ff; }
+
+/* Glare Effect */
+.glare {
+  position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+  background: linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0));
+  transform: rotate(45deg); pointer-events: none; opacity: 0; transition: opacity 0.3s;
+}
+.skill-card-3d:hover .glare { opacity: 1; }
+
+/* Timeline adjustments */
+.timeline-line {
+  background: #00f2ff;
+  width: 3px;
+  box-shadow: 0 0 20px #00f2ff;
+}
+.timeline-dot {
+  background: #000;
+  border: 2px solid #00f2ff;
+}

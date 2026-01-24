@@ -1,0 +1,185 @@
+/* --- GLOBAL SECTION SETUP --- */
+.about-section {
+  min-height: 100vh;
+  background: #050505;
+  padding: 80px 8%;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.section-header {
+  text-align: center;
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 60px;
+  letter-spacing: 2px;
+}
+
+.about-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 50px;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* --- LEFT PANEL: TIMELINE --- */
+.left-panel {
+  flex: 1;
+  position: relative;
+}
+
+.timeline-wrapper {
+  position: relative;
+  padding-left: 30px;
+  border-left: 2px solid rgba(255, 255, 255, 0.1); /* Faint guide line */
+}
+
+/* The Neon Line that animates */
+.timeline-line {
+  position: absolute;
+  left: -2px; /* Overlaps border */
+  top: 0;
+  width: 4px;
+  background: var(--neon-cyan);
+  box-shadow: 0 0 15px var(--neon-cyan);
+  height: 0%; /* Starts at 0 for animation */
+  border-radius: 2px;
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 50px;
+}
+
+/* Glowing Dots */
+.timeline-dot {
+  position: absolute;
+  left: -39px; /* Aligns with line */
+  top: 5px;
+  width: 18px;
+  height: 18px;
+  background: #050505;
+  border: 3px solid var(--neon-cyan);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--neon-cyan);
+  z-index: 2;
+}
+
+.info-content h3 {
+  color: var(--neon-cyan);
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.info-list {
+  list-style: none;
+}
+
+.info-list li {
+  margin-bottom: 8px;
+  color: #ccc;
+  font-size: 1rem;
+}
+
+.info-list span {
+  font-weight: 700;
+  color: white;
+  margin-right: 8px;
+}
+
+.role-text {
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+/* --- RIGHT PANEL: SKILL CARDS --- */
+.right-panel {
+  flex: 1.2;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.skill-card-large {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 30px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: 0.4s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Hover Effect: Neon Border & Glow */
+.skill-card-large:hover {
+  border-color: var(--neon-cyan);
+  background: rgba(0, 242, 255, 0.05);
+  transform: translateX(10px) scale(1.02);
+  box-shadow: 0 0 30px rgba(0, 242, 255, 0.15);
+}
+
+.skill-card-large h4 {
+  margin-top: 15px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: white;
+  text-align: center;
+}
+
+/* MERN Specifics */
+.card-icon-group {
+  display: flex;
+  gap: 15px;
+}
+.card-icon-group img {
+  width: 50px;
+  transition: 0.3s;
+}
+.skill-card-large:hover .card-icon-group img {
+  transform: translateY(-5px); /* Float up on hover */
+}
+
+/* Single Icon Styling (Java/DSA) */
+.main-icon {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}
+
+/* Utility to turn black logos white */
+.invert {
+  filter: invert(1);
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 968px) {
+  .about-container {
+    flex-direction: column;
+  }
+  .left-panel {
+    border-left: none;
+    padding-left: 10px;
+    margin-bottom: 40px;
+  }
+  .timeline-line { display: none; } /* Hide line on mobile for simpler look */
+  .timeline-dot { display: none; }
+  .timeline-wrapper { border: none; padding: 0; }
+  
+  .right-panel {
+    width: 100%;
+  }
+}
