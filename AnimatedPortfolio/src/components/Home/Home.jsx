@@ -1,5 +1,6 @@
-import React, { useEffect, useRef } from "react";
-import { gsap } from "gsap";
+import React, { useRef } from "react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 import "./Home.css";
 
 // Reliable 3D Avatar (Microsoft Fluent Emoji)
@@ -9,8 +10,11 @@ const Home = () => {
   const bgTextRef = useRef(null);
   const avatarRef = useRef(null);
   const contentRef = useRef(null);
+  const sliderRef = useRef(null);
 
-  useEffect(() => {
+  const techStack = ["React", "Next.js", "JavaScript", "GSAP", "Tailwind", "Node.js", "MongoDB", "TypeScript", "Python", "Framer Motion"];
+
+  useGSAP(() => {
     const tl = gsap.timeline();
 
     // 1. Entrance Animation
@@ -18,16 +22,23 @@ const Home = () => {
       .fromTo(avatarRef.current, { x: 100, opacity: 0 }, { x: 0, opacity: 1, duration: 1.2, ease: "power3.out" }, "-=1")
       .fromTo(contentRef.current.children, { y: 30, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.1, duration: 0.8 }, "-=0.8");
 
-    // 2. Parallax Mouse Move Effect
+    // 2. Infinite Marquee Animation
+    const slider = sliderRef.current;
+    // We animate to -50% because the list is doubled in the JSX
+    gsap.to(slider, {
+      xPercent: -50,
+      repeat: -1,
+      duration: 25,
+      ease: "none",
+    });
+
+    // 3. Parallax Mouse Move Effect
     const handleMouseMove = (e) => {
       const { innerWidth, innerHeight } = window;
-      const x = (e.clientX / innerWidth - 0.5) * 2; // -1 to 1
+      const x = (e.clientX / innerWidth - 0.5) * 2;
       const y = (e.clientY / innerHeight - 0.5) * 2;
 
-      // Move Background Text (Slowly)
       gsap.to(bgTextRef.current, { x: x * 20, y: y * 20, duration: 1 });
-      
-      // Move Avatar (Medium speed + rotation)
       gsap.to(avatarRef.current, { 
         x: x * -30, 
         y: y * -30, 
@@ -35,8 +46,6 @@ const Home = () => {
         rotationX: -y * 10,
         duration: 0.6 
       });
-
-      // Move Text Content (Fastest)
       gsap.to(contentRef.current, { x: x * -10, y: y * -10, duration: 1 });
     };
 
@@ -48,6 +57,18 @@ const Home = () => {
     <section className="hero">
       {/* 1. Background Giant Text */}
       <div className="bg-text" ref={bgTextRef}>DEVELOPER</div>
+
+      {/* --- Continuous Tech Stack Slider --- */}
+      <div className="tech-slider-wrapper">
+        <div className="tech-slider" ref={sliderRef}>
+          {/* Mapping twice creates the seamless "endless" effect */}
+          {[...techStack, ...techStack].map((tech, index) => (
+            <div key={index} className="tech-item">
+              <span className="dot">•</span> {tech}
+            </div>
+          ))}
+        </div>
+      </div>
 
       <div className="hero-container">
         {/* 2. Left Content */}
@@ -75,7 +96,6 @@ const Home = () => {
           <div className="glow-circle"></div>
           <img src={avatarImg} alt="3D Avatar" className="hero-img" />
 
-          {/* Floating Glass Cards */}
           <div className="float-card card-1">
             <span className="emoji">⚛️</span> React
           </div>

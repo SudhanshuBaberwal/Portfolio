@@ -1,146 +1,380 @@
-.projects-section {
-  background: #050505;
-  padding: 100px 8%;
+/* --- VARIABLES --- */
+:root {
+  --neon-cyan: #00f2ff;
+  --bg-dark: #050505;
+  --text-gray: #a8a8a8;
+  --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+/* --- MAIN CONTAINER SETUP --- */
+.projects-container-main {
+  background: var(--bg-dark);
+  overflow: hidden; /* Critical for horizontal scroll */
   position: relative;
+  min-height: 100vh;
 }
 
-/* --- GRID LAYOUT --- */
-.projects-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 40px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-/* --- THE CARD --- */
-.project-card {
-  background: rgba(255, 255, 255, 0.03); /* Glass dark */
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
-  overflow: hidden;
-  transition: 0.4s ease;
+.scroll-trigger-wrapper {
   position: relative;
-  /* Glow effect on hover */
-}
-
-.project-card:hover {
-  transform: translateY(-10px);
-  border-color: var(--neon-cyan);
-  box-shadow: 0 10px 40px rgba(0, 242, 255, 0.15);
-}
-
-/* --- IMAGE AREA --- */
-.card-image {
-  height: 220px;
+  height: 100vh; 
   width: 100%;
-  position: relative;
-  overflow: hidden;
 }
 
-.card-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: 0.5s ease;
-}
-
-.project-card:hover .card-image img {
-  transform: scale(1.1); /* Slight Zoom on hover */
-}
-
-/* Overlay that appears on hover */
-.card-overlay {
+/* --- HEADER SECTION --- */
+.projects-header {
   position: absolute;
-  top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(3px);
+  top: 40px;
+  left: 8%;
+  z-index: 10;
+}
+
+.projects-header h2 {
+  font-size: clamp(2rem, 4vw, 3rem); /* Responsive font size */
+  font-weight: 800;
+  color: white;
+  letter-spacing: 2px;
+}
+
+.projects-header p {
+  color: var(--neon-cyan);
+  font-family: monospace;
+  margin-top: 5px;
+  font-size: 0.9rem;
+}
+
+/* --- NAVIGATION BAR (DESKTOP) --- */
+.project-nav-bar {
+  position: absolute;
+  top: 150px; /* Positioned below Header, above Projects */
+  left: 8%;
+  width: 84%; /* Aligns with page padding */
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-items-container {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.nav-item {
+  flex: 1;
+  text-align: center;
+  color: #555;
+  font-family: monospace;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.nav-item:hover {
+  color: #fff;
+}
+
+/* Active State for Nav Items */
+.nav-item.active {
+  color: var(--neon-cyan);
+  text-shadow: 0 0 10px rgba(0, 242, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+.nav-number {
+  font-size: 0.8rem;
+  opacity: 0.6;
+}
+
+.nav-title {
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* The Background Line */
+.nav-line-bg {
+  width: 100%;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  position: relative;
+  border-radius: 2px;
+}
+
+/* The Moving Neon Line Indicator */
+.nav-line-active {
+  height: 100%;
+  background: var(--neon-cyan);
+  box-shadow: 0 0 15px var(--neon-cyan);
+  position: absolute;
+  top: 0;
+  left: 0;
+  /* Smooth slide animation when index changes */
+  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); 
+  border-radius: 2px;
+}
+
+/* --- HORIZONTAL SCROLL AREA --- */
+.scroll-section-inner {
+  display: flex;
+  height: 100vh;
+  /* Width = 100vw * Number of Projects (4) */
+  width: 400vw; 
+  will-change: transform;
+}
+
+.project-panel {
+  width: 100vw;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  opacity: 0;
-  transition: 0.4s ease;
+  padding: 0 5%;
+  position: relative;
 }
 
-.project-card:hover .card-overlay {
-  opacity: 1;
+/* Grid Background Pattern */
+.project-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  z-index: 0;
+  pointer-events: none;
 }
 
-/* --- BUTTONS --- */
-.card-actions {
+/* --- PROJECT CONTENT LAYOUT --- */
+.project-content-container {
   display: flex;
-  gap: 15px;
-  transform: translateY(20px);
-  transition: 0.4s ease;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1300px;
+  gap: 60px;
+  z-index: 2;
+  margin-top: 80px; /* Offset for the header/nav bar */
 }
 
-.project-card:hover .card-actions {
-  transform: translateY(0);
+/* Left Side: Text Info */
+.project-info {
+  flex: 1;
+  position: relative;
 }
 
-.btn-view, .btn-github {
-  padding: 10px 20px;
+/* Huge Background Number (01, 02...) */
+.project-id {
+  position: absolute;
+  top: -100px;
+  left: -40px;
+  font-size: 12rem;
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.02);
+  z-index: -1;
+  pointer-events: none;
+  user-select: none;
+}
+
+.project-category {
+  color: var(--neon-cyan);
   font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin-bottom: 10px;
   font-weight: 600;
+}
+
+.project-info h3 {
+  font-size: 3rem;
+  font-weight: 700;
+  color: white;
+  line-height: 1.1;
+  margin-bottom: 20px;
+}
+
+.project-info p {
+  color: var(--text-gray);
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 30px;
+  max-width: 480px;
+}
+
+/* Tech Stack Tags */
+.tech-stack-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 35px;
+  flex-wrap: wrap;
+}
+
+.tech-tag {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
+  padding: 8px 16px;
   border-radius: 50px;
+  color: #ddd;
+  font-size: 0.85rem;
+  transition: 0.3s;
+}
+
+.tech-tag:hover {
+  border-color: var(--neon-cyan);
+  color: var(--neon-cyan);
+  box-shadow: 0 0 10px rgba(0, 242, 255, 0.1);
+}
+
+/* Buttons */
+.project-links {
+  display: flex;
+  gap: 20px;
+}
+
+.btn-main {
+  background: var(--neon-cyan);
+  color: #000;
+  padding: 12px 30px;
+  font-weight: 700;
+  border-radius: 30px;
+  text-decoration: none;
+  transition: 0.3s;
+  box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
+}
+
+.btn-main:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 25px rgba(0, 242, 255, 0.4);
+}
+
+.btn-outline {
+  background: transparent;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 12px 30px;
+  font-weight: 600;
+  border-radius: 30px;
   text-decoration: none;
   transition: 0.3s;
 }
 
-.btn-view {
-  background: var(--neon-cyan);
-  color: black;
-  box-shadow: 0 0 15px var(--neon-cyan);
-}
-
-.btn-github {
-  background: transparent;
-  border: 1px solid white;
-  color: white;
-}
-
-.btn-github:hover {
+.btn-outline:hover {
   background: white;
   color: black;
+  border-color: white;
 }
 
-/* --- CONTENT AREA --- */
-.card-content {
-  padding: 25px;
+/* --- RIGHT SIDE: VISUAL & 3D TILT --- */
+.project-visual {
+  flex: 1.3;
+  height: 450px;
+  perspective: 1000px;
 }
 
-.card-content h3 {
-  color: white;
-  font-size: 1.5rem;
-  margin-bottom: 10px;
-}
-
-.card-content p {
-  color: #aaa;
-  font-size: 0.95rem;
-  line-height: 1.6;
-  margin-bottom: 20px;
-}
-
-/* Tech Stack Pills */
-.tech-stack {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.tech-pill {
-  font-size: 0.8rem;
-  padding: 5px 12px;
-  background: rgba(255, 255, 255, 0.05);
-  color: var(--neon-cyan);
-  border: 1px solid rgba(0, 242, 255, 0.2);
+.image-wrapper {
+  width: 100%;
+  height: 100%;
   border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid var(--glass-border);
+  /* The Default Tilt */
+  transform: rotateY(-10deg) rotateX(5deg);
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.3s;
+  box-shadow: -20px 20px 50px rgba(0,0,0,0.5);
+  position: relative;
 }
 
-/* --- RESPONSIVE --- */
+/* Straighten on Hover */
+.project-visual:hover .image-wrapper {
+  transform: rotateY(0deg) rotateX(0deg);
+  border-color: var(--neon-cyan);
+}
+
+.image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s ease;
+}
+
+.project-visual:hover img {
+  transform: scale(1.05); /* Slight internal zoom */
+}
+
+/* --- MOBILE RESPONSIVE STYLES (Max-Width 768px) --- */
 @media (max-width: 768px) {
-  .projects-grid {
-    grid-template-columns: 1fr;
+  
+  /* 1. Reset Container Heights */
+  .scroll-trigger-wrapper {
+    height: auto;
+    width: 100%;
+    padding-top: 100px;
+  }
+
+  /* 2. Hide Navigation Bar on Mobile */
+  .project-nav-bar {
+    display: none;
+  }
+
+  /* 3. Stack Projects Vertically */
+  .scroll-section-inner {
+    flex-direction: column;
+    width: 100%; /* Reset from 400vw */
+    height: auto;
+    gap: 80px;
+    padding-bottom: 60px;
+  }
+
+  .project-panel {
+    width: 100%;
+    height: auto;
+    padding: 0 20px;
+  }
+
+  /* 4. Adjust Header */
+  .projects-header {
+    position: relative;
+    top: 0;
+    left: 0;
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 0 20px;
+  }
+
+  /* 5. Reorder Content (Image Top, Text Bottom) */
+  .project-content-container {
+    flex-direction: column-reverse;
+    margin-top: 0;
+    gap: 30px;
+  }
+
+  /* 6. Text Adjustments */
+  .project-info {
+    text-align: center;
+    width: 100%;
+  }
+
+  .project-id { display: none; } /* Hide big background numbers */
+
+  .project-info h3 { font-size: 2rem; }
+
+  .tech-stack-row { justify-content: center; }
+  .project-links { justify-content: center; }
+
+  /* 7. Visual Adjustments */
+  .project-visual {
+    width: 100%;
+    height: 250px; /* Shorter image height */
+    flex: none;
+  }
+
+  .image-wrapper {
+    transform: none !important; /* Remove 3D effect on mobile */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
   }
 }

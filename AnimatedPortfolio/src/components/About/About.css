@@ -1,30 +1,60 @@
-/* --- GLOBAL SECTION SETUP --- */
+/* --- VARIABLES --- */
+:root {
+  --neon-cyan: #00f2ff;
+  --bg-dark: #050505;
+  --card-bg: rgba(255, 255, 255, 0.03);
+  --text-gray: #a8a8a8;
+}
+
+/* --- SECTION SETUP --- */
 .about-section {
   min-height: 100vh;
-  background: #050505;
-  padding: 80px 8%;
+  background: radial-gradient(circle at 50% 50%, #111 0%, var(--bg-dark) 100%);
+  padding: 100px 8%;
   color: white;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Background Grid Pattern */
+.about-section::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 50px 50px;
+  z-index: 0;
+  pointer-events: none;
 }
 
 .section-header {
   text-align: center;
-  font-size: 3rem;
+  font-size: clamp(2.5rem, 5vw, 4rem);
   font-weight: 800;
   margin-bottom: 60px;
-  letter-spacing: 2px;
+  letter-spacing: 4px;
+  z-index: 1;
+}
+
+.highlight {
+  color: var(--neon-cyan);
+  text-shadow: 0 0 15px rgba(0, 242, 255, 0.3);
 }
 
 .about-container {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 50px;
-  max-width: 1200px;
+  gap: 60px;
+  max-width: 1250px;
   margin: 0 auto;
   width: 100%;
+  z-index: 2;
 }
 
 /* --- LEFT PANEL: TIMELINE --- */
@@ -35,151 +65,305 @@
 
 .timeline-wrapper {
   position: relative;
-  padding-left: 30px;
-  border-left: 2px solid rgba(255, 255, 255, 0.1); /* Faint guide line */
+  padding-left: 40px;
+  min-height: 400px;
 }
 
-/* The Neon Line that animates */
-.timeline-line {
+/* Static faint background line */
+.timeline-wrapper::before {
+  content: "";
   position: absolute;
-  left: -2px; /* Overlaps border */
+  left: 0;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* The actual glowing line that GSAP animates */
+.timeline-line-glow {
+  position: absolute;
+  left: -1px;
   top: 0;
   width: 4px;
   background: var(--neon-cyan);
-  box-shadow: 0 0 15px var(--neon-cyan);
-  height: 0%; /* Starts at 0 for animation */
-  border-radius: 2px;
+  box-shadow:
+    0 0 20px var(--neon-cyan),
+    0 0 40px var(--neon-cyan);
+  border-radius: 10px;
+  z-index: 2;
+  transform-origin: top;
+  height: 0;
+  /* Animated by ScrollTrigger */
 }
 
 .timeline-item {
   position: relative;
-  margin-bottom: 50px;
+  padding-bottom: 60px;
 }
 
-/* Glowing Dots */
 .timeline-dot {
   position: absolute;
-  left: -39px; /* Aligns with line */
-  top: 5px;
-  width: 18px;
-  height: 18px;
-  background: #050505;
+  left: -49px;
+  top: 8px;
+  width: 20px;
+  height: 20px;
+  background: var(--bg-dark);
   border: 3px solid var(--neon-cyan);
   border-radius: 50%;
-  box-shadow: 0 0 10px var(--neon-cyan);
-  z-index: 2;
+  box-shadow: 0 0 15px var(--neon-cyan);
+  z-index: 3;
 }
 
 .info-content h3 {
   color: var(--neon-cyan);
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   margin-bottom: 15px;
   text-transform: uppercase;
-  letter-spacing: 1px;
 }
 
-.info-list {
-  list-style: none;
-}
-
-.info-list li {
+.info-content p {
+  font-size: 1.1rem;
+  color: var(--text-gray);
   margin-bottom: 8px;
-  color: #ccc;
-  font-size: 1rem;
 }
 
-.info-list span {
-  font-weight: 700;
+.info-content b {
   color: white;
-  margin-right: 8px;
+  margin-right: 10px;
 }
 
-.role-text {
-  font-size: 1.2rem;
-  font-weight: 700;
-  line-height: 1.4;
-}
-
-/* --- RIGHT PANEL: SKILL CARDS --- */
+/* --- RIGHT PANEL: SKILLS GRID --- */
 .right-panel {
-  flex: 1.2;
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
+  flex: 1.5;
 }
 
-.skill-card-large {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 30px;
-  border-radius: 12px;
+.right-panel h3 {
+  margin-bottom: 30px;
+  font-size: 1.8rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 20px;
+}
+
+/* --- 3D TECH CARD ANIMATION --- */
+.tech-card {
+  height: 120px;
+  perspective: 1000px;
+  /* GSAP will handle initial entrance opacity and Y position */
+}
+
+.tech-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  /* Use a transition that matches the GSAP 'pop' feel */
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+  /* Remove the infinite float animation temporarily to test if flip works */
+  /* animation: cardFloat 6s ease-in-out infinite; */
+}
+
+.tech-card:hover .tech-card-inner {
+  /* The !important ensures this overrides GSAP's inline transforms */
+  transform: rotateY(180deg) !important;
+}
+
+.tech-front,
+.tech-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  /* Critical for 3D flipping */
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  transition: 0.4s ease;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
 }
 
-/* Hover Effect: Neon Border & Glow */
-.skill-card-large:hover {
+.tech-back {
+  background: rgba(0, 242, 255, 0.08);
   border-color: var(--neon-cyan);
-  background: rgba(0, 242, 255, 0.05);
-  transform: translateX(10px) scale(1.02);
-  box-shadow: 0 0 30px rgba(0, 242, 255, 0.15);
+  /* The back side starts rotated */
+  transform: rotateY(180deg);
 }
 
-.skill-card-large h4 {
-  margin-top: 15px;
-  font-size: 1.2rem;
-  font-weight: 700;
-  letter-spacing: 1px;
-  color: white;
-  text-align: center;
+@keyframes cardFloat {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
 }
 
-/* MERN Specifics */
-.card-icon-group {
+.tech-card:hover .tech-card-inner {
+  transform: rotateY(180deg);
+  animation-play-state: paused;
+  /* Stop floating on interaction */
+}
+
+.tech-front,
+.tech-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
   display: flex;
-  gap: 15px;
-}
-.card-icon-group img {
-  width: 50px;
-  transition: 0.3s;
-}
-.skill-card-large:hover .card-icon-group img {
-  transform: translateY(-5px); /* Float up on hover */
+  align-items: center;
+  justify-content: center;
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
 }
 
-/* Single Icon Styling (Java/DSA) */
-.main-icon {
+.tech-front span {
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.95rem;
+  letter-spacing: 1px;
+  color: #ddd;
+}
+
+.tech-back {
+  background: rgba(0, 242, 255, 0.08);
+  border-color: var(--neon-cyan);
+  transform: rotateY(180deg);
+}
+
+.tech-back img {
   width: 60px;
   height: 60px;
   object-fit: contain;
 }
 
-/* Utility to turn black logos white */
+/* Hover Glow Effect */
+.tech-card:hover .tech-back {
+  box-shadow: 0 0 25px rgba(0, 242, 255, 0.3);
+}
+
+/* --- BACKGROUND ORBS --- */
+.bg-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.15;
+}
+
+.orb-1 {
+  width: 600px;
+  height: 600px;
+  background: var(--neon-cyan);
+  top: -10%;
+  right: -10%;
+}
+
+.orb-2 {
+  width: 500px;
+  height: 500px;
+  background: #7000ff;
+  bottom: -10%;
+  left: -5%;
+}
+
+/* --- UTILS --- */
 .invert {
-  filter: invert(1);
+  filter: invert(1) brightness(1.5);
 }
 
 /* --- RESPONSIVE --- */
 @media (max-width: 968px) {
   .about-container {
     flex-direction: column;
+    gap: 50px;
   }
+
   .left-panel {
-    border-left: none;
-    padding-left: 10px;
-    margin-bottom: 40px;
-  }
-  .timeline-line { display: none; } /* Hide line on mobile for simpler look */
-  .timeline-dot { display: none; }
-  .timeline-wrapper { border: none; padding: 0; }
-  
-  .right-panel {
     width: 100%;
+  }
+
+  .skills-grid {
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  }
+}
+/* --- MERN SPECIAL CARD (NO FLIP) --- */
+
+.mern-special-card {
+  grid-column: span 4; 
+  height: 120px;
+  position: relative;
+}
+
+/* Disable the 3D flip for this card specifically */
+.mern-special-card:hover .tech-card-inner {
+  transform: none !important; 
+}
+
+/* Hide the back face (logos) by default */
+.mern-special-card .tech-back {
+  transform: rotateY(0deg); /* Reset the 180deg rotation */
+  opacity: 0;
+  background: rgba(0, 242, 255, 0.1);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  pointer-events: none;
+  display: flex;
+  justify-content: space-around;
+  padding: 0 40px;
+}
+
+/* On hover: Hide front text and show back logos */
+.mern-special-card:hover .tech-front {
+  opacity: 0;
+  transform: scale(0.9);
+  transition: 0.3s ease;
+}
+
+.mern-special-card:hover .tech-back {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+}
+
+/* Logo container styling */
+.mern-logos-container {
+  display: flex;
+  gap: 30px;
+  align-items: center;
+}
+
+.mern-logos-container img {
+  width: 60px;
+  height: 60px;
+  transition: transform 0.3s ease;
+}
+
+.mern-logos-container img:hover {
+  transform: scale(1.2);
+  filter: drop-shadow(0 0 10px var(--neon-cyan));
+}
+
+/* RESPONSIVE: Adjust span so it doesn't break the grid */
+@media (max-width: 1024px) {
+  .mern-special-card {
+    grid-column: span 2;
+  }
+  .mern-logos-container {
+    gap: 15px;
   }
 }

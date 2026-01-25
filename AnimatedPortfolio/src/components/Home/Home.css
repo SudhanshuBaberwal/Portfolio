@@ -1,34 +1,89 @@
+/* --- NEW: Tech Slider Section --- */
+.tech-slider-wrapper {
+  position: absolute;
+  top: 100px; /* Positioned below your navbar */
+  width: 100%;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.03); 
+  padding: 15px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  white-space: nowrap;
+  z-index: 10; /* Ensure it stays above background text */
+}
+
+.tech-slider {
+  display: inline-flex;
+  gap: 50px;
+  will-change: transform; /* Optimization for GSAP */
+}
+
+.tech-item {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.tech-item .dot {
+  color: #00f2ff; /* Using your neon cyan color */
+  font-size: 1.5rem;
+}
+
+/* --- EXISTING DESIGN (UNTOUCHED) --- */
+:root {
+  --neon-cyan: #00f2ff;
+  --text-gray: #a8a8a8;
+}
+
 .hero {
-  height: 100vh; width: 100%; position: relative;
-  display: flex; align-items: center; justify-content: center;
+  height: 100vh; 
+  width: 100%; 
+  position: relative;
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
   overflow: hidden;
   background: radial-gradient(circle at 60% 50%, #111 0%, #000 85%);
 }
 
-/* Giant Background Text */
 .bg-text {
-  position: absolute; top: 50%; left: 50%;
+  position: absolute; 
+  top: 50%; 
+  left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 18vw; font-weight: 900;
-  color: white; opacity: 0.05; z-index: 0;
-  white-space: nowrap; pointer-events: none; user-select: none;
+  font-size: 18vw; 
+  font-weight: 900;
+  color: white; 
+  opacity: 0.05; 
+  z-index: 0;
+  white-space: nowrap; 
+  pointer-events: none; 
+  user-select: none;
 }
 
 .hero-container {
-  display: flex; justify-content: space-between; align-items: center;
-  width: 85%; max-width: 1200px; z-index: 2;
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center;
+  width: 85%; 
+  max-width: 1200px; 
+  z-index: 2;
+  margin-top: 80px; /* Offset to prevent overlap with slider */
 }
 
-/* Left Content */
 .hero-content { flex: 1; max-width: 600px; }
 .hero-content h3 { color: var(--neon-cyan); font-size: 1.2rem; letter-spacing: 3px; margin-bottom: 10px; }
-.hero-content h1 { font-size: 4.5rem; font-weight: 800; line-height: 1; margin-bottom: 25px; }
-.stroke-text { color: transparent; -webkit-text-stroke: 2px white; } /* Outline effect */
+.hero-content h1 { font-size: 4.5rem; font-weight: 800; line-height: 1; margin-bottom: 25px; color: white; }
+.stroke-text { color: transparent; -webkit-text-stroke: 2px white; }
 
 .hero-content p { color: var(--text-gray); font-size: 1.1rem; line-height: 1.6; margin-bottom: 40px; max-width: 450px; }
 .hero-content b { color: white; }
 
-/* Buttons */
 .btn-group { display: flex; gap: 20px; margin-bottom: 40px; }
 .btn-primary {
   padding: 15px 35px; background: var(--neon-cyan); color: black; border: none;
@@ -43,44 +98,38 @@
 }
 .btn-secondary:hover { border-color: var(--neon-cyan); color: var(--neon-cyan); }
 
-/* Stats */
-.stats { display: flex; gap: 50px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 25px; }
+.stats { display: flex; gap: 50px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 25px; color: white; }
 .stats h4 { font-size: 2rem; margin: 0; }
 .stats span { color: #666; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
 
-/* Right Avatar Wrapper */
 .hero-image-wrapper {
   flex: 1; display: flex; justify-content: center; position: relative;
-  perspective: 1000px; /* Essential for 3D rotation */
+  perspective: 1000px;
 }
 
 .hero-img { width: 100%; max-width: 500px; filter: drop-shadow(0 30px 50px rgba(0,0,0,0.6)); position: relative; z-index: 2; }
 
-/* Glow Behind */
 .glow-circle {
   position: absolute; width: 400px; height: 400px;
   background: var(--neon-cyan); filter: blur(120px); opacity: 0.2;
   border-radius: 50%; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1;
 }
 
-/* Floating Glass Cards */
 .float-card {
   position: absolute;
   background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px);
   padding: 12px 25px; border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   display: flex; align-items: center; gap: 10px;
-  font-weight: 600; font-size: 0.9rem;
+  font-weight: 600; font-size: 0.9rem; color: white;
   box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 3;
   animation: float 5s ease-in-out infinite;
 }
-.emoji { font-size: 1.2rem; }
 .card-1 { top: 20%; left: 0; animation-delay: 0s; }
 .card-2 { bottom: 20%; right: 5%; animation-delay: 2.5s; }
 
 @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
 
-/* Scroll Down Indicator */
 .scroll-down {
   position: absolute; bottom: 40px; display: flex; flex-direction: column; align-items: center; gap: 10px;
   color: #666; font-size: 0.8rem; letter-spacing: 2px;
@@ -93,12 +142,12 @@
 
 @keyframes scroll { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(20px); } }
 
-/* Responsive */
 @media (max-width: 968px) {
-  .hero-container { flex-direction: column-reverse; text-align: center; }
+  .hero-container { flex-direction: column-reverse; text-align: center; margin-top: 140px; }
   .bg-text { font-size: 25vw; top: 20%; }
   .hero-content h1 { font-size: 3rem; }
   .hero-img { max-width: 300px; margin-bottom: 30px; }
   .btn-group, .stats { justify-content: center; }
-  .float-card { display: none; } /* Hide floating cards on mobile to save space */
+  .float-card { display: none; }
+  .tech-slider-wrapper { top: 70px; } /* Adjust for mobile nav height */
 }
