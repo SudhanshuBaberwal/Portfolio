@@ -1,37 +1,194 @@
+/* --- VARIABLES --- */
+:root {
+  --neon-cyan: #00f2ff;
+  --bg-dark: #050505;
+  --glass-nav: rgba(5, 5, 5, 0.7);
+}
+
+/* --- NAVBAR CONTAINER --- */
 .navbar {
-  position: fixed; top: 0; width: 100%; padding: 25px 8%;
-  display: flex; justify-content: space-between; align-items: center;
-  z-index: 1000; transition: 0.4s ease;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  padding: 30px 8%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000;
+  transition: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  border-bottom: 1px solid transparent;
 }
+
+/* Scrolled State: Glass Effect */
 .navbar.scrolled {
-  background: rgba(5, 5, 5, 0.85); backdrop-filter: blur(15px);
-  padding: 15px 8%; border-bottom: 1px solid var(--glass-border);
+  background: var(--glass-nav);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  padding: 15px 8%;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
-.logo { font-size: 1.8rem; font-weight: 800; letter-spacing: 1px; }
-.dot { color: var(--neon-cyan); }
 
-.nav-links { list-style: none; display: flex; gap: 40px; align-items: center; }
-.nav-links a { text-decoration: none; color: #ccc; font-weight: 500; transition: 0.3s; }
-.nav-links a:hover { color: white; text-shadow: 0 0 10px var(--neon-cyan); }
-
-.contact-btn {
-  padding: 10px 24px; border: 1px solid var(--neon-cyan);
-  color: var(--neon-cyan) !important; border-radius: 4px;
+/* --- LOGO --- */
+.logo {
+  font-size: 1.8rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: white;
+  position: relative;
+  cursor: pointer;
+  z-index: 1001; /* Above mobile menu */
 }
-.contact-btn:hover { background: var(--neon-cyan); color: black !important; box-shadow: 0 0 20px rgba(0,242,255,0.4); }
 
-.hamburger { display: none; cursor: pointer; flex-direction: column; gap: 6px; }
-.bar { width: 25px; height: 2px; background: white; transition: 0.3s; }
+.dot {
+  color: var(--neon-cyan);
+  text-shadow: 0 0 10px var(--neon-cyan);
+}
 
+/* --- LINKS --- */
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 50px;
+  align-items: center;
+}
+
+.nav-links li {
+  position: relative;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #ccc;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: 0.3s;
+  position: relative;
+  display: inline-block;
+  padding: 5px 0;
+}
+
+/* Holographic Hover Effect */
+.nav-links a:not(.contact-btn-cyber):hover {
+  color: white;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+/* The Glowing Underline */
+.nav-links a:not(.contact-btn-cyber)::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background: var(--neon-cyan);
+  box-shadow: 0 0 10px var(--neon-cyan);
+  transition: width 0.3s ease;
+}
+
+.nav-links a:not(.contact-btn-cyber):hover::after {
+  width: 100%;
+}
+
+/* --- CYBER BUTTON (Let's Talk) --- */
+.contact-btn-cyber {
+  position: relative;
+  padding: 10px 25px;
+  background: transparent;
+  color: var(--neon-cyan);
+  border: 1px solid var(--neon-cyan);
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  transition: 0.4s;
+  /* Angled Corner Cut (Cyberpunk Style) */
+  clip-path: polygon(0 0, 100% 0, 100% 70%, 90% 100%, 0 100%);
+}
+
+.contact-btn-cyber:hover {
+  background: rgba(0, 242, 255, 0.1);
+  box-shadow: 0 0 20px rgba(0, 242, 255, 0.2);
+  transform: translateY(-2px);
+  color: white;
+}
+
+/* --- SCROLL PROGRESS BAR --- */
+.scroll-progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background: var(--neon-cyan);
+  width: 100%;
+  transform-origin: left;
+  transform: scaleX(0); /* Starts at 0 */
+  box-shadow: 0 0 10px var(--neon-cyan);
+  transition: transform 0.1s linear; /* Smooth but instant */
+}
+
+/* --- HAMBURGER MENU --- */
+.hamburger {
+  display: none;
+  cursor: pointer;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 1001;
+}
+
+.bar {
+  width: 30px;
+  height: 2px;
+  background: white;
+  transition: 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+/* Mobile Close "X" (Hidden on desktop) */
+.mobile-close { display: none; }
+
+/* --- RESPONSIVE DESIGN --- */
 @media (max-width: 768px) {
   .hamburger { display: flex; }
+
   .nav-links {
-    position: absolute; top: 0; right: 0; height: 100vh; width: 70%;
-    background: black; flex-direction: column; justify-content: center;
-    transform: translateX(100%); transition: 0.4s;
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: 100%; /* Full width for immersive feel */
+    background: rgba(5, 5, 5, 0.98);
+    backdrop-filter: blur(20px);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    transform: translateY(-100%); /* Slide from top */
+    transition: 0.5s cubic-bezier(0.65, 0, 0.35, 1);
+    z-index: 1000;
   }
-  .nav-links.active { transform: translateX(0); }
-  .bar.open:nth-child(1) { transform: rotate(45deg) translate(5px, 6px); }
+
+  .nav-links.active {
+    transform: translateY(0);
+  }
+
+  .nav-links a {
+    font-size: 2rem; /* Big text for mobile */
+    font-weight: 700;
+  }
+
+  /* Hamburger Animation */
+  .bar.open:nth-child(1) { transform: rotate(45deg) translate(5px, 6px); background: var(--neon-cyan); }
   .bar.open:nth-child(2) { opacity: 0; }
-  .bar.open:nth-child(3) { transform: rotate(-45deg) translate(5px, -6px); }
+  .bar.open:nth-child(3) { transform: rotate(-45deg) translate(5px, -6px); background: var(--neon-cyan); }
+  
+  /* Show close button inside menu */
+  .mobile-close {
+    display: block;
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    font-size: 2rem;
+    color: #666;
+    cursor: pointer;
+  }
 }
