@@ -11,70 +11,9 @@ const About = () => {
   const containerRef = useRef();
   const lineRef = useRef();
 
-  const skills = [
-    {
-      name : "PYTHON",
-      icon : "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/3840px-Python-logo-notext.svg.png"
-    },
-    {
-      name : "HTML",
-      icon : "https://cdn.worldvectorlogo.com/logos/html-1.svg"
-    },
-    {
-      name : "CSS",
-      icon : "https://ultimatecourses.com/assets/category/css-fcba6b473cb1125595dc28163be24eb673907258b5f6f6c82967a0587a9df20c.svg"
-    },
-    {
-      name : "Java Script",
-      icon : "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg"
-    },
-    {
-      name: "Type Script",
-      icon: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmOm4u60oQR6t9DM-jorQugVTthmHLc_ae_g&s",
-    },
-    {
-      name : "React",
-      icon : "https://cdn.worldvectorlogo.com/logos/html-1.svg"
-    },
-    {
-      name: "Node.js",
-      icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",
-    },
-    {
-      name: "Express",
-      icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg",
-      invert: true,
-    },
-    {
-      name: "MongoDB",
-      icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg",
-    },
-    {
-      name: "Java",
-      icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg",
-    },
-    {
-      name: "Next.js",
-      icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg",
-      invert: true,
-    },
-    {
-      name: "Tailwind",
-      icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg",
-    },
-    {
-      name: "GSAP",
-      icon: "https://gsap.com/community/uploads/monthly_2020_03/tweenmax.png.cf27916e926fbb328ff214f66b4c8429.png",
-    },
-    {
-      name : "DOCKER",
-      icon : "https://brandlogos.net/wp-content/uploads/2025/10/docker_mark-logo_brandlogos.net_yetav.png"
-    },
-  ];
-
   useGSAP(
     () => {
-      // 1. Timeline Line Drawing Animation
+      // Timeline Line Drawing Animation
       gsap.fromTo(
         lineRef.current,
         { height: 0, opacity: 0 },
@@ -86,26 +25,12 @@ const About = () => {
             trigger: ".timeline-wrapper",
             start: "top 70%",
             end: "bottom 70%",
-            scrub: 1, // Smoothly ties animation to scroll
+            scrub: 1,
           },
-        },
+        }
       );
-
-      // 2. Skills Grid Staggered Entrance
-      gsap.from(".tech-card", {
-        y: 50,
-        opacity: 0,
-        scale: 0.8,
-        duration: 0.8,
-        stagger: 0.1, // Cards pop in one by one
-        ease: "back.out(1.7)",
-        scrollTrigger: {
-          trigger: ".skills-grid",
-          start: "top 85%",
-        },
-      });
     },
-    { scope: containerRef },
+    { scope: containerRef }
   );
 
   return (
@@ -120,21 +45,18 @@ const About = () => {
       </Reveal>
 
       <div className="about-container">
+        
+        {/* LEFT PANEL: TIMELINE */}
         <div className="left-panel">
           <div className="timeline-wrapper">
-            {/* The Glowing Animated Line */}
             <div className="timeline-line-glow" ref={lineRef}></div>
 
             <div className="timeline-item">
               <div className="timeline-dot"></div>
               <div className="info-content">
                 <h3>Personal Info</h3>
-                <p>
-                  <b>Name:</b> Sudhanshu Baberwal
-                </p>
-                <p>
-                  <b>Age:</b> 20 Years
-                </p>
+                <p><b>Name:</b> Sudhanshu Baberwal</p>
+                <p><b>Location:</b> India</p>
               </div>
             </div>
 
@@ -142,87 +64,68 @@ const About = () => {
               <div className="timeline-dot"></div>
               <div className="info-content">
                 <h3>Education</h3>
-                <p>
-                  <b>Degree:</b> B.Tech (CSE)
-                </p>
-                <p>
-                  <b>
-                    Collage: Indian Institute Of Information Technology Dharwad
-                  </b>
-                </p>
-                <p>
-                  <b>CGPA:</b> 7.5
-                </p>
+                <p><b>Degree:</b> B.Tech (CSE)</p>
+                <p><b>College:</b> IIIT Dharwad</p>
+                <p><b>CGPA:</b> 7.5</p>
               </div>
             </div>
+
             <div className="timeline-item">
               <div className="timeline-dot"></div>
               <div className="info-content">
-                <h3>Tech Stack</h3>
-                <p>
-                  <b>MERN Stack Developer</b>
-                </p>
-                <p>
-                  <b>Data Structure And Algorithms</b>
-                </p>
+                <h3>Core Skills</h3>
+                <p><b>MERN Stack Developer</b></p>
+                <p><b>Data Structures and Algorithms</b></p>
               </div>
             </div>
           </div>
         </div>
 
+        {/* RIGHT PANEL: BIO & PHOTO */}
         <div className="right-panel">
-          <h3>
-            MY <span className="highlight">SKILLS</span>
-          </h3>
-          <div className="skills-grid">
-            {skills.map((skill, index) => (
-              <div key={index} className="tech-card">
-                <div className="tech-card-inner">
-                  <div className="tech-front">
-                    <span>{skill.name}</span>
-                  </div>
-                  <div className="tech-back">
-                    <img
-                      src={skill.icon}
-                      alt={skill.name}
-                      className={skill.invert ? "invert" : ""}
-                    />
-                  </div>
-                </div>
+          <Reveal direction="left">
+            <div className="about-me-content">
+              
+              {/* FLOATING PHOTO */}
+              <div className="large-profile-wrapper">
+                <img 
+                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=800&auto=format&fit=crop" 
+                  alt="Sudhanshu Baberwal" 
+                  className="large-profile-img"
+                />
+                <div className="img-border-offset"></div>
+                <div className="large-img-glow"></div>
               </div>
-            ))}
 
-            {/* Add this inside your .skills-grid div after your other skill mappings */}
-            <div className="tech-card mern-special-card">
-              <div className="tech-card-inner">
-                <div className="tech-front">
-                  <span>MERN Developer</span>
-                </div>
-                <div className="tech-back">
-                  <div className="mern-logos-container">
-                    <img
-                      src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg"
-                      alt="mongo"
-                    />
-                    <img
-                      src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg"
-                      alt="express"
-                      className="invert"
-                    />
-                    <img
-                      src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg"
-                      alt="react"
-                    />
-                    <img
-                      src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg"
-                      alt="node"
-                    />
-                  </div>
-                </div>
+              {/* WRAPPING TEXT */}
+              <div className="bio-text-wrapper">
+                <h3>WHO <span className="highlight">I AM</span></h3>
+                <p className="bio-text">
+                  I am a passionate <b>MERN Stack Developer</b> and a B.Tech Computer Science student at <b>IIIT Dharwad</b>, 
+                  driven by the challenge of building scalable, secure, and user-centric web applications from the ground up. 
+                  My journey in software engineering is fueled by a deep curiosity for how things work under the hood.
+                </p>
+                <p className="bio-text">
+                  With a strong foundation in <b>Data Structures and Algorithms</b>, I don't just write code that works; 
+                  I strive to write code that is highly optimized and maintainable. I approach every project with a rigorous 
+                  problem-solving mindset, ensuring efficiency and clean architecture.
+                </p>
+                <p className="bio-text">
+                  My expertise lies in bridging the gap between complex backend logic and intuitive frontend design 
+                  using modern technologies like <b>React, Next.js, and Node.js</b>. Beyond the code, I am an avid learner, 
+                  constantly exploring the evolving tech landscape to stay at the forefront of innovation. 
+                </p>
+                <p className="bio-text">
+                  I thrive in collaborative environments where I can contribute my technical skills to build meaningful 
+                  digital experiences. Currently, I am seeking opportunities to leverage my full-stack capabilities, 
+                  contribute to a forward-thinking team, and build real-world solutions.
+                </p>
               </div>
+
             </div>
-          </div>
+          </Reveal>
         </div>
+        
       </div>
     </section>
   );

@@ -1,0 +1,148 @@
+.footer-section {
+  position: relative;
+  background: var(--bg-dark); 
+  color: white;
+  padding: 80px 8% 30px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  overflow: hidden;
+}
+
+/* The neon light bleeding from the top edge */
+.footer-top-glow {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 250px;
+  height: 2px;
+  background: var(--neon-cyan);
+  box-shadow: 0 0 30px 10px rgba(0, 242, 255, 0.2);
+  opacity: 0.8;
+}
+
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  max-width: 1250px;
+  margin: 0 auto;
+  gap: 40px;
+  padding-bottom: 50px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* BRANDING */
+.footer-brand h2 {
+  font-size: 2rem;
+  margin: 0 0 10px 0;
+  letter-spacing: 1px;
+}
+
+.footer-brand .dot {
+  color: var(--neon-cyan);
+}
+
+.footer-brand p {
+  color: var(--text-gray);
+  font-size: 0.95rem;
+  max-width: 320px;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* SOCIAL ICONS */
+.footer-socials {
+  display: flex;
+  gap: 15px;
+}
+
+.social-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 45px;
+  height: 45px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  color: var(--text-gray);
+  transition: all 0.3s ease;
+}
+
+.social-icon svg {
+  width: 20px;
+  height: 20px;
+  transition: all 0.3s ease;
+}
+
+.social-icon:hover {
+  background: rgba(0, 242, 255, 0.1);
+  border-color: var(--neon-cyan);
+  color: var(--neon-cyan);
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 242, 255, 0.2);
+}
+
+/* UP ARROW BUTTON */
+.footer-up-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.up-arrow-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  background: rgba(0, 242, 255, 0.05);
+  border: 1px solid rgba(0, 242, 255, 0.2);
+  border-radius: 50%;
+  color: var(--neon-cyan);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.up-arrow-btn svg {
+  width: 22px;
+  height: 22px;
+  transition: transform 0.3s ease;
+}
+
+.up-arrow-btn:hover {
+  background: rgba(0, 242, 255, 0.15);
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 20px rgba(0, 242, 255, 0.4);
+  transform: translateY(-5px);
+}
+
+/* Makes the arrow icon inside bounce up slightly on hover */
+.up-arrow-btn:hover svg {
+  transform: translateY(-3px);
+}
+
+/* BOTTOM BAR */
+.footer-bottom {
+  max-width: 1250px;
+  margin: 30px auto 0;
+  display: flex;
+  justify-content: center; /* Centers the text perfectly now */
+  align-items: center;
+  color: var(--text-gray);
+  font-size: 0.85rem;
+}
+
+/* MOBILE RESPONSIVENESS */
+@media (max-width: 900px) {
+  .footer-container {
+    flex-direction: column;
+    text-align: center;
+    gap: 30px;
+  }
+  
+  .footer-brand p {
+    margin: 0 auto;
+  }
+}

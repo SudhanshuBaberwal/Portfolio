@@ -69,7 +69,8 @@ const Navbar = () => {
       <ul className={`nav-links ${menuOpen ? "active" : ""}`}>
         <div className="mobile-close" onClick={() => setMenuOpen(false)}>×</div>
         
-        {["Home", "Projects", "About"].map((item) => {
+        {/* CHANGED "skills" to "Skills" here for capitalization consistency */}
+        {["Home", "Projects", "About", "Skills" , "experience" , "Contact"].map((item) => {
           const sectionId = item.toLowerCase();
           return (
             <li key={item}>

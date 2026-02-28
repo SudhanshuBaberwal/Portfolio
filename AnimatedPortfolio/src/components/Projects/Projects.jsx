@@ -9,40 +9,64 @@ gsap.registerPlugin(ScrollTrigger);
 // Your Projects Array
 const projects = [
   {
-    id: "01", title: "A Car Rental Project", category: "Full Stack",
+    id: "01",
+    title: "A Car Rental Project",
+    category: "Full Stack",
     desc: "🚗 Car Rental Platform (Full Stack Web App). A full-stack car rental web application where users can browse available cars, book rentals, and manage their bookings.",
     tech: ["React", "Node", "MongoDB", "Express"],
-    image: "/951a996c-3aff-4101-8138-ba1400a59248 (1).png", link: "#", github: "#",
+    image: "/951a996c-3aff-4101-8138-ba1400a59248 (1).png",
+    link: "#",
+    github: "https://github.com/SudhanshuBaberwal/Car-Rental-Project",
   },
   {
-    id: "02", title: "Chatify", category: "WebSocket",
+    id: "02",
+    title: "Chatify",
+    category: "WebSocket",
     desc: "High-performance chat application handling 10k+ concurrent users.",
     tech: ["Socket.io", "Redux", "React"],
-    image: "/ChatGPT Image Feb 27, 2026, 11_39_38 PM.png", link: "#", github: "#",
+    image: "/ChatGPT Image Feb 27, 2026, 11_39_38 PM.png",
+    link: "#",
+    github: "https://github.com/SudhanshuBaberwal/Chatify",
   },
   {
-    id: "03", title: "Authentication Page", category: "Security",
+    id: "03",
+    title: "Authentication Page",
+    category: "Security",
     desc: "🔐 Advanced Authentication System Full Stack Security Platform.",
     tech: ["JS", "Nodemailer", "Express"],
-    image: "/ChatGPT Image Feb 27, 2026, 11_53_08 PM.png", link: "#", github: "#",
+    image: "/ChatGPT Image Feb 27, 2026, 11_53_08 PM.png",
+    link: "#",
+    github: "https://github.com/SudhanshuBaberwal/Authentication_Master",
   },
   {
-    id: "04", title: "Luminary - Book Store", category: "Productivity",
+    id: "04",
+    title: "Luminary - Book Store",
+    category: "Productivity",
     desc: "Luminary is a modern, immersive book store web application that transforms traditional online reading into a cinematic 3D experience.",
     tech: ["React.js", "GSAP", "ContextAPI"],
-    image: "/ChatGPT Image Feb 28, 2026, 02_43_10 PM.png", link: "#", github: "#",
+    image: "/ChatGPT Image Feb 28, 2026, 02_43_10 PM.png",
+    link: "#",
+    github: "https://github.com/SudhanshuBaberwal/Book_Store_2",
   },
   {
-    id: "05", title: "Automated Timetable", category: "Productivity",
+    id: "05",
+    title: "Automated Timetable",
+    category: "Productivity",
     desc: "A fully automated academic scheduling system built in Python.",
     tech: ["Python", "Pandas", "openpyxl", "CSV"],
-    image: "/ChatGPT Image Feb 28, 2026, 03_04_28 PM.png", link: "#", github: "#",
+    image: "/ChatGPT Image Feb 28, 2026, 03_04_28 PM.png",
+    link: "#",
+    github: "https://github.com/SudhanshuBaberwal/Automated-Time-Table-IIIT-DWD",
   },
   {
-    id: "06", title: "Clutu", category: "Productivity",
+    id: "06",
+    title: "Clutu",
+    category: "APP",
     desc: "Intelligent slot allocation, room optimization, and elective synchronization.",
-    tech: ["Python", "Pandas", "openpyxl", "CSV"],
-    image: "../../../public/ChatGPT Image Feb 28, 2026, 04_50_16 PM.png", link: "#", github: "#",
+    tech: ["React", "React Router Dom", "Tailwand"],
+    image: "../../../public/ChatGPT Image Feb 28, 2026, 04_50_16 PM.png",
+    link: "#",
+    github: "https://github.com/SudhanshuBaberwal/clutu-APP",
   },
 ];
 
@@ -78,7 +102,7 @@ const ProjectGroup = ({ chunk, groupIndex }) => {
               trigger: containerRef.current,
               start: "top top", // Pin when the container hits the top
               // Make the scroll length proportional to how many items are in the chunk
-              end: () => `+=${totalItems * 800}`, 
+              end: () => `+=${totalItems * 800}`,
               scrub: 1, // Smooth scrubbing
               pin: true,
               onUpdate: (self) => {
@@ -104,7 +128,9 @@ const ProjectGroup = ({ chunk, groupIndex }) => {
       {/* HEADER (Only render it on the very first group) */}
       {groupIndex === 0 && (
         <div className="projects-header">
-          <h2>FEATURED <span className="highlight">WORK</span></h2>
+          <h2>
+            FEATURED <span className="highlight">WORK</span>
+          </h2>
           <p>Selected projects from my portfolio</p>
         </div>
       )}
@@ -113,7 +139,10 @@ const ProjectGroup = ({ chunk, groupIndex }) => {
       <div className="project-nav-bar">
         <div className="nav-items-container">
           {chunk.map((project, index) => (
-            <div key={project.id} className={`nav-item ${activeIndex === index ? "active" : ""}`}>
+            <div
+              key={project.id}
+              className={`nav-item ${activeIndex === index ? "active" : ""}`}
+            >
               <span className="nav-number">{project.id}</span>
               <span className="nav-title">{project.title}</span>
             </div>
@@ -131,15 +160,14 @@ const ProjectGroup = ({ chunk, groupIndex }) => {
       </div>
 
       {/* THE HORIZONTALLY SCROLLING WRAPPER */}
-      <div 
-        ref={sectionRef} 
-        className="scroll-section-inner" 
+      <div
+        ref={sectionRef}
+        className="scroll-section-inner"
         style={{ width: `${chunk.length * 100}vw` }} // Width adjusts automatically!
       >
         {chunk.map((project, index) => (
           <div className="project-panel" key={index}>
             <div className="project-content-container">
-              
               <div className="project-info">
                 <div className="project-id">{project.id}</div>
                 <div className="project-category">{project.category}</div>
@@ -147,12 +175,18 @@ const ProjectGroup = ({ chunk, groupIndex }) => {
                 <p>{project.desc}</p>
                 <div className="tech-stack-row">
                   {project.tech.map((t, i) => (
-                    <span key={i} className="tech-tag">{t}</span>
+                    <span key={i} className="tech-tag">
+                      {t}
+                    </span>
                   ))}
                 </div>
                 <div className="project-links">
-                  <a href={project.link} className="btn-main">View Live</a>
-                  <a href={project.github} className="btn-outline">GitHub</a>
+                  <a href={project.link} className="btn-main">
+                    View Live
+                  </a>
+                  <a href={project.github} className="btn-outline">
+                    GitHub
+                  </a>
                 </div>
               </div>
 
@@ -161,7 +195,6 @@ const ProjectGroup = ({ chunk, groupIndex }) => {
                   <img src={project.image} alt={project.title} />
                 </div>
               </div>
-
             </div>
           </div>
         ))}
