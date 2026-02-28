@@ -13,8 +13,28 @@ const About = () => {
 
   const skills = [
     {
-      name: "React",
-      icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
+      name : "PYTHON",
+      icon : "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/3840px-Python-logo-notext.svg.png"
+    },
+    {
+      name : "HTML",
+      icon : "https://cdn.worldvectorlogo.com/logos/html-1.svg"
+    },
+    {
+      name : "CSS",
+      icon : "https://ultimatecourses.com/assets/category/css-fcba6b473cb1125595dc28163be24eb673907258b5f6f6c82967a0587a9df20c.svg"
+    },
+    {
+      name : "Java Script",
+      icon : "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg"
+    },
+    {
+      name: "Type Script",
+      icon: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmOm4u60oQR6t9DM-jorQugVTthmHLc_ae_g&s",
+    },
+    {
+      name : "React",
+      icon : "https://cdn.worldvectorlogo.com/logos/html-1.svg"
     },
     {
       name: "Node.js",
@@ -44,7 +64,11 @@ const About = () => {
     },
     {
       name: "GSAP",
-      icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg",
+      icon: "https://gsap.com/community/uploads/monthly_2020_03/tweenmax.png.cf27916e926fbb328ff214f66b4c8429.png",
+    },
+    {
+      name : "DOCKER",
+      icon : "https://brandlogos.net/wp-content/uploads/2025/10/docker_mark-logo_brandlogos.net_yetav.png"
     },
   ];
 

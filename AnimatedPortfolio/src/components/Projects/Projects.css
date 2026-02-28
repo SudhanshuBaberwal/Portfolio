@@ -1,54 +1,64 @@
 /* --- VARIABLES --- */
 :root {
-  --neon-cyan: #00f2ff;
+  --neon-cyan: #00e5ff;
   --bg-dark: #050505;
-  --text-gray: #a8a8a8;
-  --glass-border: rgba(255, 255, 255, 0.1);
+  --text-gray: #a0a0a0;
+  --border-color: rgba(255, 255, 255, 0.08);
 }
 
-/* --- MAIN CONTAINER SETUP --- */
-.projects-container-main {
+/* --- MAIN CONTAINERS --- */
+.projects-master-container {
   background: var(--bg-dark);
-  overflow: hidden; /* Critical for horizontal scroll */
-  position: relative;
-  min-height: 100vh;
 }
 
-.scroll-trigger-wrapper {
+.projects-container-main {
   position: relative;
-  height: 100vh; 
-  width: 100%;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+  background-size: 50px 50px; /* Graph paper background */
 }
 
-/* --- HEADER SECTION --- */
+/* --- TOP HEADER (ZONE 1) --- */
 .projects-header {
   position: absolute;
-  top: 40px;
+  top: 50px;
   left: 8%;
-  z-index: 10;
+  z-index: 50;
 }
 
 .projects-header h2 {
-  font-size: clamp(2rem, 4vw, 3rem); /* Responsive font size */
+  font-size: 3rem;
   font-weight: 800;
   color: white;
+  text-transform: uppercase;
   letter-spacing: 2px;
+  line-height: 1;
+}
+
+.projects-header .highlight {
+  color: var(--neon-cyan);
+  text-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
 }
 
 .projects-header p {
   color: var(--neon-cyan);
   font-family: monospace;
-  margin-top: 5px;
+  margin-top: 10px;
   font-size: 0.9rem;
+  letter-spacing: 1px;
 }
 
-/* --- NAVIGATION BAR (DESKTOP) --- */
+/* --- NAVIGATION BAR (ZONE 2) --- */
 .project-nav-bar {
   position: absolute;
-  top: 150px; /* Positioned below Header, above Projects */
+  top: 180px; /* Safe distance strictly below header */
   left: 8%;
-  width: 84%; /* Aligns with page padding */
-  z-index: 20;
+  width: 84%;
+  z-index: 50;
   display: flex;
   flex-direction: column;
 }
@@ -57,55 +67,51 @@
   display: flex;
   width: 100%;
   justify-content: space-between;
-  margin-bottom: 15px;
+  margin-bottom: 25px; /* Huge gap stops text from touching the neon line */
 }
 
 .nav-item {
   flex: 1;
   text-align: center;
-  color: #555;
+  color: #444; /* Dark grey for inactive */
   font-family: monospace;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
+  font-size: 0.85rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 5px;
+  gap: 8px;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  padding: 0 10px;
 }
 
-.nav-item:hover {
-  color: #fff;
-}
-
-/* Active State for Nav Items */
 .nav-item.active {
-  color: var(--neon-cyan);
-  text-shadow: 0 0 10px rgba(0, 242, 255, 0.4);
-  transform: translateY(-2px);
+  color: var(--neon-cyan); /* Bright cyan for active */
 }
 
 .nav-number {
   font-size: 0.8rem;
-  opacity: 0.6;
+  font-weight: 600;
 }
 
 .nav-title {
   font-weight: 700;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
   text-transform: uppercase;
+  white-space: nowrap; /* Prevents text from breaking layout */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
 }
 
-/* The Background Line */
+/* The Glowing Line System */
 .nav-line-bg {
   width: 100%;
   height: 2px;
   background: rgba(255, 255, 255, 0.1);
   position: relative;
-  border-radius: 2px;
 }
 
-/* The Moving Neon Line Indicator */
 .nav-line-active {
   height: 100%;
   background: var(--neon-cyan);
@@ -113,121 +119,104 @@
   position: absolute;
   top: 0;
   left: 0;
-  /* Smooth slide animation when index changes */
-  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); 
-  border-radius: 2px;
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-/* --- HORIZONTAL SCROLL AREA --- */
+/* --- SCROLLING CONTENT (ZONE 3) - FULL SCREEN LAYOUT --- */
 .scroll-section-inner {
   display: flex;
   height: 100vh;
-  /* Width = 100vw * Number of Projects (4) */
-  width: 400vw; 
+  flex-wrap: nowrap;
   will-change: transform;
 }
 
 .project-panel {
+  flex: 0 0 100vw; /* Strict 1 full screen width */
   width: 100vw;
-  height: 100%;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0 5%;
-  position: relative;
+  padding: 0 5%; /* Pushes content closer to the edges */
+  padding-top: 250px; /* Clears the header and nav bar perfectly */
+  padding-bottom: 50px; /* Breathing room at the bottom */
+  box-sizing: border-box;
 }
 
-/* Grid Background Pattern */
-.project-panel::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: 
-    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-  background-size: 60px 60px;
-  z-index: 0;
-  pointer-events: none;
-}
-
-/* --- PROJECT CONTENT LAYOUT --- */
 .project-content-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  max-width: 1300px;
-  gap: 60px;
-  z-index: 2;
-  margin-top: 80px; /* Offset for the header/nav bar */
+  height: 100%; /* Forces container to use all vertical space */
+  max-width: none; /* Allows the content to stretch fully across wide monitors */
+  gap: 5%; /* Fluid gap between text and image */
+  z-index: 10;
 }
 
-/* Left Side: Text Info */
+/* --- LEFT SIDE: TEXT (QUALIFICATIONS) --- */
 .project-info {
-  flex: 1;
+  flex: 1; /* Takes exactly 50% of the screen */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   position: relative;
 }
 
-/* Huge Background Number (01, 02...) */
 .project-id {
   position: absolute;
-  top: -100px;
-  left: -40px;
-  font-size: 12rem;
+  top: -80px;
+  left: -20px;
+  font-size: 14rem; /* Massive faded background number */
   font-weight: 900;
   color: rgba(255, 255, 255, 0.02);
   z-index: -1;
   pointer-events: none;
-  user-select: none;
+  line-height: 1;
 }
 
 .project-category {
   color: var(--neon-cyan);
-  font-size: 0.9rem;
+  font-size: 1rem;
   text-transform: uppercase;
-  letter-spacing: 3px;
-  margin-bottom: 10px;
-  font-weight: 600;
+  letter-spacing: 5px;
+  margin-bottom: 15px;
+  font-weight: 700;
 }
 
 .project-info h3 {
-  font-size: 3rem;
-  font-weight: 700;
+  font-size: clamp(3rem, 5vw, 4.5rem); /* Text scales up dynamically on big screens */
+  font-weight: 800;
   color: white;
   line-height: 1.1;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
 .project-info p {
   color: var(--text-gray);
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   line-height: 1.6;
-  margin-bottom: 30px;
-  max-width: 480px;
+  margin-bottom: 40px;
+  max-width: 90%; /* Allows text to stretch wider */
 }
 
-/* Tech Stack Tags */
+/* Tags */
 .tech-stack-row {
   display: flex;
-  gap: 10px;
-  margin-bottom: 35px;
+  gap: 12px;
+  margin-bottom: 45px;
   flex-wrap: wrap;
 }
 
 .tech-tag {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--glass-border);
-  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  padding: 10px 20px;
   border-radius: 50px;
-  color: #ddd;
-  font-size: 0.85rem;
-  transition: 0.3s;
-}
-
-.tech-tag:hover {
-  border-color: var(--neon-cyan);
-  color: var(--neon-cyan);
-  box-shadow: 0 0 10px rgba(0, 242, 255, 0.1);
+  color: #ccc;
+  font-size: 0.9rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
 }
 
 /* Buttons */
@@ -236,145 +225,115 @@
   gap: 20px;
 }
 
+.btn-main, .btn-outline {
+  padding: 15px 40px;
+  font-weight: 600;
+  border-radius: 50px;
+  text-decoration: none;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+}
+
 .btn-main {
   background: var(--neon-cyan);
-  color: #000;
-  padding: 12px 30px;
-  font-weight: 700;
-  border-radius: 30px;
-  text-decoration: none;
-  transition: 0.3s;
-  box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
+  color: black;
+  box-shadow: 0 0 20px rgba(0, 229, 255, 0.3);
 }
 
 .btn-main:hover {
+  background: white;
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
   transform: translateY(-3px);
-  box-shadow: 0 0 25px rgba(0, 242, 255, 0.4);
 }
 
 .btn-outline {
   background: transparent;
   color: white;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  padding: 12px 30px;
-  font-weight: 600;
-  border-radius: 30px;
-  text-decoration: none;
-  transition: 0.3s;
+  border: 1px solid var(--border-color);
 }
 
 .btn-outline:hover {
+  border-color: white;
   background: white;
   color: black;
-  border-color: white;
+  transform: translateY(-3px);
 }
 
-/* --- RIGHT SIDE: VISUAL & 3D TILT --- */
+/* --- RIGHT SIDE: GLOWING IMAGE BOX --- */
 .project-visual {
-  flex: 1.3;
-  height: 450px;
-  perspective: 1000px;
+  flex: 1.2; /* Slightly wider than text for visual balance */
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: 100%;
 }
 
-.image-wrapper {
+/* The outer border with the neon glow */
+.image-frame-glow {
   width: 100%;
-  height: 100%;
+  max-width: none; /* Allows image to grow massive */
+  height: 65vh; /* Takes up 65% of the screen height */
+  min-height: 400px;
+  border: 1px solid var(--neon-cyan);
   border-radius: 20px;
-  overflow: hidden;
-  border: 1px solid var(--glass-border);
-  /* The Default Tilt */
-  transform: rotateY(-10deg) rotateX(5deg);
-  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.3s;
-  box-shadow: -20px 20px 50px rgba(0,0,0,0.5);
-  position: relative;
+  padding: 10px;
+  box-shadow: 0 0 40px rgba(0, 229, 255, 0.15), inset 0 0 20px rgba(0, 229, 255, 0.05);
+  background: rgba(0, 0, 0, 0.5);
 }
 
-/* Straighten on Hover */
-.project-visual:hover .image-wrapper {
-  transform: rotateY(0deg) rotateX(0deg);
-  border-color: var(--neon-cyan);
-}
-
-.image-wrapper img {
+/* The inner container holding the actual image */
+.image-inner-wrapper {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  transition: transform 0.8s ease;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #0a0a0a;
 }
 
-.project-visual:hover img {
-  transform: scale(1.05); /* Slight internal zoom */
+.image-inner-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; 
+  padding: 15px; 
 }
 
-/* --- MOBILE RESPONSIVE STYLES (Max-Width 768px) --- */
-@media (max-width: 768px) {
-  
-  /* 1. Reset Container Heights */
-  .scroll-trigger-wrapper {
-    height: auto;
-    width: 100%;
-    padding-top: 100px;
-  }
-
-  /* 2. Hide Navigation Bar on Mobile */
-  .project-nav-bar {
-    display: none;
-  }
-
-  /* 3. Stack Projects Vertically */
-  .scroll-section-inner {
-    flex-direction: column;
-    width: 100%; /* Reset from 400vw */
-    height: auto;
-    gap: 80px;
-    padding-bottom: 60px;
-  }
-
-  .project-panel {
-    width: 100%;
-    height: auto;
-    padding: 0 20px;
-  }
-
-  /* 4. Adjust Header */
-  .projects-header {
-    position: relative;
-    top: 0;
-    left: 0;
-    text-align: center;
-    margin-bottom: 40px;
-    padding: 0 20px;
-  }
-
-  /* 5. Reorder Content (Image Top, Text Bottom) */
+/* --- MOBILE RESPONSIVE --- */
+@media (max-width: 1024px) {
   .project-content-container {
-    flex-direction: column-reverse;
-    margin-top: 0;
-    gap: 30px;
-  }
-
-  /* 6. Text Adjustments */
-  .project-info {
+    flex-direction: column;
     text-align: center;
+    gap: 40px;
+  }
+  .project-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     width: 100%;
   }
-
-  .project-id { display: none; } /* Hide big background numbers */
-
-  .project-info h3 { font-size: 2rem; }
-
-  .tech-stack-row { justify-content: center; }
-  .project-links { justify-content: center; }
-
-  /* 7. Visual Adjustments */
+  .project-info p {
+    max-width: 100%;
+  }
+  .project-id { display: none; }
   .project-visual {
     width: 100%;
-    height: 250px; /* Shorter image height */
-    flex: none;
+    justify-content: center;
+    height: auto;
   }
+  .image-frame-glow {
+    height: 40vh;
+  }
+}
 
-  .image-wrapper {
-    transform: none !important; /* Remove 3D effect on mobile */
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+@media (max-width: 768px) {
+  .project-nav-bar { display: none; }
+  .scroll-section-inner {
+    flex-direction: column;
+    width: 100% !important;
+    height: auto;
+  }
+  .project-panel {
+    height: auto;
+    padding-top: 100px;
+    padding-bottom: 50px;
   }
 }

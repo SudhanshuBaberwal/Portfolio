@@ -8,9 +8,20 @@ const App = () => {
   return (
     <div className='App'>
       <Navbar />
-      <Home />
-      <About />
-      <Projects />
+      
+      {/* Wrapping components in divs with IDs */}
+      <div id="home">
+        <Home />
+      </div>
+      
+      <div id="about">
+        <About />
+      </div>
+      
+      <div id="projects">
+        <Projects />
+      </div>
+      
     </div>
   )
 }
