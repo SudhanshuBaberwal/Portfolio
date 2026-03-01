@@ -46,7 +46,7 @@ const Summary = () => {
       {/* LEFT CONTAINER (40% WIDTH - ON TOP) */}
       <div className="hero-panel">
         <div className="image-wrapper">
-          <img src="/your-pic.jpg" alt="Sudhanshu Babber" className="profile-img-full" />
+          <img src="../../../public/WhatsApp Image 2026-03-01 at 3.40.31 PM.jpeg" alt="Sudhanshu Babber" className="profile-img-full" />
           <div className="overlay-gradient"></div>
         </div>
         <div className="hero-intro">

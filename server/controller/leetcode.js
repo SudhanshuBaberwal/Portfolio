@@ -1,4 +1,6 @@
 import fetch from "node-fetch";
+import { getCodeforcesStats } from "./codeforces.js";
+import fetchGithubStats from "./github.js";
 
 export const getLeetCodeStats = async (req, res) => {
   try {
@@ -75,3 +77,22 @@ export const getLeetCodeStats = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch LeetCode data" });
   }
 };
+
+export const getCodeForcesData = async(req , res) => {
+  try {
+    const data = await getCodeforcesStats("Sudhanshu_Baberwal")
+    return res.status(200).json({success : true ,data } )
+  } catch (error) {
+    console.log("Error in codeForces data" + error)
+  }
+  
+}
+
+export const getGitHubData = async (req , res) => {
+  try {
+    const data = await fetchGithubStats("SudhanshuBaberwal")
+    return res.status(201).json({success : true , data})
+  } catch (error) {
+    return res.status(500).json({success : false , message : error.message})
+  }
+}
