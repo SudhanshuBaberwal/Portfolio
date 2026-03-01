@@ -8,35 +8,37 @@ import Footer from "./components/footer/Footer";
 import Contact from "./components/contect/Contact";
 import Experience from "./components/exprience/Experience";
 import Summary from "./components/summary/Summary";
+import Toaster from "react-hot-toast";
 
 const App = () => {
   return (
-    <div className="App">
-      <Navbar />
+    <>
+      <Toaster />
+      <div className="App">
+        <Navbar />
 
-      {/* Wrapping components in divs with IDs */}
-      <div id="home">
-        <Home />
-      </div>
+        {/* Wrapping components in divs with IDs */}
+        <div id="home">
+          <Home />
+        </div>
 
-      <div id="about">
-        <About />
+        <div id="about">
+          <About />
+        </div>
+        <div id="skills">
+          <Skills />
+        </div>
+        <div id="projects">{/* <Projects /> */}</div>
+        <div id="experience">
+          <Experience />
+        </div>
+        <div id="contact">
+          <Contact />
+        </div>
+        <Summary />
+        <Footer />
       </div>
-      <div id="skills">
-        <Skills />
-      </div>
-      <div id="projects">
-        {/* <Projects /> */}
-      </div>
-      <div id="experience">
-        <Experience />
-      </div>
-      <div id="contact">
-        <Contact />
-      </div>
-      <Summary />
-      <Footer />
-    </div>
+    </>
   );
 };
 
