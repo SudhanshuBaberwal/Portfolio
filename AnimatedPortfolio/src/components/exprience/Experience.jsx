@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import "./Experience.css";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
@@ -8,12 +8,27 @@ gsap.registerPlugin(ScrollTrigger);
 
 const Experience = () => {
   const containerRef = useRef();
+  const [activeCard, setActiveCard] = useState(null);
 
+  // API Data States
+  const [lcData, setLcData] = useState(null);
+  const [cfData, setCfData] = useState(null);
 
-  
-  
-  
-  
+  useEffect(() => {
+    // 1. Fetch LeetCode Data
+    fetch("https://leetcode-stats-api.herokuapp.com/sudhanshubabber")
+      .then((res) => res.json())
+      .then((data) => setLcData(data))
+      .catch((err) => console.error("LC Fetch Error:", err));
+
+    // 2. Fetch Codeforces Data
+    fetch("https://codeforces.com/api/user.info?handles=sudhanshubabber")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.status === "OK") setCfData(data.result[0]);
+      })
+      .catch((err) => console.error("CF Fetch Error:", err));
+  }, []);
 
   useGSAP(() => {
     gsap.from(".glass-module", {
@@ -31,96 +46,191 @@ const Experience = () => {
 
   return (
     <section id="experience" className="experience-section" ref={containerRef}>
-      <div className="bg-orb-experience"></div>
       
       <div className="header-group">
         <h2 className="section-header">CODING <span className="highlight">COMMAND CENTER</span></h2>
-        <div className="status-bar">
-          <span className="pulse-dot"></span> 
-        </div>
       </div>
 
-      <div className="dashboard-grid">
+      <div className={`dashboard-grid ${activeCard ? "has-active" : ""}`}>
         
-        {/* LEETCODE MODULE */}
-        <div className="glass-module">
-          <div className="module-header">
-            <div className="platform-info">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/1/19/LeetCode_logo_black.png" alt="LC" className="invert-logo" />
-              <span>LEETCODE.SYS</span>
-            </div>
-            <div className="rank-tag">#12,402</div>
-          </div>
-
-          <div className="main-display">
-            <div className="progress-ring">
-              <svg viewBox="0 0 100 100">
-                <circle className="ring-bg" cx="50" cy="50" r="45" />
-                <circle className="ring-meter lc-meter" cx="50" cy="50" r="45" />
+        {/* ==================== LEETCODE MODULE ==================== */}
+        <div 
+          className={`glass-module ${activeCard === 'lc' ? 'expanded' : activeCard ? 'collapsed' : ''}`}
+          onMouseEnter={() => setActiveCard('lc')}
+          onMouseLeave={() => setActiveCard(null)}
+        >
+          {/* COMPACT VIEW */}
+          <div className="view-compact">
+            
+            {/* Inline SVG LeetCode Logo - Will never break! */}
+            <div className="big-logo-container">
+              <svg viewBox="0 0 24 24" fill="white" className="huge-logo">
+                <path d="M13.483 0a1.374 1.374 0 0 0-.961.438L7.116 6.226l-3.854 4.126a5.266 5.266 0 0 0-1.209 2.104 5.35 5.35 0 0 0-.125.513 5.527 5.527 0 0 0 .062 2.362 5.83 5.83 0 0 0 .349 1.017 5.938 5.938 0 0 0 1.271 1.541l5.967 5.68c.8.761 2.077.761 2.877 0l5.611-5.343a1.36 1.36 0 0 0 0-1.921 1.362 1.362 0 0 0-1.922 0l-4.65 4.427a.496.496 0 0 1-.72 0l-5.966-5.68a3.166 3.166 0 0 1-.871-1.377 3.016 3.016 0 0 1-.145-1.597 3.253 3.253 0 0 1 .655-1.287 3.204 3.204 0 0 1 .482-.49L7.18 8.16l4.424-4.737a.496.496 0 0 1 .72 0l3.852 4.126a1.362 1.362 0 0 0 1.922 0 1.362 1.362 0 0 0 0-1.921L14.246.438A1.374 1.374 0 0 0 13.483 0zm5.105 10.103c-.663 0-1.2.537-1.2 1.2s.537 1.2 1.2 1.2h4.008c.663 0 1.2-.537 1.2-1.2s-.537-1.2-1.2-1.2h-4.008z"/>
               </svg>
-              <div className="ring-text">
-                <span className="big-num">542</span>
-                <span className="label">SOLVED</span>
+            </div>
+
+            <div className="compact-text-group">
+              <div className="platform-title">LEETCODE.SYS</div>
+              <div className="rank-tag">#{lcData ? lcData.ranking : "12,402"}</div>
+            </div>
+
+            <div className="main-display lc-split">
+              <div className="progress-ring">
+                <svg viewBox="0 0 100 100">
+                  <circle className="ring-bg" cx="50" cy="50" r="45" />
+                  <circle className="ring-meter lc-meter" cx="50" cy="50" r="45" />
+                </svg>
+                <div className="ring-text">
+                  <span className="big-num">{lcData ? lcData.totalSolved : "542"}</span>
+                  <span className="label">SOLVED</span>
+                </div>
+              </div>
+
+              <div className="bars-container">
+                <div className="bar-row">
+                  <span className="bar-label">EASY</span>
+                  <div className="bar-bg"><div className="bar-fill easy-fill" style={{width: '70%'}}></div></div>
+                  <span className="bar-val">{lcData ? lcData.easySolved : "210"}</span>
+                </div>
+                <div className="bar-row">
+                  <span className="bar-label">MED</span>
+                  <div className="bar-bg"><div className="bar-fill med-fill" style={{width: '45%'}}></div></div>
+                  <span className="bar-val">{lcData ? lcData.mediumSolved : "280"}</span>
+                </div>
+                <div className="bar-row">
+                  <span className="bar-label">HARD</span>
+                  <div className="bar-bg"><div className="bar-fill hard-fill" style={{width: '15%'}}></div></div>
+                  <span className="bar-val">{lcData ? lcData.hardSolved : "52"}</span>
+                </div>
               </div>
             </div>
 
-            <div className="bars-container">
-              <div className="bar-item"><div className="bar-bg"><div className="bar-fill" style={{width: '70%', background: '#00b8a3'}}></div></div><span>210</span></div>
-              <div className="bar-item"><div className="bar-bg"><div className="bar-fill" style={{width: '45%', background: '#ffc01e'}}></div></div><span>280</span></div>
-              <div className="bar-item"><div className="bar-bg"><div className="bar-fill" style={{width: '15%', background: '#ef4743'}}></div></div><span>52</span></div>
+            <div className="module-footer lc-footer">
+              <div className="footer-stat">RATING <strong>1842</strong></div>
+              <div className="footer-stat">STREAK <strong>45 Days</strong></div>
             </div>
           </div>
 
-          <div className="module-footer">
-            <div className="footer-stat"><span>RATING</span><strong>1842</strong></div>
-            <div className="footer-stat"><span>STREAK</span><strong>45 Days</strong></div>
+          {/* EXPANDED VIEW */}
+          <div className="view-expanded">
+            <div className="exp-header">
+              <h2>LEETCODE.SYS // <span className="highlight">DETAILED_ANALYSIS</span></h2>
+            </div>
+            <div className="exp-content">
+              <div className="exp-stats-box">
+                <p>Acceptance Rate: <strong>{lcData?.acceptanceRate || '0'}%</strong></p>
+                <p>Contribution Points: <strong>{lcData?.contributionPoints || '0'}</strong></p>
+              </div>
+              <div className="terminal-log">
+                <p className="log-line"> {">"} STATUS: ACTIVE SOLVER</p>
+                <p className="log-line success"> {">"} CONSISTENCY: OPTIMAL</p>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* CODEFORCES MODULE */}
-        <div className="glass-module">
-          <div className="module-header">
-            <div className="platform-info">
-              <img src="https://cdn.iconscout.com/icon/free/png-256/free-code-forces-3521352-2944796.png" alt="CF" />
-              <span>CODEFORCES.EXE</span>
+        {/* ==================== CODEFORCES MODULE ==================== */}
+        <div 
+          className={`glass-module ${activeCard === 'cf' ? 'expanded' : activeCard ? 'collapsed' : ''}`}
+          onMouseEnter={() => setActiveCard('cf')}
+          onMouseLeave={() => setActiveCard(null)}
+        >
+          {/* COMPACT VIEW */}
+          <div className="view-compact">
+            
+            {/* Pure CSS Codeforces Logo - Will never break! */}
+            <div className="big-logo-container cf-bars-wrapper">
+              <div className="cf-big-bar yellow"></div>
+              <div className="cf-big-bar blue"></div>
+              <div className="cf-big-bar red"></div>
             </div>
-            <span className="badge specialist">SPECIALIST</span>
-          </div>
-          
-          <div className="hero-section">
-            <h2 className="hero-rating cf-color">1458</h2>
-            <p className="hero-sub">MAX RATING: 1502</p>
+
+            <div className="compact-text-group">
+              <div className="platform-title">CODEFORCES.EXE</div>
+              <div className="rank-tag">{cfData ? cfData.rank.toUpperCase() : "SPECIALIST"}</div>
+            </div>
+
+            <div className="hero-section">
+              <h2 className="hero-rating cf-color">{cfData ? cfData.rating : "1458"}</h2>
+              <p className="hero-sub">MAX RATING: {cfData ? cfData.maxRating : "1502"}</p>
+            </div>
+
+            <div className="stats-mini-grid">
+              <div className="mini-box"><span>CONTESTS</span><strong>62</strong></div>
+              <div className="mini-box"><span>RANK</span><strong>Top 15%</strong></div>
+            </div>
+
+            <a href="#" className="action-btn">ACCESS_PROFILE _</a>
           </div>
 
-          <div className="stats-mini-grid">
-            <div className="mini-box"><span>CONTESTS</span><strong>62</strong></div>
-            <div className="mini-box"><span>RANK</span><strong>Top 15%</strong></div>
+          {/* EXPANDED VIEW */}
+          <div className="view-expanded">
+            <div className="exp-header">
+              <h2>CODEFORCES.EXE // <span className="cf-color">{cfData?.handle || 'Loading...'}</span></h2>
+            </div>
+            <div className="exp-content">
+              <div className="exp-stats-box">
+                <p>Current Rating: <strong className="cf-color">{cfData?.rating || '0'}</strong></p>
+                <p>Organization: <strong>{cfData?.organization || 'N/A'}</strong></p>
+              </div>
+              <div className="terminal-log">
+                <p className="log-line"> {">"} Max Rating Achieved: {cfData?.maxRating}</p>
+                <p className="log-line success"> {">"} STATUS: CONNECTED</p>
+              </div>
+            </div>
           </div>
-
-          <a href="#" className="action-btn">ACCESS_PROFILE _</a>
         </div>
 
-        {/* CODECHEF MODULE - FORCED VISIBILITY */}
-        <div className="glass-module cc-card-fixed">
-          <div className="module-header">
-            <div className="platform-info">
-              <img src="https://cdn.iconscout.com/icon/free/png-256/free-code-chef-3521351-2944795.png" alt="CC" className="invert-logo" />
-              <span style={{color: '#888'}}>CODECHEF.LOG</span>
+        {/* ==================== CODECHEF MODULE ==================== */}
+        <div 
+          className={`glass-module ${activeCard === 'cc' ? 'expanded' : activeCard ? 'collapsed' : ''}`}
+          onMouseEnter={() => setActiveCard('cc')}
+          onMouseLeave={() => setActiveCard(null)}
+        >
+          {/* COMPACT VIEW */}
+          <div className="view-compact">
+            
+            {/* Inline SVG CodeChef-style Logo - Will never break! */}
+            <div className="big-logo-container">
+              <svg viewBox="0 0 24 24" fill="white" className="huge-logo">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-2-12.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zm4 0a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5z" />
+              </svg>
             </div>
-            <div className="stars">★★★<span style={{color: '#333'}}>☆☆</span></div>
-          </div>
-          
-          <div className="hero-section">
-            <h2 className="hero-rating cc-color">1685</h2>
-            <p className="hero-sub" style={{color: '#aaa'}}>GLOBAL RANK: #4,521</p>
+
+            <div className="compact-text-group">
+              <div className="platform-title">CODECHEF.LOG</div>
+              <div className="stars">★★★<span style={{color: '#555'}}>☆☆</span></div>
+            </div>
+
+            <div className="hero-section">
+              <h2 className="hero-rating cc-color">1685</h2>
+              <p className="hero-sub">GLOBAL RANK: #4,521</p>
+            </div>
+
+            <div className="stats-mini-grid">
+              <div className="mini-box"><span>DIVISION</span><strong>Div 2</strong></div>
+              <div className="mini-box"><span>RECENT</span><strong>Rank 412</strong></div>
+            </div>
+
+            <a href="#" className="action-btn">VIEW_STATS.EXE</a>
           </div>
 
-          <div className="stats-mini-grid">
-            <div className="mini-box"><span>DIVISION</span><strong style={{color: '#fff'}}>Div 2</strong></div>
-            <div className="mini-box"><span>RECENT</span><strong style={{color: '#fff'}}>Rank 412</strong></div>
+          {/* EXPANDED VIEW */}
+          <div className="view-expanded">
+             <div className="exp-header">
+              <h2>CODECHEF.LOG // <span>SUDHANSHU</span></h2>
+            </div>
+            <div className="exp-content">
+              <div className="exp-stats-box">
+                <p>Highest Rating: <strong>1720</strong></p>
+                <p>Division: <strong>Div 2</strong></p>
+              </div>
+               <div className="terminal-log">
+                <p className="log-line"> {">"} Starters 124: Rank 412 (+35)</p>
+                <p className="log-line success"> {">"} RATING TREND: UPWARD</p>
+              </div>
+            </div>
           </div>
-
-          <a href="#" className="action-btn cc-btn">VIEW_STATS.EXE</a>
         </div>
 
       </div>
