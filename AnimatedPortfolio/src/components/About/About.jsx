@@ -89,7 +89,7 @@ const About = () => {
               {/* FLOATING PHOTO */}
               <div className="large-profile-wrapper">
                 <img 
-                  src="../../../public/WhatsApp Image 2026-03-01 at 3.40.31 PM.jpeg" 
+                  src="/public/WhatsApp Image 2026-03-01 at 3.40.31 PM.jpeg" 
                   alt="Sudhanshu Baberwal" 
                   className="large-profile-img"
                 />
