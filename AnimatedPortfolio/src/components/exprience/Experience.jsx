@@ -4,6 +4,7 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import axios from "axios";
+const API_BASE = import.meta.env.VITE_API_URL;
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -35,7 +36,7 @@ const Experience = () => {
   useEffect(() => {
     const leetcodeData = async () => {
       try {
-        const data = await axios.get("http://localhost:3000/api/leetcode");
+        const data = await axios.get(`${API_BASE}/api/leetcode`);
         setlAllQuestion(data.data.submitStats.acSubmissionNum[0].count);
         setlEasyQuestion(data.data.submitStats.acSubmissionNum[1].count);
         setlMediumQuestion(data.data.submitStats.acSubmissionNum[2].count);
@@ -62,7 +63,7 @@ const Experience = () => {
 
     const codeforcesData = async () => {
       try {
-        const data = await axios.get("http://localhost:3000/api/code-forces", {
+       const data = await axios.get(`${API_BASE}/api/code-forces`, {
           withCredentials: true,
         });
         setCfData(data.data.data);
@@ -73,7 +74,7 @@ const Experience = () => {
 
     const githubData = async () => {
       try {
-        const data = await axios.get("http://localhost:3000/api/github");
+      const data = await axios.get(`${API_BASE}/api/github`);
         console.log(data);
         setGhData(data.data.data); // <-- NEW: Saving GitHub data to state
       } catch (err) {
