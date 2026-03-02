@@ -1,0 +1,67 @@
+.preloader-portal {
+  position: fixed;
+  inset: 0;
+  background: #000000;
+  z-index: 10000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  pointer-events: none; /* Allows clicks to pass through as it fades */
+}
+
+.perspective-layer {
+  perspective: 1200px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.main-content {
+  transform-style: preserve-3d;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  will-change: transform, opacity;
+}
+
+.name-3d {
+  display: flex;
+  gap: 8px;
+  font-size: clamp(2rem, 10vw, 7rem);
+  font-weight: 950;
+  color: #111;
+  text-transform: uppercase;
+  transform-style: preserve-3d;
+}
+
+.char {
+  display: inline-block;
+  position: relative;
+  transform-style: preserve-3d;
+  /* This creates the "thick" 3D look */
+  text-shadow: 
+    0 1px 0 #333, 
+    0 2px 0 #333, 
+    0 10px 20px rgba(0,0,0,0.5);
+}
+
+.pre-text, .post-text {
+  font-family: monospace;
+  letter-spacing: 15px;
+  font-size: 10px;
+  color: #444;
+  margin: 20px 0;
+}
+
+/* Optional: Add a glow to the center to act as the "light" you fly into */
+.main-content::after {
+  content: '';
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background: #00e5ff;
+  filter: blur(80px);
+  opacity: 0.2;
+  z-index: -1;
+}
