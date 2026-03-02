@@ -4,6 +4,7 @@ import Reveal from "../Reveal";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import myphoto from "../../../public/WhatsApp Image 2026-03-01 at 3.40.31 PM.jpeg"
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -89,7 +90,7 @@ const About = () => {
               {/* FLOATING PHOTO */}
               <div className="large-profile-wrapper">
                 <img 
-                  src="/public/WhatsApp Image 2026-03-01 at 3.40.31 PM.jpeg" 
+                  src={myphoto}
                   alt="Sudhanshu Baberwal" 
                   className="large-profile-img"
                 />
