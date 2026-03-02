@@ -7,11 +7,13 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import axios from "axios";
 import toast from "react-hot-toast";
 
+const API_BASE = import.meta.env.VITE_API_URL;
+
 gsap.registerPlugin(ScrollTrigger);
 
 const Contact = () => {
   const containerRef = useRef();
-  const [loading , setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   // Basic state to hold form data
   const [formData, setFormData] = useState({
@@ -26,27 +28,25 @@ const Contact = () => {
   };
 
   const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
     try {
-      e.preventDefault();
-      setLoading(true)
-      const email = formData.email;
-      const name = formData.name;
-      const subject = formData.subject;
-      const message = formData.message;
-  
-      const result = await axios.post(
-        "http://localhost:3000/api/send-email",
+      const { name, email, subject, message } = formData;
+
+      await axios.post(
+        `${API_BASE}/api/send-email`,
         { name, email, subject, message },
         { withCredentials: true },
       );
-  
-      toast.success("Thank You For Reching Out Service")
-      setLoading(false)
+
+      toast.success("Message sent successfully 🚀");
       setFormData({ name: "", email: "", subject: "", message: "" });
     } catch (error) {
-      setLoading(false)
-      toast.error("Something Missing")
-      console.log(error)
+      console.log(error);
+      toast.error("Failed to send message ❌");
+    } finally {
+      setLoading(false);
     }
   };
 

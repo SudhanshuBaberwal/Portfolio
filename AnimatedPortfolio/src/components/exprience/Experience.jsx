@@ -36,6 +36,7 @@ const Experience = () => {
   useEffect(() => {
     const leetcodeData = async () => {
       try {
+        console.log("API : " +API_BASE)
         const data = await axios.get(`${API_BASE}/api/leetcode`);
         setlAllQuestion(data.data.submitStats.acSubmissionNum[0].count);
         setlEasyQuestion(data.data.submitStats.acSubmissionNum[1].count);
