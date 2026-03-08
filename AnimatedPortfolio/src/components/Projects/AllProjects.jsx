@@ -7,7 +7,7 @@ const projectsData = [
     id: 1,
     title: "IIIT-DWD automated Time table",
     description:
-      "A full-stack MERN e-commerce platform with Stripe integration, admin dashboard, and real-time inventory tracking. Engineered to handle high traffic and secure transactions seamlessly.",
+      "A web application that automatically generates optimized academic timetables based on constraints such as subjects, faculty availability, and classroom allocation. The system reduces manual scheduling effort and ensures conflict-free timetables through algorithmic optimization.",
     tech: ["Python", "openpyxl", "pandas"],
     github:
       "https://github.com/SudhanshuBaberwal/Automated-Time-Table-IIIT-DWD",
@@ -18,7 +18,7 @@ const projectsData = [
     id: 2,
     title: "Advance Authenticaiton",
     description:
-      "Interactive web application to visualize complex sorting and pathfinding algorithms in real-time. Built to simplify data structures and provide a hands-on learning experience for developers.",
+      "A secure full-stack authentication system featuring user signup, login, email OTP verification, password reset via token, and protected routes. Built to simulate real-world authentication workflows using modern web technologies.",
     tech: ["Next", "TypeScript", "Tailwind CSS", "Nodemailer"],
     github: "https://github.com/SudhanshuBaberwal/Auth-with_TSandNext",
     live: "https://live-link.com",
