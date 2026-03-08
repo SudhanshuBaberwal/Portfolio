@@ -124,7 +124,7 @@ const Contact = () => {
             <div className="info-text">
               <h3>Email Me</h3>
               <a href="mailto:sudhanshu@example.com?subject=Reaching%20out%20from%20your%20portfolio&body=Hi%20Sudhanshu,%0D%0A%0D%0AI%20was%20looking%20at%20your%20portfolio%20and%20wanted%20to%20connect%20with%20you%20regarding...">
-                sudhanshu@example.com
+                baberwalsudhanshu16@gmail.com
               </a>
             </div>
           </div>
@@ -152,7 +152,9 @@ const Contact = () => {
                 rel="noreferrer"
                 aria-label="Open location in Google Maps"
               >
-                Hubballi, Karnataka, India
+                Hubballi, Karnataka, India 
+                <br />
+                Jaipur , Rajasthan , India
               </a>
             </div>
           </div>

@@ -5,31 +5,46 @@ import "./AllProjects.css";
 const projectsData = [
   {
     id: 1,
-    title: "E-COMMERCE.SYS",
-    description: "A full-stack MERN e-commerce platform with Stripe integration, admin dashboard, and real-time inventory tracking. Engineered to handle high traffic and secure transactions seamlessly.",
-    tech: ["React", "Node.js", "MongoDB", "Express", "Stripe"],
-    github: "https://github.com",
+    title: "IIIT-DWD automated Time table",
+    description:
+      "A full-stack MERN e-commerce platform with Stripe integration, admin dashboard, and real-time inventory tracking. Engineered to handle high traffic and secure transactions seamlessly.",
+    tech: ["Python", "openpyxl", "pandas"],
+    github:
+      "https://github.com/SudhanshuBaberwal/Automated-Time-Table-IIIT-DWD",
     live: "https://live-link.com",
-    image: "https://images.unsplash.com/photo-1557821552-17105176677c?q=80&w=1000&auto=format&fit=crop"
+    image: "../../../public/ChatGPT Image Feb 28, 2026, 03_04_28 PM.png",
   },
   {
     id: 2,
-    title: "ALGO_VISUALIZER.EXE",
-    description: "Interactive web application to visualize complex sorting and pathfinding algorithms in real-time. Built to simplify data structures and provide a hands-on learning experience for developers.",
-    tech: ["React", "TypeScript", "Tailwind CSS"],
-    github: "https://github.com",
+    title: "Advance Authenticaiton",
+    description:
+      "Interactive web application to visualize complex sorting and pathfinding algorithms in real-time. Built to simplify data structures and provide a hands-on learning experience for developers.",
+    tech: ["Next", "TypeScript", "Tailwind CSS", "Nodemailer"],
+    github: "https://github.com/SudhanshuBaberwal/Auth-with_TSandNext",
     live: "https://live-link.com",
-    image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1000&auto=format&fit=crop"
+    image: "../../../public/ChatGPT Image Mar 8, 2026, 03_47_37 PM.png",
   },
   {
     id: 3,
-    title: "CHAT_MATRIX.LOG",
-    description: "Real-time chat application featuring end-to-end encryption, group channels, and instant notifications using WebSockets. Designed with a focus on privacy and instantaneous data delivery.",
-    tech: ["Next.js", "Socket.io", "Tailwind", "PostgreSQL"],
-    github: "https://github.com",
+    title: "Clutu",
+    description:
+      "A modern social media web application built using React, featuring user authentication powered by Clerk. The platform allows users to create profiles, share posts, interact through likes and comments, and explore a dynamic feed. This project focuses on building a responsive and interactive UI while integrating secure authentication without a custom backend.",
+    tech: ["React", "Tailwind CSS"],
+    github: "https://github.com/SudhanshuBaberwal/clutu-APP",
     live: "https://live-link.com",
-    image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=1000&auto=format&fit=crop"
-  }
+    image: "../../../public/ChatGPT Image Mar 8, 2026, 04_19_01 PM.png",
+  },
+  {
+    id: 3,
+    title: "Mstry-Message",
+    description:
+      "A AI powered Chat App to send Mistry messages to friends --- > ON WORKING",
+    tech: ["NEXT", "Tailwind CSS", "ZOD", "OPNE-AI"],
+    github: "https://github.com/SudhanshuBaberwal/MSTRYmessage",
+    live: "https://live-link.com",
+    image:
+      "../../../public/ChatGPT Image Feb 28, 2026, 04_50_16 PM.png",
+  },
 ];
 
 const AllProjects = () => {
@@ -43,7 +58,6 @@ const AllProjects = () => {
       <div className="bg-glow"></div>
 
       <div className="pp-container">
-        
         {/* Header Area */}
         <div className="pp-header">
           <Link to="/" className="pp-back-btn">
@@ -59,10 +73,13 @@ const AllProjects = () => {
         <div className="pp-list">
           {projectsData.map((project, index) => (
             <div className="pp-row" key={project.id}>
-              
               {/* Image Side */}
               <div className="pp-image-wrapper">
-                <img src={project.image} alt={project.title} className="pp-image" />
+                <img
+                  src={project.image}
+                  alt={project.title}
+                  className="pp-image"
+                />
                 <div className="pp-image-overlay"></div>
               </div>
 
@@ -70,32 +87,42 @@ const AllProjects = () => {
               <div className="pp-content">
                 <div className="pp-number">
                   {/* Pads the index to always be two digits like 01, 02 */}
-                  // {String(index + 1).padStart(2, '0')} 
+                  // {String(index + 1).padStart(2, "0")}
                 </div>
                 <h2 className="pp-card-title">{project.title}</h2>
-                
+
                 <div className="pp-tech-stack">
                   {project.tech.map((tech, i) => (
-                    <span key={i} className="pp-tech-tag">{tech}</span>
+                    <span key={i} className="pp-tech-tag">
+                      {tech}
+                    </span>
                   ))}
                 </div>
 
                 <p className="pp-card-desc">{project.description}</p>
-                
+
                 <div className="pp-actions">
-                  <a href={project.live} target="_blank" rel="noreferrer" className="pp-btn solid">
+                  <a
+                    href={project.live}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="pp-btn solid"
+                  >
                     LIVE_DEMO.EXE
                   </a>
-                  <a href={project.github} target="_blank" rel="noreferrer" className="pp-btn outline">
+                  <a
+                    href={project.github}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="pp-btn outline"
+                  >
                     GITHUB.GIT
                   </a>
                 </div>
               </div>
-
             </div>
           ))}
         </div>
-
       </div>
     </section>
   );
