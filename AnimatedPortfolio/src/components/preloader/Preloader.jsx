@@ -5,7 +5,7 @@ import "./Preloader.css";
 const Preloader = ({ setLoading }) => {
   const componentRef = useRef();
   const nameRef = useRef();
-  const name = "IT'S BABBER";
+  const name = "Sudhanshu";
 
   useEffect(() => {
     const ctx = gsap.context(() => {

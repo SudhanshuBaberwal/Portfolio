@@ -12,7 +12,7 @@ const projectsData = [
     github:
       "https://github.com/SudhanshuBaberwal/Automated-Time-Table-IIIT-DWD",
     live: "https://live-link.com",
-    image: "../../../public/ChatGPT Image Feb 28, 2026, 03_04_28 PM.png",
+    image: "/ChatGPT Image Feb 28, 2026, 03_04_28 PM.png",
   },
   {
     id: 2,
@@ -22,7 +22,7 @@ const projectsData = [
     tech: ["Next", "TypeScript", "Tailwind CSS", "Nodemailer"],
     github: "https://github.com/SudhanshuBaberwal/Auth-with_TSandNext",
     live: "https://live-link.com",
-    image: "../../../public/ChatGPT Image Mar 8, 2026, 03_47_37 PM.png",
+    image: "/ChatGPT Image Mar 8, 2026, 03_47_37 PM.png",
   },
   {
     id: 3,
@@ -32,7 +32,7 @@ const projectsData = [
     tech: ["React", "Tailwind CSS"],
     github: "https://github.com/SudhanshuBaberwal/clutu-APP",
     live: "https://live-link.com",
-    image: "../../../public/ChatGPT Image Mar 8, 2026, 04_19_01 PM.png",
+    image: "/ChatGPT Image Mar 8, 2026, 04_19_01 PM.png",
   },
   {
     id: 3,
@@ -43,7 +43,7 @@ const projectsData = [
     github: "https://github.com/SudhanshuBaberwal/MSTRYmessage",
     live: "https://live-link.com",
     image:
-      "../../../public/ChatGPT Image Feb 28, 2026, 04_50_16 PM.png",
+      "/ChatGPT Image Feb 28, 2026, 04_50_16 PM.png",
   },
 ];
 
