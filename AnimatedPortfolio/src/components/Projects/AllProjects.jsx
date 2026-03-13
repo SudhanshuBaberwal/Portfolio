@@ -38,10 +38,10 @@ const projectsData = [
     id: 3,
     title: "Mstry-Message",
     description:
-      "A AI powered Chat App to send Mistry messages to friends --- > ON WORKING",
+      "A AI powered Chat App to send Mistry messages to friends",
     tech: ["NEXT", "Tailwind CSS", "ZOD", "OPNE-AI"],
     github: "https://github.com/SudhanshuBaberwal/MSTRYmessage",
-    live: "https://live-link.com",
+    live: "/ChatGPT Image Mar 13, 2026, 04_06_10 PM.png",
     image:
       "/ChatGPT Image Feb 28, 2026, 04_50_16 PM.png",
   },
