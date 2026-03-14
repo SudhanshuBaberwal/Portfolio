@@ -18,7 +18,7 @@ const Footer = () => {
         
         {/* BRANDING */}
         <div className="footer-brand">
-          <h2>Babber<span className="dot">.</span></h2>
+          <h2>Sudhanshu<span className="dot">.</span></h2>
           <p>Building scalable web applications and solving complex problems with clean architecture.</p>
         </div>
 

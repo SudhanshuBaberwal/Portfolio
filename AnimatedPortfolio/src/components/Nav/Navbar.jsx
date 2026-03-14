@@ -63,7 +63,7 @@ const Navbar = () => {
     <nav className={`navbar ${scrolled ? "scrolled" : ""}`}>
       
       <div className="logo">
-        Babber<span className="dot">.</span>
+        Sudhanshu<span className="dot">.</span>
       </div>
 
       <ul className={`nav-links ${menuOpen ? "active" : ""}`}>
