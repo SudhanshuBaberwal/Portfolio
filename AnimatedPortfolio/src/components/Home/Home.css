@@ -41,7 +41,7 @@
 }
 
 .hero {
-  height: 100vh; 
+  min-height: 100vh; /* Changed from height to min-height */
   width: 100%; 
   position: relative;
   display: flex; 
@@ -49,8 +49,8 @@
   justify-content: center;
   overflow: hidden;
   background: radial-gradient(circle at 60% 50%, #111 0%, #000 85%);
+  padding-bottom: 120px; /* Added to give the scroll indicator breathing room */
 }
-
 .bg-text {
   position: absolute; 
   top: 50%; 
@@ -131,8 +131,18 @@
 @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
 
 .scroll-down {
-  position: absolute; bottom: 40px; display: flex; flex-direction: column; align-items: center; gap: 10px;
-  color: #666; font-size: 0.8rem; letter-spacing: 2px;
+  position: absolute; 
+  bottom: 30px; 
+  left: 50%; /* Center horizontally */
+  transform: translateX(-50%); /* Center horizontally */
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  gap: 10px;
+  color: #666; 
+  font-size: 0.8rem; 
+  letter-spacing: 2px;
+  z-index: 10; /* Ensures it stays above the next section's background */
 }
 .mouse {
   width: 26px; height: 40px; border: 2px solid #666; border-radius: 20px;
@@ -143,11 +153,16 @@
 @keyframes scroll { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(20px); } }
 
 @media (max-width: 968px) {
-  .hero-container { flex-direction: column-reverse; text-align: center; margin-top: 140px; }
+  .hero-container { 
+    flex-direction: column-reverse; 
+    text-align: center; 
+    margin-top: 140px; 
+    margin-bottom: 50px; /* Added to separate stats from the scroll animation */
+  }
   .bg-text { font-size: 25vw; top: 20%; }
   .hero-content h1 { font-size: 3rem; }
   .hero-img { max-width: 300px; margin-bottom: 30px; }
   .btn-group, .stats { justify-content: center; }
   .float-card { display: none; }
-  .tech-slider-wrapper { top: 70px; } /* Adjust for mobile nav height */
+  .tech-slider-wrapper { top: 70px; } 
 }

@@ -35,15 +35,23 @@ const projectsData = [
     image: "/ChatGPT Image Mar 8, 2026, 04_19_01 PM.png",
   },
   {
-    id: 3,
+    id: 4,
     title: "Mstry-Message",
-    description:
-      "A AI powered Chat App to send Mistry messages to friends",
-    tech: ["NEXT", "Tailwind CSS", "ZOD", "OPNE-AI"],
+    description: "A AI powered Chat App to send Mistry messages to friends",
+    tech: ["NEXT", "Tailwind CSS", "ZOD", "OPNE-AI", "ShadCN"],
     github: "https://github.com/SudhanshuBaberwal/MSTRYmessage",
-    live: "/ChatGPT Image Mar 13, 2026, 04_06_10 PM.png",
-    image:
-      "/ChatGPT Image Feb 28, 2026, 04_50_16 PM.png",
+    live: "#",
+    image: "/ChatGPT Image Mar 13, 2026, 04_06_10 PM.png",
+  },
+  {
+    id: 5,
+    title: "Swift-Cart",
+    description:
+      "SwiftCart is a modern full-stack e-commerce platform that enables users to browse products, manage carts, and securely authenticate using credentials or Google OAuth. The platform features role-based access for users, vendors, and admins, along with a responsive UI and smooth animations. Built with a scalable architecture, SwiftCart demonstrates secure authentication, API-driven development, and modern frontend design.",
+    tech: ["NEXT", "Tailwind CSS", "Payment GateWay", "OPNE-AI", "TS"],
+    github: "https://github.com/SudhanshuBaberwal/SwiftCart",
+    live: "#",
+    image: "/ChatGPT Image Feb 28, 2026, 04_50_16 PM.png",
   },
 ];
 
