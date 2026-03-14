@@ -57,7 +57,7 @@ const About = () => {
               <div className="info-content">
                 <h3>Personal Info</h3>
                 <p><b>Name:</b> Sudhanshu Baberwal</p>
-                <p><b>Location:</b> India</p>
+                <p><b>Location:</b> Karnataka (India) </p>
               </div>
             </div>
 
@@ -66,7 +66,7 @@ const About = () => {
               <div className="info-content">
                 <h3>Education</h3>
                 <p><b>Degree:</b> B.Tech (CSE)</p>
-                <p><b>College:</b> IIIT Dharwad</p>
+                <p><b>Institute:</b> IIIT Dharwad</p>
                 <p><b>CGPA:</b> 7.5</p>
               </div>
             </div>

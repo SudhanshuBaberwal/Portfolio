@@ -144,17 +144,39 @@ const Contact = () => {
                 <circle cx="12" cy="10" r="3"></circle>
               </svg>
             </div>
-            <div className="info-text">
+            <div className="info-text location-info">
               <h3>Location</h3>
               <a
-                href="https://www.google.com/maps/search/?api=1&query=Hubballi,+Karnataka,+India"
+                href="https://maps.google.com/?q=Hubballi,+Karnataka,+India"
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Open location in Google Maps"
+                className="location-link"
               >
-                Hubballi, Karnataka, India 
-                <br />
-                Jaipur , Rajasthan , India
+                {/* Static Base Location */}
+                <div className="loc-row">
+                  <span
+                    className="loc-icon"
+                    role="img"
+                    aria-label="Base Location"
+                  >
+                    🏠
+                  </span>
+                  <span className="loc-text">Base: Jaipur, Rajasthan</span>
+                </div>
+
+                {/* Current Live Location */}
+                <div className="loc-row">
+                  <div className="pulse-dot-wrapper">
+                    <div className="pulse-dot"></div>
+                  </div>
+                  <span
+                    className="loc-text"
+                    style={{ color: "var(--neon-cyan)" }}
+                  >
+                    Dharwad, Karnataka
+                  </span>
+                </div>
               </a>
             </div>
           </div>
