@@ -64,7 +64,7 @@ const About = () => {
             <div className="timeline-item">
               <div className="timeline-dot"></div>
               <div className="info-content">
-                <h3>Education</h3>
+                <h3>Education - Qualifications</h3>
                 <p><b>Degree:</b> B.Tech (CSE)</p>
                 <p><b>Institute:</b> IIIT Dharwad</p>
                 <p><b>CGPA:</b> 7.5</p>
