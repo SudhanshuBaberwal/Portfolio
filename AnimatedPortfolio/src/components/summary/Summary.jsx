@@ -72,10 +72,10 @@ const Summary = () => {
           <div className="summary-block">
             <span className="terminal-tag"># COMMAND_SUMMARY</span>
             <p className="description-text">
-              Bridging the gap between powerful backend logic and sleek, modern
-              user interfaces. I specialize in building fast, scalable web
-              applications that look as good under the hood as they do on the
-              screen.
+              A full-stack developer obsessed with performance and design. I
+              love taking bold ideas and engineering them into fast, highly
+              interactive, and scalable web experiences that users actually
+              enjoy using.
             </p>
           </div>
 
