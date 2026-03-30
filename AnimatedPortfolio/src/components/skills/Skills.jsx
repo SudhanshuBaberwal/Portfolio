@@ -115,6 +115,11 @@ const Skills = () => {
               icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/socketio/socketio-original.svg"
               invert={true}
             />
+            <SkillBadge
+              name="Spring boot [Learning]"
+              icon="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Spring_Framework_Logo_2018.svg/1280px-Spring_Framework_Logo_2018.svg.png"
+              invert={true}
+            />
           </div>
         </div>
 
