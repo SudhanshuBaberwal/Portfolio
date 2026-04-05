@@ -177,8 +177,16 @@ const Skills = () => {
         {/* CARD 5: Others */}
         <div className="skill-card">
           <div className="card-glow"></div>
-          <h3>Others</h3>
+          <h3>Languages</h3>
           <div className="skills-grid">
+             <SkillBadge
+              name="JAVA"
+              icon="/javaImage.png"
+            />
+             <SkillBadge
+              name="Python"
+              icon="https://logos-world.net/wp-content/uploads/2021/10/Python-Emblem.png"
+            />
             <SkillBadge
               name="HTML"
               icon="https://cdn.iconscout.com/icon/free/png-256/free-html-5-icon-svg-download-png-1175208.png"
