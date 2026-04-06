@@ -171,6 +171,10 @@ const Skills = () => {
               name="VS Code"
               icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vscode/vscode-original.svg"
             />
+             {/* <SkillBadge
+              name="IntelliJ"
+              icon="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStTf_EMHI-GvJAsky9fK3n-9cjKsu6BALtPw&s"
+            /> */}
           </div>
         </div>
 
