@@ -14,7 +14,7 @@ app.use(
   cors({
     origin: [
       process.env.FRONTEND_ORIGIN,
-      "https://portfolio-wheat-gamma-90.vercel.app",
+      "https://animatedportfolio-new.vercel.app/",
     ],
     credentials: true,
   }),
