@@ -8,16 +8,14 @@ import dotenv from "dotenv";
 
 const app = express();
 dotenv.config();
-app.use(express.json());
-
 app.use(
   cors({
     origin: [
       process.env.FRONTEND_ORIGIN,
-      "https://animatedportfolio-new.vercel.app/",
+      "https://animatedportfolio-new.vercel.app"
     ],
     credentials: true,
-  }),
+  })
 );
 
 app.use("/api", emailRouter);
