@@ -116,7 +116,7 @@ const Skills = () => {
               invert={true}
             />
             <SkillBadge
-              name="Spring boot [Learning]"
+              name="Spring [Learning]"
               icon="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Spring_Framework_Logo_2018.svg/1280px-Spring_Framework_Logo_2018.svg.png"
               invert={true}
             />
@@ -225,7 +225,6 @@ const Skills = () => {
                 verticalAlign: "middle",
               }}
             >
-              (Learning)
             </span>
           </h3>
           <div className="skills-grid">
@@ -233,7 +232,7 @@ const Skills = () => {
               name="Docker"
               icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-original.svg"
             />
-            <SkillBadge
+            {/* <SkillBadge
               name="AWS"
               icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/amazonwebservices/amazonwebservices-original-wordmark.svg"
               invert={true}
@@ -241,7 +240,7 @@ const Skills = () => {
             <SkillBadge
               name="Linux"
               icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/linux/linux-original.svg"
-            />
+            /> */}
           </div>
         </div>
       </div>
