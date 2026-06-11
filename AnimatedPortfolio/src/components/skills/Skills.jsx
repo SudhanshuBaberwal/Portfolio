@@ -232,7 +232,7 @@ const Skills = () => {
               name="Docker"
               icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-original.svg"
             />
-            {/* <SkillBadge
+            <SkillBadge
               name="AWS"
               icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/amazonwebservices/amazonwebservices-original-wordmark.svg"
               invert={true}
@@ -240,7 +240,15 @@ const Skills = () => {
             <SkillBadge
               name="Linux"
               icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/linux/linux-original.svg"
-            /> */}
+            />
+             <SkillBadge
+              name="Micro-services"
+              icon="https://miro.medium.com/1*KH-i7gZC9UEUELeMhnAugg.jpeg"
+            />
+             <SkillBadge
+              name="Redis"
+              icon="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4GWKDc_PWKmWvq2dbYzgjTORRgmpjJmadTw&s"
+            />
           </div>
         </div>
       </div>
