@@ -245,8 +245,8 @@ const Skills = () => {
               name="Micro-services"
               icon="https://miro.medium.com/1*KH-i7gZC9UEUELeMhnAugg.jpeg"
             />
-             <SkillBadge
-              name="Redis"
+             <SkillBadge 
+              name="Redis"   
               icon="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4GWKDc_PWKmWvq2dbYzgjTORRgmpjJmadTw&s"
             />
           </div>
