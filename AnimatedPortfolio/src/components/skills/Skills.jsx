@@ -7,24 +7,18 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// --- 3D FLIP BADGE COMPONENT ---
-const SkillBadge = ({ name, icon, invert }) => {
+// Minimalistic Modern Token Pill Component
+const SkillToken = ({ name, icon, invert }) => {
   return (
-    <div className="skill-flip-container">
-      <div className="skill-flip-inner">
-        {/* FRONT: Text */}
-        <div className="skill-flip-front">{name}</div>
-        {/* BACK: Logo */}
-        <div className="skill-flip-back">
-          <img
-            src={icon}
-            alt={`${name} logo`}
-            className="skill-logo"
-            // If a logo is naturally black (like Next.js), this turns it white so it's visible on dark mode!
-            style={{ filter: invert ? "brightness(0) invert(1)" : "none" }}
-          />
-        </div>
-      </div>
+    <div className="tech-token">
+      <div className="token-glow"></div>
+      <img
+        src={icon}
+        alt={`${name} logo`}
+        className="token-icon"
+        style={{ filter: invert ? "brightness(0) invert(1)" : "none" }}
+      />
+      <span className="token-name">{name}</span>
     </div>
   );
 };
@@ -35,17 +29,17 @@ const Skills = () => {
   useGSAP(
     () => {
       gsap.fromTo(
-        ".skill-card",
-        { y: 60, opacity: 0 },
+        ".dashboard-row",
+        { opacity: 0, x: -30 },
         {
-          y: 0,
           opacity: 1,
-          duration: 0.8,
+          x: 0,
+          duration: 0.6,
           stagger: 0.15,
-          ease: "power3.out",
+          ease: "power2.out",
           scrollTrigger: {
-            trigger: ".skills-container",
-            start: "top 90%",
+            trigger: ".skills-dashboard",
+            start: "top 85%",
             toggleActions: "play none none none",
           },
         },
@@ -55,200 +49,279 @@ const Skills = () => {
   );
 
   return (
-    <section id="skills" className="skills-section" ref={containerRef}>
-      <div className="bg-orb orb-3"></div>
-      <div className="bg-orb orb-4"></div>
+    <section id="skills" className="skills-fresh-section" ref={containerRef}>
+      <div className="matrix-glow-top"></div>
+      <div className="matrix-glow-bottom"></div>
 
-      <Reveal direction="up">
-        <h2 className="section-header">
-          MY <span className="highlight">SKILLS</span>
-        </h2>
-      </Reveal>
+      <div className="header-wrapper">
+        <Reveal direction="up">
+          <span className="section-subtitle">// CAPABILITIES & EXPERTISE</span>
+          <h2 className="section-header-fresh">
+            TECH <span className="highlight-fresh">STACK</span>
+          </h2>
+        </Reveal>
+      </div>
 
-      <div className="skills-container">
-        {/* CARD 1: FRONTEND */}
-        <div className="skill-card">
-          <div className="card-glow"></div>
-          <h3>Frontend Development</h3>
-          <div className="skills-grid">
-            <SkillBadge
+      <div className="skills-dashboard">
+        {/* ROW 1: AI-ML (Featured Top Row) */}
+        {/* ROW 1: AI-ML (Featured Top Row) */}
+        <div className="dashboard-row">
+          <div className="row-sidebar">
+            <span className="row-index">01</span>
+            <div className="title-status-wrapper">
+              <h3 className="row-title">Artificial Intelligence & ML</h3>
+              <span className="learning-status">
+                <span className="pulse-dot"></span>
+                CURRENTLY LEARNING
+              </span>
+            </div>
+            <div className="accent-bar ai-bar"></div>
+          </div>
+          <div className="row-content">
+            <SkillToken
+              name="Python"
+              icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg"
+            />
+            <SkillToken
+              name="Pandas"
+              icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/pandas/pandas-original.svg"
+              invert={true}
+            />
+            <SkillToken
+              name="NumPy"
+              icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/numpy/numpy-original.svg"
+            />
+            <SkillToken
+              name="Scikit-learn"
+              icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/scikitlearn/scikitlearn-original.svg"
+            />
+            <SkillToken
+              name="OpenCV"
+              icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/opencv/opencv-original.svg"
+            />
+            <SkillToken
+              name="TensorFlow"
+              icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tensorflow/tensorflow-original.svg"
+            />
+            <SkillToken
+              name="Jupyter"
+              icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/jupyter/jupyter-original.svg"
+            />
+            {/* For your AI & Machine Learning row */}
+            <SkillToken
+              name="Matplotlib"
+              icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/matplotlib/matplotlib-original.svg"
+            />
+            <SkillToken
+              name="Seaborn"
+              icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/seaborn/seaborn-original.svg"
+            />
+
+            {/* For your Core Utilities / DevOps row */}
+           
+          </div>
+        </div>
+
+        {/* ROW 2: FRONTEND */}
+        <div className="dashboard-row">
+          <div className="row-sidebar">
+            <span className="row-index">02</span>
+            <h3 className="row-title">Frontend Architecture</h3>
+            <div className="accent-bar dev-bar"></div>
+          </div>
+          <div className="row-content">
+            <SkillToken
               name="React.js"
               icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg"
             />
-            <SkillBadge
+            <SkillToken
               name="Next.js"
               icon="https://www.drupal.org/files/project-images/nextjs-icon-dark-background.png"
               invert={true}
             />
-            <SkillBadge
+            <SkillToken
               name="Tailwind CSS"
               icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tailwindcss/tailwindcss-original.svg"
             />
-            {/* <SkillBadge name="HTML5" icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg" /> */}
-            <SkillBadge
+            <SkillToken
               name="Redux"
               icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/redux/redux-original.svg"
+            />
+            <SkillToken
+              name="Zustand"
+              icon="https://raw.githubusercontent.com/pmndrs/zustand/main/docs/favicon.ico"
+            />
+            <SkillToken
+              name="Framer Motion"
+              icon="https://images.seeklogo.com/logo-png/43/b/framer-motion-logo-png_seeklogo-434057.png"
+            />
+            <SkillToken
+              name="Shadcn UI"
+              icon="https://avatar.iran.liara.run/public/37"
+              invert={true}
             />
           </div>
         </div>
 
-        {/* CARD 2: BACKEND */}
-        <div className="skill-card">
-          <div className="card-glow"></div>
-          <h3>Backend Development</h3>
-          <div className="skills-grid">
-            <SkillBadge
+        {/* ROW 3: BACKEND (Fixed the crash issue here) */}
+        <div className="dashboard-row">
+          <div className="row-sidebar">
+            <span className="row-index">03</span>
+            <h3 className="row-title">Backend Engineering</h3>
+            <div className="accent-bar dev-bar"></div>
+          </div>
+          <div className="row-content">
+            <SkillToken
               name="Node.js"
               icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg"
             />
-            <SkillBadge
+            <SkillToken
               name="Express.js"
               icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/express/express-original.svg"
               invert={true}
             />
-            <SkillBadge
+            <SkillToken
               name="JWT Auth"
               icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/json/json-original.svg"
             />
-            <SkillBadge
+            <SkillToken
               name="WebSockets"
               icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/socketio/socketio-original.svg"
               invert={true}
             />
-            <SkillBadge
-              name="Spring [Learning]"
+            <SkillToken
+              name="Spring Boot"
               icon="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Spring_Framework_Logo_2018.svg/1280px-Spring_Framework_Logo_2018.svg.png"
               invert={true}
             />
-          </div>
-        </div>
-
-        {/* CARD 3: DATABASES */}
-        <div className="skill-card">
-          <div className="card-glow"></div>
-          <h3>Databases & Services</h3>
-          <div className="skills-grid">
-            <SkillBadge
-              name="MongoDB"
-              icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mongodb/mongodb-original.svg"
+            <SkillToken
+              name="Spring Security"
+              icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/spring/spring-original.svg"
             />
-            <SkillBadge
-              name="MySQL"
-              icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mysql/mysql-original.svg"
+            <SkillToken
+              name="REST APIs"
+              icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/openapi/openapi-original.svg"
             />
-            <SkillBadge
-              name="Cloudinary"
-              icon="https://assets.streamlinehq.com/image/private/w_300,h_300,ar_1/f_auto/v1/icons/1/cloudinary-icon-ug0qqy8ms6ozyzy6cntbll.png/cloudinary-icon-hz05evx1htrghud89kpab4.png?_a=DATAiZAAZAA0"
-            />
-            <SkillBadge
-              name="Imagekit"
-              icon="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcYZb9ocjmCaPKFZS6qMv3zXFMmQzuXZnHGQ&s"
-            />
-            <SkillBadge
-              name="Nodemailer"
-              icon="https://blog.nodemailer.com/wp-content/uploads/2017/01/cropped-nm_logo_1000x680.png"
+             <SkillToken
+              name="Maven"
+              icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/maven/maven-original.svg"
             />
           </div>
         </div>
 
-        {/* CARD 4: CORE & TOOLS */}
-        <div className="skill-card">
-          <div className="card-glow"></div>
-          <h3>Core & Tools</h3>
-          <div className="skills-grid">
-            {/* <SkillBadge name="C++" icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/cplusplus/cplusplus-original.svg" /> */}
-            {/* <SkillBadge name="Data Structures" icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/thealgorithms/thealgorithms-original.svg" invert={true} /> */}
-            <SkillBadge
-              name="Git & GitHub"
-              icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg"
-              invert={true}
-            />
-            <SkillBadge
-              name="Postman"
-              icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postman/postman-original.svg"
-            />
-            <SkillBadge
-              name="VS Code"
-              icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vscode/vscode-original.svg"
-            />
-             {/* <SkillBadge
-              name="IntelliJ"
-              icon="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStTf_EMHI-GvJAsky9fK3n-9cjKsu6BALtPw&s"
-            /> */}
+        {/* ROW 4: TWO-COLUMN SPLIT (Databases & DevOps) */}
+        <div className="dashboard-split-container">
+          <div className="dashboard-row split-row">
+            <div className="row-sidebar">
+              <span className="row-index">04</span>
+              <h3 className="row-title">Databases & Cloud</h3>
+              <div className="accent-bar data-bar"></div>
+            </div>
+            <div className="row-content">
+              <SkillToken
+                name="MongoDB"
+                icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mongodb/mongodb-original.svg"
+              />
+              <SkillToken
+                name="MySQL"
+                icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mysql/mysql-original.svg"
+              />
+              <SkillToken
+                name="Cloudinary"
+                icon="https://assets.streamlinehq.com/image/private/w_300,h_300,ar_1/f_auto/v1/icons/1/cloudinary-icon-ug0qqy8ms6ozyzy6cntbll.png/cloudinary-icon-hz05evx1htrghud89kpab4.png?_a=DATAiZAAZAA0"
+              />
+              <SkillToken
+                name="Imagekit"
+                icon="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcYZb9ocjmCaPKFZS6qMv3zXFMmQzuXZnHGQ&s"
+              />
+            </div>
+          </div>
+
+          <div className="dashboard-row split-row">
+            <div className="row-sidebar">
+              <span className="row-index">05</span>
+              <h3 className="row-title">DevOps & Systems</h3>
+              <div className="accent-bar data-bar"></div>
+            </div>
+            <div className="row-content">
+              <SkillToken
+                name="Docker"
+                icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-original.svg"
+              />
+              <SkillToken
+                name="AWS"
+                icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/amazonwebservices/amazonwebservices-original-wordmark.svg"
+                invert={true}
+              />
+              <SkillToken
+                name="Linux"
+                icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/linux/linux-original.svg"
+              />
+              <SkillToken
+                name="Redis"
+                icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/redis/redis-original.svg"
+              />
+              <SkillToken
+                name="Nginx"
+                icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nginx/nginx-original.svg"
+              />
+            </div>
           </div>
         </div>
 
-        {/* CARD 5: Others */}
-        <div className="skill-card">
-          <div className="card-glow"></div>
-          <h3>Languages</h3>
-          <div className="skills-grid">
-             <SkillBadge
-              name="JAVA"
-              icon="/javaImage.png"
-            />
-             <SkillBadge
-              name="Python"
-              icon="https://logos-world.net/wp-content/uploads/2021/10/Python-Emblem.png"
-            />
-            <SkillBadge
-              name="HTML"
-              icon="https://cdn.iconscout.com/icon/free/png-256/free-html-5-icon-svg-download-png-1175208.png"
-            />
-            <SkillBadge
-              name="CSS"
-              icon="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/css-icon.png"
-            />
-            <SkillBadge
-              name="Java Script"
-              icon="https://upload.wikimedia.org/wikipedia/commons/c/ce/Unofficial_JavaScript_logo.svg"
-              invert={true}
-            />
-            <SkillBadge
-              name="Type Script"
-              icon="https://cdn.iconscout.com/icon/free/png-256/free-typescript-icon-svg-download-png-1174965.png?f=webp"
-              invert={true}
-            />
+        {/* ROW 5: TWO-COLUMN SPLIT (Languages & Core Utilities) */}
+        <div className="dashboard-split-container">
+          <div className="dashboard-row split-row">
+            <div className="row-sidebar">
+              <span className="row-index">06</span>
+              <h3 className="row-title">Languages</h3>
+              <div className="accent-bar core-bar"></div>
+            </div>
+            <div className="row-content">
+              <SkillToken
+                name="Java"
+                icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original.svg"
+              />
+              <SkillToken
+                name="JavaScript"
+                icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg"
+              />
+              <SkillToken
+                name="TypeScript"
+                icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/typescript/typescript-original.svg"
+              />
+              <SkillToken
+                name="HTML/CSS"
+                icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg"
+              />
+            </div>
           </div>
-        </div>
 
-        {/* CARD 6: DEVOPS */}
-        <div className="skill-card">
-          <div className="card-glow"></div>
-          <h3>
-            DevOps{" "}
-            <span
-              style={{
-                fontSize: "0.8rem",
-                color: "var(--neon-cyan)",
-                fontWeight: "normal",
-                verticalAlign: "middle",
-              }}
-            >
-            </span>
-          </h3>
-          <div className="skills-grid">
-            <SkillBadge
-              name="Docker"
-              icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-original.svg"
-            />
-            <SkillBadge
-              name="AWS"
-              icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/amazonwebservices/amazonwebservices-original-wordmark.svg"
-              invert={true}
-            />
-            <SkillBadge
-              name="Linux"
-              icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/linux/linux-original.svg"
-            />
-             <SkillBadge
-              name="Micro-services"
-              icon="https://miro.medium.com/1*KH-i7gZC9UEUELeMhnAugg.jpeg"
-            />
-             <SkillBadge 
-              name="Redis"   
-              icon="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4GWKDc_PWKmWvq2dbYzgjTORRgmpjJmadTw&s"
-            />
+          <div className="dashboard-row split-row">
+            <div className="row-sidebar">
+              <span className="row-index">07</span>
+              <h3 className="row-title">Core Utilities</h3>
+              <div className="accent-bar core-bar"></div>
+            </div>
+            <div className="row-content">
+              <SkillToken
+                name="Git & GitHub"
+                icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg"
+                invert={true}
+              />
+              <SkillToken
+                name="Postman"
+                icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postman/postman-original.svg"
+              />
+              <SkillToken
+                name="VS Code"
+                icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vscode/vscode-original.svg"
+              />
+              <SkillToken
+                name="IntelliJ"
+                icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/intellij/intellij-original.svg"
+              />
+            </div>
           </div>
         </div>
       </div>

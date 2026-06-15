@@ -1,197 +1,280 @@
-/* Keeps the variables consistent with your About page */
 :root {
   --neon-cyan: #00f2ff;
-  --bg-dark: #050505;
-  --text-gray: #a8a8a8;
-  --card-bg: rgba(255, 255, 255, 0.03);
+  --neon-purple: #9d4edd;
+  --neon-orange: #ff758f;
+  --bg-deep: #050505;
+  --glass-bg: rgba(255, 255, 255, 0.02);
+  --border-subtle: rgba(255, 255, 255, 0.05);
 }
 
-.skills-section {
+.skills-fresh-section {
   min-height: 100vh;
-  background: radial-gradient(circle at 50% 50%, #111 0%, var(--bg-dark) 100%);
+  background-color: var(--bg-deep);
   padding: 100px 8%;
-  color: white;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  color: #f3f4f6;
   position: relative;
   overflow: hidden;
 }
 
-/* The grid background pattern */
-.skills-section::after {
-  content: "";
+/* Linear subtle ambient background spots */
+.matrix-glow-top {
   position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-  background-size: 50px 50px;
-  z-index: 0;
+  top: -10%;
+  right: 15%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(0, 242, 255, 0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+.matrix-glow-bottom {
+  position: absolute;
+  bottom: -5%;
+  left: 5%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(157, 78, 221, 0.05) 0%, transparent 70%);
   pointer-events: none;
 }
 
-.skills-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 40px;
-  max-width: 1250px;
+.header-wrapper {
+  margin-bottom: 60px;
+}
+.section-subtitle {
+  font-family: monospace;
+  color: var(--neon-cyan);
+  letter-spacing: 3px;
+  font-size: 0.85rem;
+  display: block;
+  margin-bottom: 8px;
+}
+.section-header-fresh {
+  font-size: 3rem;
+  font-weight: 900;
+  margin: 0;
+  letter-spacing: -1px;
+}
+.highlight-fresh {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.6);
+}
+
+/* --- DASHBOARD STRUCTURAL SYSTEM --- */
+.skills-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 1300px;
   margin: 0 auto;
-  width: 100%;
-  z-index: 2;
 }
 
-/* --- SKILL CARDS --- */
-.skill-card {
+/* Dashboard Row Elements */
+.dashboard-row {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  background: var(--glass-bg);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 28px 35px;
+  align-items: center;
+  transition: border 0.3s ease, background 0.3s ease;
+}
+
+.dashboard-row:hover {
+  border-color: rgba(0, 242, 255, 0.2);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* Two Column Flex Row for Compact Blocks */
+.dashboard-split-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+.dashboard-split-container .dashboard-row {
+  grid-template-columns: 200px 1fr;
+  padding: 24px 28px;
+}
+
+/* --- LEFTSIDE ROW METRICS --- */
+.row-sidebar {
+  display: flex;
+  flex-direction: column;
   position: relative;
-  background: var(--card-bg);
-  border: 1px solid rgba(0, 242, 255, 0.1);
-  border-radius: 16px;
-  padding: 40px 30px;
-  backdrop-filter: blur(10px);
-  transition: all 0.4s ease;
-  overflow: hidden;
+  padding-right: 20px;
 }
-
-.skill-card:hover {
-  transform: translateY(-10px);
-  border-color: rgba(0, 242, 255, 0.5);
-  box-shadow: 0 10px 30px rgba(0, 242, 255, 0.1);
+.row-index {
+  font-family: monospace;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.3);
+  margin-bottom: 4px;
 }
-
-/* A subtle neon glow inside the top of the card */
-.card-glow {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 150px;
+.row-title {
+  font-size: 1.2rem;
+  margin: 0;
+  font-weight: 600;
+  color: #fff;
+}
+.accent-bar {
+  width: 25px;
   height: 2px;
-  background: var(--neon-cyan);
-  box-shadow: 0 0 20px 5px rgba(0, 242, 255, 0.4);
-  opacity: 0.5;
-  transition: opacity 0.4s ease;
+  margin-top: 10px;
+  border-radius: 2px;
 }
+.ai-bar { background: var(--neon-purple); }
+.dev-bar { background: var(--neon-cyan); }
+.data-bar { background: var(--neon-orange); }
+.core-bar { background: #56cfe1; }
 
-.skill-card:hover .card-glow {
-  opacity: 1;
-}
-
-.skill-card h3 {
-  font-size: 1.5rem;
-  margin-top: 0;
-  margin-bottom: 25px;
-  color: white;
-  letter-spacing: 1px;
-}
-
-/* --- 3D FLIP SKILL BADGES --- */
-.skills-grid {
+/* --- TECH CHIPS CONTAINER --- */
+.row-content {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
 }
 
-/* The outer container establishes 3D space */
-.skill-flip-container {
-  perspective: 1000px;
-  display: inline-block;
-  cursor: pointer;
-}
-
-/* The inner wrapper handles the actual flipping */
-.skill-flip-inner {
+/* Futuristic Tech Pill Style */
+.tech-token {
   position: relative;
-  transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
-  transform-style: preserve-3d; /* This is what makes the 3D effect work! */
-}
-
-.skill-flip-container:hover .skill-flip-inner {
-  transform: rotateY(180deg);
-}
-
-/* Front and Back face share common styles */
-.skill-flip-front, 
-.skill-flip-back {
-  border-radius: 30px;
-  backface-visibility: hidden; /* Hides the back of the element when turned away */
-}
-
-/* The Front Side (Text) */
-.skill-flip-front {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: var(--text-gray);
-  padding: 8px 16px;
-  white-space: nowrap; /* Forces dynamic width based on text length */
-  font-size: 0.95rem;
-}
-
-/* The Back Side (Logo) */
-.skill-flip-back {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%; /* Perfectly matches the front's dynamic width */
-  height: 100%;
-  background: rgba(0, 242, 255, 0.1); /* Soft neon cyan background */
-  border: 1px solid var(--neon-cyan);
-  transform: rotateY(180deg); /* Starts flipped around */
   display: flex;
   align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 15px rgba(0, 242, 255, 0.3);
+  gap: 10px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 8px 16px;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-/* The Logo Image */
-.skill-logo {
-  height: 22px;
-  max-width: 80%;
+.token-icon {
+  width: 18px;
+  height: 18px;
   object-fit: contain;
+  z-index: 1;
+}
+.token-name {
+  font-size: 0.9rem;
+  color: #d1d5db;
+  font-weight: 500;
+  z-index: 1;
 }
 
-
-/* --- ORBS (Keep exactly the same) --- */
-.bg-orb {
+/* Micro interaction transitions */
+.token-glow {
   position: absolute;
-  border-radius: 50%;
-  filter: blur(120px);
-  z-index: 0;
-  opacity: 0.15;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(0, 242, 255, 0.15) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
-.orb-3 { width: 500px; height: 500px; background: #7000ff; top: 20%; left: -10%; }
-.orb-4 { width: 600px; height: 600px; background: var(--neon-cyan); bottom: -10%; right: -5%; }
+.tech-token:hover {
+  transform: translateY(-2px);
+  border-color: rgba(0, 242, 255, 0.4);
+  box-shadow: 0 4px 15px rgba(0, 242, 255, 0.1);
+}
+.tech-token:hover .token-glow {
+  opacity: 1;
+}
+.tech-token:hover .token-name {
+  color: #fff;
+}
 
-/* Mobile Responsiveness */
-@media (max-width: 768px) {
-  .skills-container {
+/* --- MEDIA BREAKPOINTS --- */
+@media (max-width: 1200px) {
+  .dashboard-split-container {
     grid-template-columns: 1fr;
-    gap: 30px;
-  }
-  .skill-card {
-    padding: 30px 20px;
   }
 }
 
-/* --- ORBS --- */
-/* Different positions from the About page to keep things fresh */
-.bg-orb {
-  position: absolute;
+@media (max-width: 900px) {
+  .dashboard-row, 
+  .dashboard-split-container .dashboard-row {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 24px;
+  }
+  .row-sidebar {
+    padding-right: 0;
+  }
+  .accent-bar {
+    width: 40px;
+    margin-top: 6px;
+  }
+  .section-header-fresh {
+    font-size: 2.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .skills-fresh-section {
+    padding: 80px 6%;
+  }
+  .row-content {
+    gap: 8px;
+  }
+  .tech-token {
+    padding: 6px 12px;
+  }
+}
+
+/* Layout wrapper to align title and tag neatly */
+.title-status-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* The modern tech status tag */
+.learning-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: monospace;
+  font-size: 0.7rem;
+  color: #b388ff; /* Soft futuristic purple */
+  letter-spacing: 1.5px;
+  font-weight: bold;
+  background: rgba(157, 78, 221, 0.1);
+  padding: 4px 10px;
+  border-radius: 4px;
+  width: fit-content;
+  border: 1px solid rgba(157, 78, 221, 0.2);
+}
+
+/* The neon glowing core dot */
+.pulse-dot {
+  width: 6px;
+  height: 6px;
+  background-color: #e0aaff;
   border-radius: 50%;
-  filter: blur(120px);
-  z-index: 0;
-  opacity: 0.15;
+  box-shadow: 0 0 8px #9d4edd, 0 0 15px #9d4edd;
+  animation: beaconPulse 2s infinite ease-in-out;
 }
-.orb-3 { width: 500px; height: 500px; background: #7000ff; top: 20%; left: -10%; }
-.orb-4 { width: 600px; height: 600px; background: var(--neon-cyan); bottom: -10%; right: -5%; }
 
-/* Mobile Responsiveness */
-@media (max-width: 768px) {
-  .skills-container {
-    grid-template-columns: 1fr; /* Stacks the cards vertically on small phones */
-    gap: 30px;
+/* Continuous breathing animation */
+@keyframes beaconPulse {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.4;
+    box-shadow: 0 0 4px #9d4edd;
   }
-  .skill-card {
-    padding: 30px 20px;
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+    box-shadow: 0 0 12px #9d4edd, 0 0 20px #9d4edd;
+  }
+  100% {
+    transform: scale(0.9);
+    opacity: 0.4;
+    box-shadow: 0 0 4px #9d4edd;
+  }
+}
+
+/* Ensures layout adjusts nicely when tracking tags match responsive code */
+@media (max-width: 900px) {
+  .title-status-wrapper {
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
   }
 }
