@@ -1,67 +1,123 @@
-.preloader-portal {
+.editorial-preloader {
   position: fixed;
   inset: 0;
-  background: #000000;
+  background: #0a0a0a; /* True modern sleek off-black */
   z-index: 10000;
   display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  pointer-events: none; /* Allows clicks to pass through as it fades */
+  will-change: transform;
 }
 
-.perspective-layer {
-  perspective: 1200px;
+/* A structural outer frame mimicking editorial print layouts */
+.editorial-frame {
   width: 100%;
-  display: flex;
-  justify-content: center;
-}
-
-.main-content {
-  transform-style: preserve-3d;
+  height: 100%;
+  padding: 60px 8%;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* Center Layout Alignment */
+.editorial-center {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Heavy, Bold, Raw Typography Statement */
+.editorial-title {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: clamp(2.5rem, 9vw, 6.5rem);
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: -2px;
+  margin: 0;
+  text-transform: uppercase;
   will-change: transform, opacity;
 }
 
-.name-3d {
-  display: flex;
-  gap: 8px;
-  font-size: clamp(2rem, 10vw, 7rem);
-  font-weight: 950;
-  color: #111;
-  text-transform: uppercase;
-  transform-style: preserve-3d;
+.title-top {
+  color: #ffffff;
+  align-self: flex-start;
 }
 
-.char {
-  display: inline-block;
-  position: relative;
-  transform-style: preserve-3d;
-  /* This creates the "thick" 3D look */
-  text-shadow: 
-    0 1px 0 #333, 
-    0 2px 0 #333, 
-    0 10px 20px rgba(0,0,0,0.5);
+.title-bottom {
+  align-self: flex-end;
+  color: transparent;
+  /* Ultra thin elegant human-crafted vector outline */
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.4); 
+  margin-top: 5px;
 }
 
-.pre-text, .post-text {
-  font-family: monospace;
-  letter-spacing: 15px;
-  font-size: 10px;
-  color: #444;
-  margin: 20px 0;
+/* Minimalist Asymmetric Split Rule */
+.editorial-divider {
+  width: 100%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.15);
+  margin: 25px 0;
+  transform-origin: left center;
+  will-change: transform;
 }
 
-/* Optional: Add a glow to the center to act as the "light" you fly into */
-.main-content::after {
-  content: '';
+/* Fine-print Human Editorial Footer */
+.editorial-footer {
   position: absolute;
-  width: 100px;
-  height: 100px;
-  background: #00e5ff;
-  filter: blur(80px);
-  opacity: 0.2;
-  z-index: -1;
+  bottom: 60px;
+  left: 8%;
+  right: 8%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 84%;
+}
+
+.meta-label {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.3);
+  letter-spacing: 2px;
+  margin: 0 0 4px 0;
+  text-transform: uppercase;
+}
+
+.meta-value {
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: #a3a3a3;
+  margin: 0;
+}
+
+.meta-right {
+  text-align: right;
+}
+
+/* Responsive adjustment scaling rules */
+@media (max-width: 768px) {
+  .editorial-frame {
+    padding: 40px 6%;
+  }
+  .editorial-divider {
+    margin: 15px 0;
+  }
+  .editorial-footer {
+    bottom: 40px;
+    left: 6%;
+    right: 6%;
+    width: 88%;
+  }
+  .meta-value {
+    font-size: 11px;
+  }
 }
