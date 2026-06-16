@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import axios from "axios";
 const API_BASE = import.meta.env.VITE_API_URL;
+// const API_BASE = "http://localhost:3000"
 
 gsap.registerPlugin(ScrollTrigger);
 

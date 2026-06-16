@@ -7,7 +7,7 @@ export const getLeetCodeStats = async (req, res) => {
     const username = "sudhanshubaberwal";
 
     const query = {
-  query: `
+      query: `
     query getUserProfile($username: String!) {
       matchedUser(username: $username) {
         username
@@ -58,8 +58,8 @@ export const getLeetCodeStats = async (req, res) => {
             }
           }
   `,
-  variables: { username },
-};
+      variables: { username },
+    };
 
     const response = await fetch("https://leetcode.com/graphql", {
       method: "POST",
@@ -78,21 +78,30 @@ export const getLeetCodeStats = async (req, res) => {
   }
 };
 
-export const getCodeForcesData = async(req , res) => {
+export const getCodeForcesData = async (req, res) => {
   try {
-    const data = await getCodeforcesStats("Sudhanshu_Baberwal")
-    return res.status(200).json({success : true ,data } )
+    const data = await getCodeforcesStats("Sudhanshu_Baberwal");
+    return res.status(200).json({ success: true, data });
   } catch (error) {
-    console.log("Error in codeForces data" + error)
+    console.log("Error in codeForces data" + error);
   }
-  
-}
+};
 
-export const getGitHubData = async (req , res) => {
+export const getGitHubData = async (req, res) => {
   try {
-    const data = await fetchGithubStats("SudhanshuBaberwal")
-    return res.status(201).json({success : true , data})
+    const username = process.env.GITHUB_USERNAME || "SudhanshuBaberwal";
+
+    const data = await fetchGithubStats(username);
+
+    return res.status(200).json({
+      success: true,
+      data,
+    });
   } catch (error) {
-    return res.status(500).json({success : false , message : error.message})
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch GitHub stats",
+      error: error.message,
+    });
   }
-}
+};
