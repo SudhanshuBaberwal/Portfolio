@@ -63,19 +63,12 @@ const Skills = () => {
       </div>
 
       <div className="skills-dashboard">
-        {/* ROW 1: AI-ML (Featured Top Row) */}
-        {/* ROW 1: AI-ML (Featured Top Row) */}
+        {/* ROW 1: TRADITIONAL MACHINE LEARNING & DATA */}
         <div className="dashboard-row">
           <div className="row-sidebar">
             <span className="row-index">01</span>
-            <div className="title-status-wrapper">
-              <h3 className="row-title">Artificial Intelligence & ML</h3>
-              <span className="learning-status">
-                <span className="pulse-dot"></span>
-                CURRENTLY LEARNING
-              </span>
-            </div>
-            <div className="accent-bar ai-bar"></div>
+            <h3 className="row-title">Machine Learning & Data</h3>
+            <div className="accent-bar ml-bar"></div>
           </div>
           <div className="row-content">
             <SkillToken
@@ -92,6 +85,14 @@ const Skills = () => {
               icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/numpy/numpy-original.svg"
             />
             <SkillToken
+              name="Matplotlib"
+              icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/matplotlib/matplotlib-original.svg"
+            />
+            <SkillToken
+              name="Seaborn"
+              icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/seaborn/seaborn-original.svg"
+            />
+            <SkillToken
               name="Scikit-learn"
               icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/scikitlearn/scikitlearn-original.svg"
             />
@@ -103,29 +104,50 @@ const Skills = () => {
               name="TensorFlow"
               icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tensorflow/tensorflow-original.svg"
             />
+          </div>
+        </div>
+
+        {/* ROW 2: GENERATIVE AI & AGENTIC SYSTEMS */}
+        <div className="dashboard-row">
+          <div className="row-sidebar">
+            <span className="row-index">02</span>
+            <div className="title-status-wrapper">
+              <h3 className="row-title">Generative AI & Agents</h3>
+              <span className="learning-status">
+                <span className="pulse-dot"></span>
+                CURRENTLY LEARNING
+              </span>
+            </div>
+            <div className="accent-bar ai-bar"></div>
+          </div>
+          <div className="row-content">
+            <SkillToken
+              name="Gemini LLM"
+              icon="https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/assets/gemini-color.png"
+            />
+            <SkillToken
+              name="LangChain"
+              icon="https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/assets/langchain-color.png"
+            />
+            <SkillToken
+              name="LangGraph"
+              icon="https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/assets/langchain-color.png"
+            />
+            <SkillToken
+              name="Tavily AI"
+              icon="https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/assets/tavily-color.png"
+            />
             <SkillToken
               name="Jupyter"
               icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/jupyter/jupyter-original.svg"
             />
-            {/* For your AI & Machine Learning row */}
-            <SkillToken
-              name="Matplotlib"
-              icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/matplotlib/matplotlib-original.svg"
-            />
-            <SkillToken
-              name="Seaborn"
-              icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/seaborn/seaborn-original.svg"
-            />
-
-            {/* For your Core Utilities / DevOps row */}
-           
           </div>
         </div>
 
-        {/* ROW 2: FRONTEND */}
+        {/* ROW 3: FRONTEND ARCHITECTURE */}
         <div className="dashboard-row">
           <div className="row-sidebar">
-            <span className="row-index">02</span>
+            <span className="row-index">03</span>
             <h3 className="row-title">Frontend Architecture</h3>
             <div className="accent-bar dev-bar"></div>
           </div>
@@ -163,10 +185,10 @@ const Skills = () => {
           </div>
         </div>
 
-        {/* ROW 3: BACKEND (Fixed the crash issue here) */}
+        {/* ROW 4: BACKEND ENGINEERING */}
         <div className="dashboard-row">
           <div className="row-sidebar">
-            <span className="row-index">03</span>
+            <span className="row-index">04</span>
             <h3 className="row-title">Backend Engineering</h3>
             <div className="accent-bar dev-bar"></div>
           </div>
@@ -202,18 +224,18 @@ const Skills = () => {
               name="REST APIs"
               icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/openapi/openapi-original.svg"
             />
-             <SkillToken
+            <SkillToken
               name="Maven"
               icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/maven/maven-original.svg"
             />
           </div>
         </div>
 
-        {/* ROW 4: TWO-COLUMN SPLIT (Databases & DevOps) */}
+        {/* ROW 5: TWO-COLUMN SPLIT (Databases & DevOps) */}
         <div className="dashboard-split-container">
           <div className="dashboard-row split-row">
             <div className="row-sidebar">
-              <span className="row-index">04</span>
+              <span className="row-index">05</span>
               <h3 className="row-title">Databases & Cloud</h3>
               <div className="accent-bar data-bar"></div>
             </div>
@@ -239,7 +261,7 @@ const Skills = () => {
 
           <div className="dashboard-row split-row">
             <div className="row-sidebar">
-              <span className="row-index">05</span>
+              <span className="row-index">06</span>
               <h3 className="row-title">DevOps & Systems</h3>
               <div className="accent-bar data-bar"></div>
             </div>
@@ -269,11 +291,11 @@ const Skills = () => {
           </div>
         </div>
 
-        {/* ROW 5: TWO-COLUMN SPLIT (Languages & Core Utilities) */}
+        {/* ROW 6: TWO-COLUMN SPLIT (Languages & Core Utilities) */}
         <div className="dashboard-split-container">
           <div className="dashboard-row split-row">
             <div className="row-sidebar">
-              <span className="row-index">06</span>
+              <span className="row-index">07</span>
               <h3 className="row-title">Languages</h3>
               <div className="accent-bar core-bar"></div>
             </div>
@@ -299,7 +321,7 @@ const Skills = () => {
 
           <div className="dashboard-row split-row">
             <div className="row-sidebar">
-              <span className="row-index">07</span>
+              <span className="row-index">08</span>
               <h3 className="row-title">Core Utilities</h3>
               <div className="accent-bar core-bar"></div>
             </div>

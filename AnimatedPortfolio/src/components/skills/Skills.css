@@ -120,6 +120,7 @@
   margin-top: 10px;
   border-radius: 2px;
 }
+.ml-bar { background: linear-gradient(90deg, #00b4d8, transparent); }
 .ai-bar { background: var(--neon-purple); }
 .dev-bar { background: var(--neon-cyan); }
 .data-bar { background: var(--neon-orange); }
@@ -179,49 +180,15 @@
   color: #fff;
 }
 
-/* --- MEDIA BREAKPOINTS --- */
-@media (max-width: 1200px) {
-  .dashboard-split-container {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 900px) {
-  .dashboard-row, 
-  .dashboard-split-container .dashboard-row {
-    grid-template-columns: 1fr;
-    gap: 20px;
-    padding: 24px;
-  }
-  .row-sidebar {
-    padding-right: 0;
-  }
-  .accent-bar {
-    width: 40px;
-    margin-top: 6px;
-  }
-  .section-header-fresh {
-    font-size: 2.3rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .skills-fresh-section {
-    padding: 80px 6%;
-  }
-  .row-content {
-    gap: 8px;
-  }
-  .tech-token {
-    padding: 6px 12px;
-  }
-}
-
 /* Layout wrapper to align title and tag neatly */
 .title-status-wrapper {
   display: flex;
   flex-direction: column;
   gap: 6px;
+}
+
+.title-status-wrapper .row-title {
+  margin: 0;
 }
 
 /* The modern tech status tag */
@@ -270,11 +237,46 @@
   }
 }
 
-/* Ensures layout adjusts nicely when tracking tags match responsive code */
+/* --- MEDIA BREAKPOINTS --- */
+@media (max-width: 1200px) {
+  .dashboard-split-container {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 900px) {
+  .dashboard-row, 
+  .dashboard-split-container .dashboard-row {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 24px;
+  }
+  .row-sidebar {
+    padding-right: 0;
+  }
   .title-status-wrapper {
     flex-direction: row;
     align-items: center;
     flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  .accent-bar {
+    width: 40px;
+    margin-top: 6px;
+  }
+  .section-header-fresh {
+    font-size: 2.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .skills-fresh-section {
+    padding: 80px 6%;
+  }
+  .row-content {
+    gap: 8px;
+  }
+  .tech-token {
+    padding: 6px 12px;
   }
 }
