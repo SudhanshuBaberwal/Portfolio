@@ -68,6 +68,10 @@ const Skills = () => {
           <div className="row-sidebar">
             <span className="row-index">01</span>
             <h3 className="row-title">Machine Learning & Data</h3>
+            <span className="learning-status">
+                <span className="pulse-dot"></span>
+                CURRENTLY LEARNING
+              </span>
             <div className="accent-bar ml-bar"></div>
           </div>
           <div className="row-content">
@@ -137,10 +141,10 @@ const Skills = () => {
               name="Tavily AI"
               icon="https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/assets/tavily-color.png"
             />
-            <SkillToken
+            {/* <SkillToken
               name="Jupyter"
               icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/jupyter/jupyter-original.svg"
-            />
+            /> */}
           </div>
         </div>
 

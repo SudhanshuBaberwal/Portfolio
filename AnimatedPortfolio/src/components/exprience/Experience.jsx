@@ -37,7 +37,7 @@ const Experience = () => {
   useEffect(() => {
     const leetcodeData = async () => {
       try {
-        console.log("API : " +API_BASE)
+        // console.log("API : " +API_BASE)
         const data = await axios.get(`${API_BASE}/api/leetcode`);
         setlAllQuestion(data.data.submitStats.acSubmissionNum[0].count);
         setlEasyQuestion(data.data.submitStats.acSubmissionNum[1].count);
@@ -77,7 +77,7 @@ const Experience = () => {
     const githubData = async () => {
       try {
       const data = await axios.get(`${API_BASE}/api/github`);
-        console.log(data);
+        // console.log(data);
         setGhData(data.data.data); // <-- NEW: Saving GitHub data to state
       } catch (err) {
         console.error(err);
