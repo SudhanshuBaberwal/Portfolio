@@ -127,7 +127,7 @@ const Skills = () => {
           <div className="row-content">
             <SkillToken
               name="Gemini LLM"
-              icon="https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/assets/gemini-color.png"
+              icon="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaKp7580ptSeqDXvbVWRZM4c_M433Kb3fQzA&s"
             />
             <SkillToken
               name="LangChain"
