@@ -119,7 +119,9 @@ const Skills = () => {
               <h3 className="row-title">Generative AI & Agents</h3>
               <span className="learning-status">
                 <span className="pulse-dot"></span>
+
                 CURRENTLY LEARNING
+                
               </span>
             </div>
             <div className="accent-bar ai-bar"></div>
