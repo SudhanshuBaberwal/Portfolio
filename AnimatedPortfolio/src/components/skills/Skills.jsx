@@ -100,6 +100,7 @@ const Skills = () => {
               name="Scikit-learn"
               icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/scikitlearn/scikitlearn-original.svg"
             />
+            
             <SkillToken
               name="OpenCV"
               icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/opencv/opencv-original.svg"
@@ -110,7 +111,6 @@ const Skills = () => {
             />
           </div>
         </div>
-
         {/* ROW 2: GENERATIVE AI & AGENTIC SYSTEMS */}
         <div className="dashboard-row">
           <div className="row-sidebar">
@@ -127,10 +127,12 @@ const Skills = () => {
             <div className="accent-bar ai-bar"></div>
           </div>
           <div className="row-content">
+
             <SkillToken
               name="Gemini LLM"
               icon="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaKp7580ptSeqDXvbVWRZM4c_M433Kb3fQzA&s"
             />
+
             <SkillToken
               name="LangChain"
               icon="https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/assets/langchain-color.png"
