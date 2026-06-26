@@ -92,10 +92,10 @@ const Skills = () => {
               name="Matplotlib"
               icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/matplotlib/matplotlib-original.svg"
             />
-            <SkillToken
+            {/* <SkillToken
               name="Seaborn"
               icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/seaborn/seaborn-original.svg"
-            />
+            /> */}
             <SkillToken
               name="Scikit-learn"
               icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/scikitlearn/scikitlearn-original.svg"
@@ -133,7 +133,7 @@ const Skills = () => {
               icon="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaKp7580ptSeqDXvbVWRZM4c_M433Kb3fQzA&s"
             />
 
-            <SkillToken
+            {/* <SkillToken
               name="LangChain"
               icon="https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/assets/langchain-color.png"
             />
@@ -144,7 +144,7 @@ const Skills = () => {
             <SkillToken
               name="Tavily AI"
               icon="https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/assets/tavily-color.png"
-            />
+            /> */}
             {/* <SkillToken
               name="Jupyter"
               icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/jupyter/jupyter-original.svg"
@@ -181,10 +181,10 @@ const Skills = () => {
               name="Zustand"
               icon="https://raw.githubusercontent.com/pmndrs/zustand/main/docs/favicon.ico"
             />
-            <SkillToken
+            {/* <SkillToken
               name="Framer Motion"
               icon="https://images.seeklogo.com/logo-png/43/b/framer-motion-logo-png_seeklogo-434057.png"
-            />
+            /> */}
             <SkillToken
               name="Shadcn UI"
               icon="https://avatar.iran.liara.run/public/37"

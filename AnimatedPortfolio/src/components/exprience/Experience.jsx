@@ -6,6 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import axios from "axios";
 const API_BASE = import.meta.env.VITE_API_URL;
 // const API_BASE = "http://localhost:3000"
+console.log(import.meta.env.VITE_API_URL);
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -65,8 +66,8 @@ const Experience = () => {
 
     const codeforcesData = async () => {
       try {
-       const data = await axios.get(`${API_BASE}/api/code-forces`, {
-          withCredentials: true,
+        const data = await axios.get(`${API_BASE}/api/code-forces`, {
+       
         });
         setCfData(data.data.data);
       } catch (err) {
@@ -76,7 +77,7 @@ const Experience = () => {
 
     const githubData = async () => {
       try {
-      const data = await axios.get(`${API_BASE}/api/github`);
+        const data = await axios.get(`${API_BASE}/api/github`);
         // console.log(data);
         setGhData(data.data.data); // <-- NEW: Saving GitHub data to state
       } catch (err) {
@@ -85,9 +86,17 @@ const Experience = () => {
     };
 
     // Load everything
-    Promise.all([leetcodeData(), codeforcesData(), githubData()]).then(() => {
-      setDataLoaded(true); // Triggers GSAP animation once all APIs return
-    });
+    const loadData = async () => {
+      try {
+        await Promise.all([leetcodeData(), codeforcesData(), githubData()]);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setDataLoaded(true);
+      }
+    };
+
+    loadData();
   }, []);
 
   useGSAP(
@@ -196,18 +205,22 @@ const Experience = () => {
             </div>
 
             <div className="module-footer lc-footer">
-              <div  className="footer-stat">
+              <div className="footer-stat">
                 TOTAL ACTIVE DAYS <strong>{totalActiveDays}</strong>
               </div>
               <div className="footer-stat">
                 STREAK <strong>{strak} Days</strong>
               </div>
-              <a 
+              <a
                 href={`https://leetcode.com/u/sudhanshubaberwal/`}
                 target="_blank"
                 rel="noreferrer"
                 className="action-btn"
-                style={{ borderColor: "#2ea043", color: "#2ea043" , marginTop : "10px" }}
+                style={{
+                  borderColor: "#2ea043",
+                  color: "#2ea043",
+                  marginTop: "10px",
+                }}
               >
                 ACCESS_PROFILE
               </a>
@@ -335,8 +348,12 @@ const Experience = () => {
               </div>
             </div>
 
-            <a target="_blank" href="https://codeforces.com/profile/Sudhanshu_Baberwal" className="action-btn">
-              ACCESS_PROFILE 
+            <a
+              target="_blank"
+              href="https://codeforces.com/profile/Sudhanshu_Baberwal"
+              className="action-btn"
+            >
+              ACCESS_PROFILE
             </a>
           </div>
 
