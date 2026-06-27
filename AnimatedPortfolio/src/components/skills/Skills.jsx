@@ -185,11 +185,11 @@ const Skills = () => {
               name="Framer Motion"
               icon="https://images.seeklogo.com/logo-png/43/b/framer-motion-logo-png_seeklogo-434057.png"
             /> */}
-            <SkillToken
+            {/* <SkillToken
               name="Shadcn UI"
               icon="https://avatar.iran.liara.run/public/37"
               invert={true}
-            />
+            /> */}
           </div>
         </div>
 
