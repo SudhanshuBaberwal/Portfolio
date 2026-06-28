@@ -270,7 +270,7 @@ const Experience = () => {
                     </strong>
                   </p>
 
-                  {lActiveBadgeIcon && (
+                  {/* {lActiveBadgeIcon && (
                     <img
                       src={lActiveBadgeIcon}
                       alt={lActiveBadge}
@@ -282,7 +282,7 @@ const Experience = () => {
                           "drop-shadow(0px 0px 12px rgba(255, 192, 30, 0.4))",
                       }}
                     />
-                  )}
+                  )} */}
                 </div>
               </div>
               <div className="terminal-log">
