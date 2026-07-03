@@ -130,25 +130,26 @@ const Skills = () => {
 
             <SkillToken
               name="Gemini LLM"
-              icon="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaKp7580ptSeqDXvbVWRZM4c_M433Kb3fQzA&s"
+              icon="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/google-gemini-icon.png"
             />
 
-            {/* <SkillToken
+            <SkillToken
               name="LangChain"
-              icon="https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/assets/langchain-color.png"
+              icon="https://raw.githubusercontent.com/lobehub/lobe-icons/refs/heads/master/packages/static-png/dark/langgraph-color.png"
             />
             <SkillToken
               name="LangGraph"
-              icon="https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/assets/langchain-color.png"
+              icon="https://raw.githubusercontent.com/lobehub/lobe-icons/refs/heads/master/packages/static-png/dark/langgraph-color.png"
             />
             <SkillToken
               name="Tavily AI"
-              icon="https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/assets/tavily-color.png"
-            /> */}
-            {/* <SkillToken
-              name="Jupyter"
-              icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/jupyter/jupyter-original.svg"
-            /> */}
+              icon="https://raw.githubusercontent.com/lobehub/lobe-icons/refs/heads/master/packages/static-png/light/tavily-color.png"
+            /> 
+            <SkillToken
+              name="Qdrant"
+              icon="https://qdrant.tech/img/brand-resources-logos/qdrant-brandmark-red.png"
+            /> 
+            
           </div>
         </div>
 
@@ -181,15 +182,15 @@ const Skills = () => {
               name="Zustand"
               icon="https://raw.githubusercontent.com/pmndrs/zustand/main/docs/favicon.ico"
             />
-            {/* <SkillToken
+            <SkillToken
               name="Framer Motion"
-              icon="https://images.seeklogo.com/logo-png/43/b/framer-motion-logo-png_seeklogo-434057.png"
-            /> */}
-            {/* <SkillToken
+              icon="https://static.vecteezy.com/system/resources/previews/067/565/486/non_2x/framer-logo-rounded-free-png.png"
+            />
+            <SkillToken
               name="Shadcn UI"
-              icon="https://avatar.iran.liara.run/public/37"
+              icon="https://images.seeklogo.com/logo-png/51/2/shadcn-ui-logo-png_seeklogo-519786.png"
               invert={true}
-            /> */}
+            />
           </div>
         </div>
 
@@ -239,11 +240,37 @@ const Skills = () => {
           </div>
         </div>
 
+         <div className="dashboard-row">
+          <div className="row-sidebar">
+            <span className="row-index">05</span>
+            <h3 className="row-title">Deployment Engineering</h3>
+            <div className="accent-bar dev-bar"></div>
+          </div>
+          <div className="row-content">
+            <SkillToken
+              name="Vercel"
+              icon="https://pnghdpro.com/wp-content/themes/pnghdpro/download/social-media-and-brands/vercel-logo-icon.png"
+            />
+             <SkillToken
+              name="Render"
+              icon="https://render.com/images/render-logo-white.png"
+            />
+             <SkillToken
+              name="AWS-EC2"
+              icon="https://download.logo.wine/logo/Amazon_Elastic_Compute_Cloud/Amazon_Elastic_Compute_Cloud-Logo.wine.png"
+            />
+             <SkillToken
+              name="Netlify"
+              icon="https://make-cxp-documentation.ams3.digitaloceanspaces.com/apps-center-icons/netlify.png"
+            />
+          </div>
+        </div>
+
         {/* ROW 5: TWO-COLUMN SPLIT (Databases & DevOps) */}
         <div className="dashboard-split-container">
           <div className="dashboard-row split-row">
             <div className="row-sidebar">
-              <span className="row-index">05</span>
+              <span className="row-index">06</span>
               <h3 className="row-title">Databases & Cloud</h3>
               <div className="accent-bar data-bar"></div>
             </div>
@@ -269,7 +296,7 @@ const Skills = () => {
 
           <div className="dashboard-row split-row">
             <div className="row-sidebar">
-              <span className="row-index">06</span>
+              <span className="row-index">07</span>
               <h3 className="row-title">DevOps & Systems</h3>
               <div className="accent-bar data-bar"></div>
             </div>
@@ -295,6 +322,10 @@ const Skills = () => {
                 name="Nginx"
                 icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nginx/nginx-original.svg"
               />
+               <SkillToken
+                name="CI-CD"
+                icon="https://www.mabl.com/hs-fs/hubfs/CICDBlog.png?width=536&name=CICDBlog.png"
+              />
             </div>
           </div>
         </div>
@@ -303,7 +334,7 @@ const Skills = () => {
         <div className="dashboard-split-container">
           <div className="dashboard-row split-row">
             <div className="row-sidebar">
-              <span className="row-index">07</span>
+              <span className="row-index">08</span>
               <h3 className="row-title">Languages</h3>
               <div className="accent-bar core-bar"></div>
             </div>
@@ -329,7 +360,7 @@ const Skills = () => {
 
           <div className="dashboard-row split-row">
             <div className="row-sidebar">
-              <span className="row-index">08</span>
+              <span className="row-index">09</span>
               <h3 className="row-title">Core Utilities</h3>
               <div className="accent-bar core-bar"></div>
             </div>
