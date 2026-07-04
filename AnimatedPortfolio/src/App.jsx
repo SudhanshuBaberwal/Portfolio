@@ -13,6 +13,7 @@ import "./App.css";
 import Preloader from "./components/preloader/Preloader";
 import { Route, Routes } from "react-router-dom";
 import AllProjects from "./components/Projects/AllProjects";
+import VentureDetail from "./components/startup/VentureDetails";
 
 const MainLayout = ({ loading, setLoading }) => (
   <div className="App">
@@ -22,6 +23,7 @@ const MainLayout = ({ loading, setLoading }) => (
     <div id="home"><Home /></div>
     <div id="about"><About /></div>
     <div id="skills"><Skills /></div>
+    <div id="startup"><VentureDetail /></div>
     <div id="projects"><Projects /></div>
     <div id="experience"><Experience /></div>
     <div id="contact"><Contact /></div>
