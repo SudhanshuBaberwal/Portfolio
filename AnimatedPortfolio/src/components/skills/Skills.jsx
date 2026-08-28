@@ -142,11 +142,8 @@ const Skills = () => {
             <SkillToken
               name="Tavily AI"
               icon="https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/assets/tavily-color.png"
-            /> */}
-            {/* <SkillToken
-              name="Jupyter"
-              icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/jupyter/jupyter-original.svg"
-            /> */}
+            /> 
+        
           </div>
         </div>
 
