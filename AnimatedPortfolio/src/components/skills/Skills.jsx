@@ -119,9 +119,7 @@ const Skills = () => {
               <h3 className="row-title">Generative AI & Agents</h3>
               <span className="learning-status">
                 <span className="pulse-dot"></span>
-
                 CURRENTLY LEARNING
-                
               </span>
             </div>
             <div className="accent-bar ai-bar"></div>
@@ -143,13 +141,12 @@ const Skills = () => {
             />
             <SkillToken
               name="Tavily AI"
-              icon="https://raw.githubusercontent.com/lobehub/lobe-icons/refs/heads/master/packages/static-png/light/tavily-color.png"
-            /> 
-            <SkillToken
-              name="Qdrant"
-              icon="https://qdrant.tech/img/brand-resources-logos/qdrant-brandmark-red.png"
-            /> 
-            
+              icon="https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/assets/tavily-color.png"
+            /> */}
+            {/* <SkillToken
+              name="Jupyter"
+              icon="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/jupyter/jupyter-original.svg"
+            /> */}
           </div>
         </div>
 
@@ -290,6 +287,10 @@ const Skills = () => {
               <SkillToken
                 name="Imagekit"
                 icon="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcYZb9ocjmCaPKFZS6qMv3zXFMmQzuXZnHGQ&s"
+              />
+              <SkillToken
+                name="SupaBase"
+                icon="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTHpiCovcf59kKFAXDhHcHx-6anNAvDvUb9u5uqyE8Rg&s=10"
               />
             </div>
           </div>
