@@ -4,7 +4,7 @@ import { SITE } from "../../data/site.js";
 
 // Portrait lives in public/ so the <link rel="preload"> hint in index.html works.
 // If the file is absent the component falls back to a CSS gradient.
-const HERO_PHOTO = "/hero.jpg";
+const HERO_PHOTO = "/hero.webp";
 
 /* ─── helpers ─────────────────────────────────────────────── */
 const prefersReducedMotion = () =>
@@ -204,6 +204,8 @@ export default function Hero() {
               ref={photoRef}
               src={HERO_PHOTO}
               alt=""
+              width="896"
+              height="1195"
               className="hero__photo"
               loading="eager"
               onError={() => setPhotoError(true)}

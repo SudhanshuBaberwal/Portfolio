@@ -6,6 +6,7 @@ import Stack from "./components/Stack/Stack";
 import Contact from "./components/Contact/Contact";
 import Footer from "./components/Footer/Footer";
 import PillNav from "./components/PillNav/PillNav";
+import ErrorBoundary from "./components/common/ErrorBoundary";
 import { NAV_ITEMS } from "./data/site.js";
 import logo from "./assets/logo.svg";
 import "./index.css";
@@ -15,6 +16,18 @@ const SECTION_IDS = ["top", "work", "about", "stack", "contact"];
 
 export default function App() {
   const [activeHref, setActiveHref] = useState("#top");
+
+  // Fallback for unknown hashes/paths: if invalid hash provided, smooth scroll to #top
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash) {
+      const validHashes = SECTION_IDS.map((id) => `#${id}`);
+      if (!validHashes.includes(hash)) {
+        window.history.replaceState(null, "", window.location.pathname);
+        window.scrollTo({ top: 0, behavior: "instant" });
+      }
+    }
+  }, []);
 
   /* ── IntersectionObserver: track which section is in view ── */
   useEffect(() => {
@@ -33,20 +46,39 @@ export default function App() {
         });
       },
       {
-        // Fire when section centre crosses the viewport centre.
-        // rootMargin clips 45% from top and 45% from bottom,
-        // so only the middle 10% of the viewport triggers updates.
-        rootMargin: "-45% 0px -45% 0px",
+        rootMargin: "-35% 0px -35% 0px",
         threshold: 0,
       }
     );
 
     sections.forEach((s) => observer.observe(s));
-    return () => observer.disconnect();
+
+    // Handle scroll to the very bottom to reliably activate #contact
+    const handleScrollBottom = () => {
+      const atBottom =
+        window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 50;
+      if (atBottom) {
+        setActiveHref("#contact");
+      } else if (window.scrollY < 100) {
+        setActiveHref("#top");
+      }
+    };
+
+    window.addEventListener("scroll", handleScrollBottom, { passive: true });
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("scroll", handleScrollBottom);
+    };
   }, []);
 
   return (
     <>
+      {/* ── Skip to content link for accessibility ────────── */}
+      <a href="#main-content" className="skip-to-content">
+        Skip to content
+      </a>
+
       {/* ── Fixed pill nav ─────────────────────────────────── */}
       <div
         style={{
@@ -78,25 +110,37 @@ export default function App() {
         />
       </div>
 
-      {/* ── Sections ───────────────────────────────────────── */}
-      <Hero />
+      {/* ── Sections protected by Error Boundaries ─────────── */}
+      <ErrorBoundary fallbackMessage="Hero section error.">
+        <Hero />
+      </ErrorBoundary>
 
-      <main>
+      <main id="main-content">
         {/* Work / Selected Projects Section */}
-        <Work />
+        <ErrorBoundary fallbackMessage="Projects section error.">
+          <Work />
+        </ErrorBoundary>
 
         {/* About / Who I am Section */}
-        <About />
+        <ErrorBoundary fallbackMessage="About section error.">
+          <About />
+        </ErrorBoundary>
 
         {/* Stack / Tools I use Section */}
-        <Stack />
+        <ErrorBoundary fallbackMessage="Stack section error.">
+          <Stack />
+        </ErrorBoundary>
 
         {/* Contact Section */}
-        <Contact />
+        <ErrorBoundary fallbackMessage="Contact section error.">
+          <Contact />
+        </ErrorBoundary>
       </main>
 
       {/* Footer */}
-      <Footer />
+      <ErrorBoundary fallbackMessage="Footer section error.">
+        <Footer />
+      </ErrorBoundary>
     </>
   );
 }

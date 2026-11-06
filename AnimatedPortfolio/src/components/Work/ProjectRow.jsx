@@ -95,6 +95,8 @@ export default function ProjectRow({
                   <img
                     src={project.image}
                     alt={`${project.title} interface preview`}
+                    width="640"
+                    height="400"
                     className="work__detail-image"
                     loading="lazy"
                     onError={(e) => {

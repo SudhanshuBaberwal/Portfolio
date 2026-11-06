@@ -20,6 +20,8 @@ export default function ProjectPreview({
           <img
             src={activeProject.image}
             alt=""
+            width="360"
+            height="240"
             className="work__cursor-preview-img"
             onError={(e) => {
               e.currentTarget.style.display = "none";
