@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Hero from "./components/Hero/Hero";
 import Work from "./components/Work/Work";
+import About from "./components/About/About";
 import PillNav from "./components/PillNav/PillNav";
 import { NAV_ITEMS } from "./data/site.js";
 import logo from "./assets/logo.svg";
@@ -81,30 +82,10 @@ export default function App() {
         {/* Work / Selected Projects Section */}
         <Work />
 
-        <section
-          id="about"
-          style={{
-            minHeight: "100vh",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "clamp(20px, 2.5vw, 44px)",
-            background: "#111",
-            color: "#fbece3",
-            fontFamily: "'Inter Tight', sans-serif",
-          }}
-        >
-          <h2
-            style={{
-              fontSize: "clamp(32px, 5vw, 64px)",
-              fontWeight: 500,
-              letterSpacing: "-0.04em",
-            }}
-          >
-            About
-          </h2>
-        </section>
+        {/* About / Who I am Section */}
+        <About />
 
+        {/* Contact placeholder */}
         <section
           id="contact"
           style={{

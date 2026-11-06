@@ -22,6 +22,11 @@ export const SITE = {
   // Email
   email: "baberwalsudhanshu34@gmail.com",
 
+  // Socials / External links
+  github: "https://github.com/SudhanshuBaberwal",
+  linkedin: "https://www.linkedin.com/in/sudhanshu-baberwal/",
+  resume: "/resume.pdf",
+
   // Small label (left-middle of hero)
   labelLine1: "Selected Projects",
   labelLine2: "IIIT Dharwad",
