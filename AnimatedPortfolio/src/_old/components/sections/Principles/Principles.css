@@ -1,0 +1,39 @@
+.limes {
+  background: var(--lime);
+  color: var(--ink);
+}
+
+.limes h2 {
+  max-width: none;
+}
+
+.g4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.g4 div {
+  border: 1.5px solid var(--ink);
+  border-radius: 16px;
+  padding: 24px;
+  min-height: 190px;
+}
+
+.g4 b {
+  font-size: 22px;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.g4 p {
+  font-size: 14px;
+  opacity: 0.75;
+}
+
+@media (max-width: 860px) {
+  .g4 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+

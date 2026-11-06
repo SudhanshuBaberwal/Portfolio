@@ -1,0 +1,77 @@
+.stk {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 30px;
+}
+
+.stk-rows {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+  flex-wrap: wrap;
+}
+
+.row .mono {
+  width: 110px;
+}
+
+.tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tags button {
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--tx);
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 4px 10px;
+  font-family: var(--m);
+  background: none;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.tags button[aria-pressed="true"] {
+  background: var(--lime);
+  color: var(--ink);
+  border-color: var(--lime);
+}
+
+.det {
+  background: var(--bg2);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 28px;
+  align-self: start;
+  position: sticky;
+  top: 96px;
+}
+
+.det b {
+  font-size: 30px;
+  display: block;
+  margin: 6px 0 10px;
+}
+
+.det p {
+  color: var(--mu);
+}
+
+@media (max-width: 860px) {
+  .stk {
+    grid-template-columns: 1fr;
+  }
+  .det {
+    position: static;
+  }
+}
+

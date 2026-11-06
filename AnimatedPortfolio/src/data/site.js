@@ -1,26 +1,38 @@
-/**
- * Site configuration - Single source of truth for name, role, links, and navigation
- */
-export const SITE_CONFIG = {
-  name: "Sudhanshu Baberwal",
-  shortName: "Sudhanshu B",
-  role: "Backend Engineer",
-  roleTagline: "// Backend engineer · Java, Spring, system design",
-  tagline: "I’m a B.Tech CSE student at IIIT Dharwad. I design APIs, services and data layers that stay fast and readable as they grow, and I’m exploring AI-powered applications on top of them.",
+// All editable content lives here — change once, reflects everywhere.
+
+export const SITE = {
+  // Identity
+  firstName: "Sudhanshu",
+  lastName: "Baberwal",
+  fullName: "Sudhanshu Baberwal",
+
+  // Hero display name (shown as giant text at bottom of hero)
+  heroName: "Sudhanshu",
+
+  // Role / location
+  role: "Backend software engineer",
+  location: "Based in India",
+
+  // College
+  college: "IIIT Dharwad",
+
+  // Copyright year
+  year: "© 2026",
+
+  // Email
   email: "baberwalsudhanshu34@gmail.com",
-  linkedin: "https://www.linkedin.com/in/sudhanshu-baberwal/",
-  github: "https://github.com/SudhanshuBaberwal",
-  availabilityText: "Open to internships & full-time",
-  stats: [
-    { value: "4", label: "projects featured" },
-    { value: "Java", label: "main language" },
-    { value: "2026", label: "graduating" },
-  ],
-  navItems: [
+
+  // Small label above the giant name
+  labelLine1: "Selected Projects",
+  labelLine2: "IIIT Dharwad",
+
+  // "All projects" link text
+  allProjectsText: "All projects",
+
+  // Nav links
+  navLinks: [
     { label: "Work", href: "#work" },
-    { label: "What I build", href: "#build" },
     { label: "About", href: "#about" },
-    { label: "Stack", href: "#stack" },
     { label: "Contact", href: "#contact" },
   ],
 };

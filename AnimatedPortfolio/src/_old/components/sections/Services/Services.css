@@ -1,0 +1,28 @@
+.svc {
+  border-top: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 30px;
+  padding: 30px 0;
+}
+
+.svc h3 {
+  font-size: 28px;
+  transition: color 0.2s;
+}
+
+.svc:hover h3 {
+  color: var(--lime);
+}
+
+.svc p {
+  color: var(--mu);
+  max-width: 52ch;
+}
+
+@media (max-width: 860px) {
+  .svc {
+    grid-template-columns: 1fr;
+  }
+}
+

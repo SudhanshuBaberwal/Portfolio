@@ -1,0 +1,22 @@
+.mq {
+  border-block: 1px solid var(--line);
+  overflow: hidden;
+  padding: 18px 0;
+  margin-top: 70px;
+}
+
+.mq div {
+  display: flex;
+  gap: 56px;
+  width: max-content;
+  animation: s 30s linear infinite;
+  font: 500 15px var(--m);
+  color: var(--mu);
+}
+
+@keyframes s {
+  to {
+    transform: translateX(-50%);
+  }
+}
+

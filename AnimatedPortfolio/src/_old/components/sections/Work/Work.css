@@ -1,0 +1,91 @@
+.stackc {
+  position: relative;
+}
+
+.card {
+  position: sticky;
+  top: 96px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  background: var(--bg2);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  overflow: hidden;
+  margin-bottom: 28px;
+  min-height: 340px;
+}
+
+.card .t {
+  padding: 34px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.card h3 {
+  font-size: 30px;
+  letter-spacing: -0.02em;
+}
+
+.card p {
+  color: var(--mu);
+  max-width: 38ch;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.chips span,
+.chips .link-chip {
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 4px 10px;
+  font: 12px var(--m);
+  color: var(--mu);
+  background: none;
+  text-decoration: none;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.chips .link-chip:hover {
+  color: var(--tx);
+  border-color: var(--lime);
+}
+
+.art {
+  display: grid;
+  place-items: center;
+  font: 800 150px var(--d);
+  color: rgba(10, 12, 16, 0.9);
+  background: linear-gradient(135deg, var(--lime), #7cc01a);
+}
+
+.card:nth-child(2) .art {
+  background: linear-gradient(135deg, #f1f2f4, #8b92a0);
+}
+
+.card:nth-child(3) .art {
+  background: linear-gradient(135deg, #6ee7d0, #1b7a8a);
+}
+
+.card:nth-child(4) .art {
+  background: linear-gradient(135deg, #ffb86b, #c2410c);
+}
+
+@media (max-width: 860px) {
+  .card {
+    grid-template-columns: 1fr;
+    position: relative;
+    top: 0;
+  }
+  .art {
+    min-height: 140px;
+    font-size: 90px;
+  }
+}
+
