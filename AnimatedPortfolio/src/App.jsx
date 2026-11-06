@@ -2,13 +2,14 @@ import React, { useState, useEffect } from "react";
 import Hero from "./components/Hero/Hero";
 import Work from "./components/Work/Work";
 import About from "./components/About/About";
+import Stack from "./components/Stack/Stack";
 import PillNav from "./components/PillNav/PillNav";
 import { NAV_ITEMS } from "./data/site.js";
 import logo from "./assets/logo.svg";
 import "./index.css";
 
 /* IDs the observer watches — must match section id= attributes */
-const SECTION_IDS = ["top", "work", "about", "contact"];
+const SECTION_IDS = ["top", "work", "about", "stack", "contact"];
 
 export default function App() {
   const [activeHref, setActiveHref] = useState("#top");
@@ -84,6 +85,9 @@ export default function App() {
 
         {/* About / Who I am Section */}
         <About />
+
+        {/* Stack / Tools I use Section */}
+        <Stack />
 
         {/* Contact placeholder */}
         <section
