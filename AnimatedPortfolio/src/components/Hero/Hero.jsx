@@ -2,10 +2,9 @@ import React, { useEffect, useRef, useState, useCallback } from "react";
 import "./Hero.css";
 import { SITE } from "../../data/site.js";
 
-// Vite glob: picks up hero.jpg if it exists, empty record otherwise.
-// Add your portrait photo as src/assets/hero.jpg to enable the full background.
-const heroPhotos = import.meta.glob("../../assets/hero.jpg", { eager: true, query: "?url", import: "default" });
-const heroPhoto = heroPhotos["../../assets/hero.jpg"] ?? null;
+// Portrait lives in public/ so the <link rel="preload"> hint in index.html works.
+// If the file is absent the component falls back to a CSS gradient.
+const HERO_PHOTO = "/hero.jpg";
 
 /* ─── helpers ─────────────────────────────────────────────── */
 const prefersReducedMotion = () =>
@@ -20,39 +19,41 @@ function lerp(a, b, t) {
 
 /* ─── Hero ─────────────────────────────────────────────────── */
 export default function Hero() {
-  const [menuOpen, setMenuOpen] = useState(false);
   const [photoError, setPhotoError] = useState(false);
 
-  /* Refs for DOM nodes that JS will animate */
-  const heroRef = useRef(null);
+  const heroRef  = useRef(null);
   const photoRef = useRef(null);
-  const nameRef = useRef(null);
-  const dotRef = useRef(null);
-  const topRowRef = useRef(null);
+  const nameRef  = useRef(null);
+  const dotRef   = useRef(null);   // red cursor-follower dot
 
   /* Parallax state */
-  const mouse = useRef({ x: 0, y: 0 });
+  const mouse    = useRef({ x: 0, y: 0 });
   const photoPos = useRef({ x: 0, y: 0 });
-  const namePos = useRef({ x: 0, y: 0 });
-  const rafId = useRef(null);
-  const dotPos = useRef({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
-  const targetDot = useRef({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
+  const namePos  = useRef({ x: 0, y: 0 });
+  const rafId    = useRef(null);
+  const dotPos   = useRef({
+    x: typeof window !== "undefined" ? window.innerWidth  / 2 : 0,
+    y: typeof window !== "undefined" ? window.innerHeight / 2 : 0,
+  });
+  const targetDot = useRef({ ...dotPos.current });
 
-  /* ── Entrance animation ──────────────────────────────────── */
+  /* ── Entrance animations ─────────────────────────────────
+     PillNav intro lasts ~560ms (60ms delay + 500ms transition).
+     Hero text starts after 500ms so the pill lands first.
+  ──────────────────────────────────────────────────────────── */
   useEffect(() => {
     if (prefersReducedMotion()) return;
 
-    // Gather top-row animatable elements
+    // Elements that fade-up: meta, year, label, projects, contact, down
     const toFade = heroRef.current?.querySelectorAll(
-      ".hero__logo, .hero__meta p, .hero__nav a, .hero__year, .hero__menu-btn, .hero__label, .hero__projects, .hero__contact, .hero__down"
+      ".hero__meta p, .hero__year, .hero__label, .hero__projects, .hero__contact, .hero__down"
     );
 
-    // Stagger top-row fade-ups
     if (toFade) {
       toFade.forEach((el, i) => {
-        const delay = 0.1 + i * 0.08;
+        // Start at 500ms, stagger by 80ms each
+        const delay = 0.5 + i * 0.08;
         el.style.transition = `opacity 0.6s ease ${delay}s, transform 0.6s ease ${delay}s`;
-        // Trigger on next frame
         requestAnimationFrame(() => {
           el.style.opacity = "1";
           el.style.transform = "translateY(0)";
@@ -60,11 +61,11 @@ export default function Hero() {
       });
     }
 
-    // Letter-by-letter name rise
+    // Letter-by-letter name rise — starts at 500ms
     const letters = nameRef.current?.querySelectorAll(".hero__name-letter");
     if (letters) {
       letters.forEach((el, i) => {
-        const delay = 0.25 + i * 0.045;
+        const delay = 0.5 + i * 0.045;
         el.style.transition = `transform 0.9s cubic-bezier(0.16, 1, 0.3, 1) ${delay}s`;
         requestAnimationFrame(() => {
           el.style.transform = "translateY(0)";
@@ -75,61 +76,61 @@ export default function Hero() {
     // Photo fade-in + slight scale
     const photo = photoRef.current;
     if (photo) {
-      photo.style.opacity = "0";
-      photo.style.transform = "scale(1.06)";
-      photo.style.transition = "opacity 1.1s ease 0.15s, transform 1.1s ease 0.15s";
+      photo.style.opacity    = "0";
+      photo.style.transform  = "scale(1.06)";
+      photo.style.transition = "opacity 1.2s ease 0.4s, transform 1.2s ease 0.4s";
       requestAnimationFrame(() => {
-        photo.style.opacity = "1";
+        photo.style.opacity   = "1";
         photo.style.transform = "scale(1)";
       });
     }
   }, []);
 
-  /* ── Parallax loop ───────────────────────────────────────── */
+  /* ── Mouse parallax loop ─────────────────────────────────── */
   useEffect(() => {
     if (prefersReducedMotion() || isTouchDevice()) return;
 
     const handleMove = (e) => {
-      mouse.current.x = e.clientX;
-      mouse.current.y = e.clientY;
-      targetDot.current.x = e.clientX;
-      targetDot.current.y = e.clientY;
+      mouse.current.x       = e.clientX;
+      mouse.current.y       = e.clientY;
+      targetDot.current.x   = e.clientX;
+      targetDot.current.y   = e.clientY;
     };
-
     window.addEventListener("mousemove", handleMove, { passive: true });
 
     const tick = () => {
       const { x: mx, y: my } = mouse.current;
-      const cx = window.innerWidth / 2;
+      const cx = window.innerWidth  / 2;
       const cy = window.innerHeight / 2;
-      const dx = (mx - cx) / cx; // -1 to 1
+      const dx = (mx - cx) / cx;
       const dy = (my - cy) / cy;
 
       // Photo moves opposite 12px
       photoPos.current.x = lerp(photoPos.current.x, -dx * 12, 0.07);
       photoPos.current.y = lerp(photoPos.current.y, -dy * 12, 0.07);
       if (photoRef.current) {
-        photoRef.current.style.transform = `translate(${photoPos.current.x}px, ${photoPos.current.y}px)`;
+        photoRef.current.style.transform =
+          `translate(${photoPos.current.x}px, ${photoPos.current.y}px)`;
       }
 
       // Name moves with cursor 6px
       namePos.current.x = lerp(namePos.current.x, dx * 6, 0.07);
       namePos.current.y = lerp(namePos.current.y, dy * 6, 0.07);
       if (nameRef.current) {
-        nameRef.current.style.transform = `translate(${namePos.current.x}px, ${namePos.current.y}px)`;
+        nameRef.current.style.transform =
+          `translate(${namePos.current.x}px, ${namePos.current.y}px)`;
       }
 
-      // Dot follower lagged
+      // Cursor-follower dot (lagged)
       dotPos.current.x = lerp(dotPos.current.x, targetDot.current.x, 0.1);
       dotPos.current.y = lerp(dotPos.current.y, targetDot.current.y, 0.1);
       if (dotRef.current) {
         dotRef.current.style.left = `${dotPos.current.x}px`;
-        dotRef.current.style.top = `${dotPos.current.y}px`;
+        dotRef.current.style.top  = `${dotPos.current.y}px`;
       }
 
       rafId.current = requestAnimationFrame(tick);
     };
-
     rafId.current = requestAnimationFrame(tick);
 
     return () => {
@@ -141,18 +142,16 @@ export default function Hero() {
   /* ── Dot hover scaling ───────────────────────────────────── */
   useEffect(() => {
     if (isTouchDevice()) return;
-    const links = document.querySelectorAll("a, button");
     const dot = dotRef.current;
     if (!dot) return;
 
     const enter = () => dot.classList.add("is-hovering");
     const leave = () => dot.classList.remove("is-hovering");
-
+    const links = document.querySelectorAll("a, button");
     links.forEach((el) => {
       el.addEventListener("mouseenter", enter);
       el.addEventListener("mouseleave", leave);
     });
-
     return () => {
       links.forEach((el) => {
         el.removeEventListener("mouseenter", enter);
@@ -161,62 +160,32 @@ export default function Hero() {
     };
   }, []);
 
-  /* ── Smooth scroll helper ────────────────────────────────── */
+  /* ── Smooth scroll ───────────────────────────────────────── */
   const smoothScroll = useCallback((e, href) => {
     e.preventDefault();
-    setMenuOpen(false);
     const target = document.querySelector(href);
-    if (target) target.scrollIntoView({ behavior: "smooth" });
+    if (!target) return;
+    const reduced = prefersReducedMotion();
+    target.scrollIntoView({ behavior: reduced ? "instant" : "smooth" });
   }, []);
 
   /* ── Split name into letter spans ───────────────────────── */
   const letters = SITE.heroName.split("").map((char, i) => (
-    <span
-      key={i}
-      className="hero__name-letter"
-      aria-hidden="true"
-    >
+    <span key={i} className="hero__name-letter" aria-hidden="true">
       {char}
     </span>
   ));
 
   return (
     <>
-      {/* Red dot follower — hidden on touch */}
+      {/* Red cursor-follower dot — hidden on touch & mobile */}
       {!isTouchDevice() && (
-        <div ref={dotRef} className="hero__dot-follower" aria-hidden="true" />
+        <div
+          ref={dotRef}
+          className="hero__dot-follower"
+          aria-hidden="true"
+        />
       )}
-
-      {/* Mobile full-screen menu overlay */}
-      <div
-        className={`hero__overlay${menuOpen ? " is-open" : ""}`}
-        aria-modal="true"
-        role="dialog"
-        aria-label="Navigation menu"
-      >
-        <button
-          className="hero__overlay-close"
-          onClick={() => setMenuOpen(false)}
-          aria-label="Close menu"
-        >
-          ✕
-        </button>
-        {SITE.navLinks.map((link) => (
-          <a
-            key={link.href}
-            href={link.href}
-            onClick={(e) => smoothScroll(e, link.href)}
-          >
-            {link.label}
-          </a>
-        ))}
-        <a
-          className="hero__overlay-email"
-          href={`mailto:${SITE.email}`}
-        >
-          {SITE.email}
-        </a>
-      </div>
 
       {/* ── Hero section ─────────────────────────────────── */}
       <header
@@ -233,7 +202,7 @@ export default function Hero() {
           {!photoError && (
             <img
               ref={photoRef}
-              src={heroPhoto}
+              src={HERO_PHOTO}
               alt=""
               className="hero__photo"
               loading="eager"
@@ -243,52 +212,20 @@ export default function Hero() {
           <div className="hero__gradient" />
         </div>
 
-        {/* ── Top row (navbar) ───────────────────────────── */}
-        <div className="hero__top" ref={topRowRef}>
-          {/* Col 1: logo */}
-          <a
-            href="#top"
-            className="hero__logo"
-            aria-label={`${SITE.fullName} – back to top`}
-            onClick={(e) => smoothScroll(e, "#top")}
-          >
-            {SITE.firstName}
-          </a>
-
-          {/* Col 2: role + location */}
+        {/* ── Top row: role (left) + year (right) ──────── */}
+        {/* PillNav floats fixed above this row in the center */}
+        <div className="hero__top">
+          {/* Role + location */}
           <div className="hero__meta" aria-label="Role and location">
             <p>{SITE.role}</p>
             <p>{SITE.location}</p>
           </div>
 
-          {/* Col 3: nav */}
-          <nav className="hero__nav" aria-label="Primary">
-            {SITE.navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={(e) => smoothScroll(e, link.href)}
-              >
-                {link.label}
-              </a>
-            ))}
-          </nav>
-
-          {/* Col 4: year */}
-          <span className="hero__year" aria-label="Year">{SITE.year}</span>
-
-          {/* Mobile: menu button (replaces cols 2-4) */}
-          <button
-            className="hero__menu-btn"
-            onClick={() => setMenuOpen(true)}
-            aria-label="Open navigation menu"
-            aria-expanded={menuOpen}
-          >
-            Menu
-          </button>
+          {/* Year — hidden on small screens */}
+          <span className="hero__year">{SITE.year}</span>
         </div>
 
-        {/* ── Middle label ──────────────────────────────── */}
+        {/* ── Middle floating label ─────────────────────── */}
         <div className="hero__label" aria-hidden="true">
           <p>{SITE.labelLine1}</p>
           <p>{SITE.labelLine2}</p>

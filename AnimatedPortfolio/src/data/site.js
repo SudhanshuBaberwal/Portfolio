@@ -22,17 +22,19 @@ export const SITE = {
   // Email
   email: "baberwalsudhanshu34@gmail.com",
 
-  // Small label above the giant name
+  // Small label (left-middle of hero)
   labelLine1: "Selected Projects",
   labelLine2: "IIIT Dharwad",
 
   // "All projects" link text
   allProjectsText: "All projects",
-
-  // Nav links
-  navLinks: [
-    { label: "Work", href: "#work" },
-    { label: "About", href: "#about" },
-    { label: "Contact", href: "#contact" },
-  ],
 };
+
+// Nav items used by PillNav (and any other nav consumers)
+// Home targets #top (the hero <header id="top">)
+export const NAV_ITEMS = [
+  { label: "Home",    href: "#top"     },
+  { label: "Work",    href: "#work"    },
+  { label: "About",   href: "#about"   },
+  { label: "Contact", href: "#contact" },
+];
