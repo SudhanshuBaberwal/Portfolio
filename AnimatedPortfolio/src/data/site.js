@@ -27,6 +27,14 @@ export const SITE = {
   linkedin: "https://www.linkedin.com/in/sudhanshu-baberwal/",
   resume: "/resume.pdf",
 
+  // Available for list
+  availableFor: [
+    "Internships",
+    "Full-time roles",
+    "Open source collaboration",
+    "Technical discussions",
+  ],
+
   // Small label (left-middle of hero)
   labelLine1: "Selected Projects",
   labelLine2: "IIIT Dharwad",

@@ -1,0 +1,138 @@
+/* ============================================================
+   Footer.css — Minimal top row + oversized signature name
+   ============================================================ */
+
+.footer {
+  position: relative;
+  width: 100%;
+  background: var(--bg, #0b0b0b);
+  color: var(--cream, #fbece3);
+  font-family: var(--font, "Inter Tight", sans-serif);
+  border-top: 1px solid rgba(251, 236, 227, 0.18);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* ---- Top Row ---------------------------------------------- */
+.footer__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 32px clamp(20px, 2.5vw, 44px);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.footer__copy {
+  font-size: 15px;
+  font-weight: 400;
+  color: rgba(251, 236, 227, 0.6);
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.footer__top-btn {
+  background: none;
+  border: none;
+  padding: 8px 16px;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--cream, #fbece3);
+  cursor: pointer;
+  letter-spacing: -0.02em;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  outline-offset: 4px;
+  transition: opacity 0.25s ease;
+}
+
+.footer__top-btn:hover {
+  opacity: 0.7;
+}
+
+.footer__top-btn:focus-visible {
+  outline: 2px solid var(--cream, #fbece3);
+}
+
+.footer__top-arrow {
+  color: var(--red, #ff2a1f);
+  font-size: 14px;
+  transition: transform 0.25s ease;
+}
+
+.footer__top-btn:hover .footer__top-arrow {
+  transform: translateY(-3px);
+}
+
+.footer__links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.footer__link {
+  font-size: 14px;
+  color: rgba(251, 236, 227, 0.7);
+  text-decoration: none;
+  letter-spacing: -0.01em;
+  outline-offset: 3px;
+  transition: color 0.2s ease;
+}
+
+.footer__link:hover {
+  color: var(--cream, #fbece3);
+}
+
+.footer__link:focus-visible {
+  outline: 2px solid var(--cream, #fbece3);
+}
+
+/* ---- Oversized Signature Name ----------------------------- */
+.footer__signature {
+  width: 100%;
+  overflow: hidden;
+  padding: 0 clamp(10px, 1.5vw, 24px);
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  user-select: none;
+  pointer-events: none;
+  line-height: 0.76;
+}
+
+.footer__signature-text {
+  font-size: clamp(48px, 11vw, 220px);
+  font-weight: 500;
+  letter-spacing: -0.05em;
+  color: var(--cream, #fbece3);
+  white-space: nowrap;
+  display: block;
+  transform: translateY(12%); /* clipped slightly at the bottom edge */
+}
+
+/* ---- Responsive: <= 900px --------------------------------- */
+@media (max-width: 900px) {
+  .footer__row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 32px clamp(20px, 2.5vw, 44px) 24px;
+  }
+
+  .footer__top-btn {
+    padding: 0;
+  }
+
+  .footer__links {
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .footer__signature-text {
+    font-size: clamp(40px, 13vw, 120px);
+    transform: translateY(10%);
+  }
+}

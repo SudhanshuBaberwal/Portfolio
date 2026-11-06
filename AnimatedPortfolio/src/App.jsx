@@ -3,6 +3,8 @@ import Hero from "./components/Hero/Hero";
 import Work from "./components/Work/Work";
 import About from "./components/About/About";
 import Stack from "./components/Stack/Stack";
+import Contact from "./components/Contact/Contact";
+import Footer from "./components/Footer/Footer";
 import PillNav from "./components/PillNav/PillNav";
 import { NAV_ITEMS } from "./data/site.js";
 import logo from "./assets/logo.svg";
@@ -89,31 +91,12 @@ export default function App() {
         {/* Stack / Tools I use Section */}
         <Stack />
 
-        {/* Contact placeholder */}
-        <section
-          id="contact"
-          style={{
-            minHeight: "100vh",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "clamp(20px, 2.5vw, 44px)",
-            background: "#0b0b0b",
-            color: "#fbece3",
-            fontFamily: "'Inter Tight', sans-serif",
-          }}
-        >
-          <h2
-            style={{
-              fontSize: "clamp(32px, 5vw, 64px)",
-              fontWeight: 500,
-              letterSpacing: "-0.04em",
-            }}
-          >
-            Contact
-          </h2>
-        </section>
+        {/* Contact Section */}
+        <Contact />
       </main>
+
+      {/* Footer */}
+      <Footer />
     </>
   );
 }
