@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import StackItem from "./StackItem.jsx";
+import SkillsItem from "./SkillsItem.jsx";
 import CursorCaption from "./CursorCaption.jsx";
-import { STACK } from "../../data/stack.js";
-import "./Stack.css";
+import { SKILLS } from "../../data/skills.js";
+import "./Skills.css";
 
 function lerp(a, b, t) {
   return a + (b - a) * t;
 }
 
-export default function Stack() {
+export default function Skills() {
   const [hoveredItem, setHoveredItem] = useState(null);
   const [pinnedItems, setPinnedItems] = useState({}); // categoryId -> item
   const [captionPos, setCaptionPos] = useState({ x: -1000, y: -1000 });
@@ -98,13 +98,13 @@ export default function Stack() {
     const isReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (isReduced) {
       section.classList.add("is-header-revealed");
-      section.querySelectorAll(".stack__row").forEach((el) => {
+      section.querySelectorAll(".skills__row").forEach((el) => {
         el.classList.add("is-revealed");
       });
       return;
     }
 
-    const rows = section.querySelectorAll(".stack__row");
+    const rows = section.querySelectorAll(".skills__row");
 
     const observer = new IntersectionObserver(
       (entries, obs) => {
@@ -112,7 +112,7 @@ export default function Stack() {
           if (entry.isIntersecting) {
             if (entry.target === section) {
               section.classList.add("is-header-revealed");
-            } else if (entry.target.classList.contains("stack__row")) {
+            } else if (entry.target.classList.contains("skills__row")) {
               const rowIndex = Array.from(rows).indexOf(entry.target);
               setTimeout(() => {
                 entry.target.classList.add("is-revealed");
@@ -138,47 +138,47 @@ export default function Stack() {
 
   return (
     <section
-      id="stack"
+      id="skills"
       ref={sectionRef}
-      className="stack"
-      aria-labelledby="stack-heading"
+      className="skills"
+      aria-labelledby="skills-heading"
     >
       {/* Header Row */}
-      <div className="stack__header">
-        <div className="stack__label-wrap">
-          <h2 id="stack-heading" className="stack__label">
-            {STACK.header.title}
+      <div className="skills__header">
+        <div className="skills__label-wrap">
+          <h2 id="skills-heading" className="skills__label">
+            {SKILLS.header.title}
           </h2>
-          <span className="stack__label-sub">{STACK.header.sub}</span>
+          <span className="skills__label-sub">{SKILLS.header.sub}</span>
         </div>
 
-        <span className="stack__header-note">{STACK.header.note}</span>
+        <span className="skills__header-note">{SKILLS.header.note}</span>
       </div>
 
       {/* Categories List */}
-      <ul className="stack__list">
-        {STACK.categories.map((category) => {
+      <ul className="skills__list">
+        {SKILLS.categories.map((category) => {
           const count = String(category.items.length).padStart(2, "0");
           const pinned = pinnedItems[category.id];
 
           return (
-            <li key={category.id} className="stack__row">
-              <div className="stack__row-grid">
+            <li key={category.id} className="skills__row">
+              <div className="skills__row-grid">
                 {/* Col 1 to 3: Category Name & Count */}
-                <div className="stack__category-col">
-                  <span className="stack__category-name">{category.name}</span>
-                  <span className="stack__category-count">{count}</span>
+                <div className="skills__category-col">
+                  <span className="skills__category-name">{category.name}</span>
+                  <span className="skills__category-count">{count}</span>
                 </div>
 
                 {/* Col 4 to 12: Items List */}
-                <div className="stack__items-col">
+                <div className="skills__items-col">
                   {category.items.map((item, idx) => {
                     const isHovered = hoveredItem?.name === item.name;
                     const isPinned = pinned?.name === item.name;
 
                     return (
                       <React.Fragment key={item.name}>
-                        <StackItem
+                        <SkillsItem
                           item={item}
                           itemIndex={idx}
                           isHovered={isHovered}
@@ -191,7 +191,7 @@ export default function Stack() {
                           }
                         />
                         {idx < category.items.length - 1 && (
-                          <span className="stack__separator" aria-hidden="true">
+                          <span className="skills__separator" aria-hidden="true">
                             /
                           </span>
                         )}
@@ -203,15 +203,15 @@ export default function Stack() {
                 {/* Pinned Note Panel if clicked */}
                 {pinned && (
                   <div
-                    className="stack__pinned-panel"
+                    className="skills__pinned-panel"
                     role="status"
                     aria-live="polite"
                   >
-                    <span className="stack__pinned-name">{pinned.name}:</span>
-                    <span className="stack__pinned-text">{pinned.note}</span>
+                    <span className="skills__pinned-name">{pinned.name}:</span>
+                    <span className="skills__pinned-text">{pinned.note}</span>
                     <button
                       type="button"
-                      className="stack__pinned-close"
+                      className="skills__pinned-close"
                       onClick={() => handleItemClick(category.id, pinned)}
                       aria-label={`Unpin note for ${pinned.name}`}
                     >

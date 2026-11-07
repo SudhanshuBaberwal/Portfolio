@@ -2,7 +2,7 @@
    Stack.css — Editorial Index of Technologies
    ============================================================ */
 
-.stack {
+.skills {
   position: relative;
   width: 100%;
   background: var(--bg, #0b0b0b);
@@ -13,7 +13,7 @@
 }
 
 /* ---- Header Row ------------------------------------------- */
-.stack__header {
+.skills__header {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
@@ -25,18 +25,18 @@
     transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.stack.is-header-revealed .stack__header {
+.skills.is-header-revealed .skills__header {
   opacity: 1;
   transform: translateY(0);
 }
 
-.stack__label-wrap {
+.skills__label-wrap {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 
-.stack__label {
+.skills__label {
   font-size: 18px;
   font-weight: 500;
   color: var(--cream, #fbece3);
@@ -45,20 +45,20 @@
   line-height: 1.3;
 }
 
-.stack__label-sub {
+.skills__label-sub {
   font-size: 15px;
   color: rgba(251, 236, 227, 0.6);
   letter-spacing: -0.02em;
 }
 
-.stack__header-note {
+.skills__header-note {
   font-size: 15px;
   color: rgba(251, 236, 227, 0.5);
   letter-spacing: -0.01em;
 }
 
 /* ---- Categories List (UL) --------------------------------- */
-.stack__list {
+.skills__list {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -66,7 +66,7 @@
 }
 
 /* Each row: 12-column grid */
-.stack__row {
+.skills__row {
   position: relative;
   width: 100%;
   border-top: 1px solid rgba(251, 236, 227, 0.18);
@@ -75,19 +75,19 @@
   transform: translateY(24px);
 }
 
-.stack__row:last-child {
+.skills__row:last-child {
   border-bottom: 1px solid rgba(251, 236, 227, 0.18);
 }
 
 /* Row scroll reveal */
-.stack__row.is-revealed {
+.skills__row.is-revealed {
   opacity: 1;
   transform: translateY(0);
   transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
     transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.stack__row-grid {
+.skills__row-grid {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   column-gap: 24px;
@@ -96,21 +96,21 @@
 }
 
 /* Col 1 to 3: Category info */
-.stack__category-col {
+.skills__category-col {
   grid-column: 1 / 4;
   display: flex;
   align-items: baseline;
   gap: 8px;
 }
 
-.stack__category-name {
+.skills__category-name {
   font-size: 18px;
   font-weight: 400;
   color: rgba(251, 236, 227, 0.65);
   letter-spacing: -0.01em;
 }
 
-.stack__category-count {
+.skills__category-count {
   font-size: 12px;
   font-family: monospace;
   color: rgba(251, 236, 227, 0.35);
@@ -118,7 +118,7 @@
 }
 
 /* Col 4 to 12: Items */
-.stack__items-col {
+.skills__items-col {
   grid-column: 4 / 13;
   display: flex;
   flex-wrap: wrap;
@@ -127,13 +127,13 @@
   row-gap: 8px;
 }
 
-.stack__item-wrapper {
+.skills__item-wrapper {
   display: inline-flex;
   align-items: baseline;
 }
 
 /* Separator '/' */
-.stack__separator {
+.skills__separator {
   color: rgba(251, 236, 227, 0.25);
   font-size: clamp(20px, 3vw, 40px);
   font-weight: 300;
@@ -142,7 +142,7 @@
 }
 
 /* Item Button */
-.stack__item-btn {
+.skills__item-btn {
   background: none;
   border: none;
   padding: 0;
@@ -166,7 +166,7 @@
 }
 
 /* Item animation inside row */
-.stack__row.is-revealed .stack__item-btn {
+.skills__row.is-revealed .skills__item-btn {
   opacity: 1;
   transform: translateY(0);
   transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--item-idx, 0) * 20ms),
@@ -174,28 +174,28 @@
     color 0.25s ease;
 }
 
-.stack__item-btn:focus-visible {
+.skills__item-btn:focus-visible {
   outline: 2px solid var(--cream, #fbece3);
 }
 
 /* Item Hover & Dimming */
-.stack__item-btn.is-dimmed {
+.skills__item-btn.is-dimmed {
   opacity: 0.25 !important;
 }
 
-.stack__item-btn.is-hovered,
-.stack__item-btn.is-pinned {
+.skills__item-btn.is-hovered,
+.skills__item-btn.is-pinned {
   color: #ffffff;
 }
 
-.stack__item-pinned-dot {
+.skills__item-pinned-dot {
   color: var(--red, #ff2a1f);
   font-size: 0.6em;
   line-height: 1;
 }
 
 /* Pinned Note row under category items */
-.stack__pinned-panel {
+.skills__pinned-panel {
   grid-column: 4 / 13;
   margin-top: 16px;
   padding-top: 12px;
@@ -217,20 +217,20 @@
   }
 }
 
-.stack__pinned-name {
+.skills__pinned-name {
   font-size: 14px;
   font-weight: 500;
   color: var(--cream, #fbece3);
   letter-spacing: -0.01em;
 }
 
-.stack__pinned-text {
+.skills__pinned-text {
   font-size: 14px;
   color: rgba(251, 236, 227, 0.6);
   letter-spacing: -0.01em;
 }
 
-.stack__pinned-close {
+.skills__pinned-close {
   background: none;
   border: none;
   color: rgba(251, 236, 227, 0.4);
@@ -240,12 +240,12 @@
   margin-left: auto;
 }
 
-.stack__pinned-close:hover {
+.skills__pinned-close:hover {
   color: var(--cream, #fbece3);
 }
 
 /* ---- Cursor Caption (Pill following cursor on desktop) ---- */
-.stack__cursor-caption {
+.skills__cursor-caption {
   position: fixed;
   top: 0;
   left: 0;
@@ -257,11 +257,11 @@
   transition: opacity 0.2s ease;
 }
 
-.stack__cursor-caption.is-visible {
+.skills__cursor-caption.is-visible {
   opacity: 1;
 }
 
-.stack__cursor-caption-pill {
+.skills__cursor-caption-pill {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -275,13 +275,13 @@
   white-space: nowrap;
 }
 
-.stack__cursor-caption-dot {
+.skills__cursor-caption-dot {
   color: var(--red, #ff2a1f);
   font-size: 14px;
   line-height: 1;
 }
 
-.stack__cursor-caption-text {
+.skills__cursor-caption-text {
   font-size: 14px;
   color: rgba(251, 236, 227, 0.85);
   letter-spacing: -0.01em;
@@ -290,53 +290,53 @@
 
 /* ---- Reduced Motion Overrides ----------------------------- */
 @media (prefers-reduced-motion: reduce) {
-  .stack__header,
-  .stack__row,
-  .stack__row.is-revealed,
-  .stack__item-btn,
-  .stack__row.is-revealed .stack__item-btn {
+  .skills__header,
+  .skills__row,
+  .skills__row.is-revealed,
+  .skills__item-btn,
+  .skills__row.is-revealed .skills__item-btn {
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
   }
 
-  .stack__cursor-caption {
+  .skills__cursor-caption {
     display: none !important;
   }
 }
 
 /* ---- Responsive: <= 900px --------------------------------- */
 @media (max-width: 900px) {
-  .stack__cursor-caption {
+  .skills__cursor-caption {
     display: none !important;
   }
 
-  .stack__row-grid {
+  .skills__row-grid {
     display: flex;
     flex-direction: column;
     gap: 16px;
   }
 
-  .stack__category-col {
+  .skills__category-col {
     width: 100%;
   }
 
-  .stack__items-col {
+  .skills__items-col {
     width: 100%;
     column-gap: 12px;
     row-gap: 6px;
   }
 
-  .stack__item-btn {
+  .skills__item-btn {
     font-size: clamp(24px, 7vw, 40px);
   }
 
-  .stack__separator {
+  .skills__separator {
     font-size: clamp(18px, 5vw, 30px);
     margin-left: 12px;
   }
 
-  .stack__pinned-panel {
+  .skills__pinned-panel {
     width: 100%;
     margin-top: 12px;
   }

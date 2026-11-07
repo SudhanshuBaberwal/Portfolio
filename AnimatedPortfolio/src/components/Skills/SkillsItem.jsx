@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function StackItem({
+export default function SkillsItem({
   item,
   isHovered,
   isAnyHovered,
@@ -14,10 +14,10 @@ export default function StackItem({
   const isDimmed = isAnyHovered && !isHovered;
 
   return (
-    <span className="stack__item-wrapper">
+    <span className="skills__item-wrapper">
       <button
         type="button"
-        className={`stack__item-btn ${isHovered ? "is-hovered" : ""} ${
+        className={`skills__item-btn ${isHovered ? "is-hovered" : ""} ${
           isDimmed ? "is-dimmed" : ""
         } ${isPinned ? "is-pinned" : ""}`}
         aria-pressed={isPinned}
@@ -29,8 +29,8 @@ export default function StackItem({
           "--item-idx": itemIndex,
         }}
       >
-        <span className="stack__item-name">{item.name}</span>
-        {isPinned && <span className="stack__item-pinned-dot" aria-hidden="true">•</span>}
+        <span className="skills__item-name">{item.name}</span>
+        {isPinned && <span className="skills__item-pinned-dot" aria-hidden="true">•</span>}
       </button>
     </span>
   );

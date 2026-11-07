@@ -9,20 +9,20 @@ export default function ProjectPreview({
 
   return (
     <div
-      className={`work__cursor-preview ${isVisible ? "is-visible" : ""}`}
+      className={`projects__cursor-preview ${isVisible ? "is-visible" : ""}`}
       style={{
         transform: `translate3d(${pos.x}px, ${pos.y}px, 0)`,
       }}
       aria-hidden="true"
     >
-      <div className="work__cursor-preview-inner">
+      <div className="projects__cursor-preview-inner">
         {activeProject.image ? (
           <img
             src={activeProject.image}
             alt=""
             width="360"
             height="240"
-            className="work__cursor-preview-img"
+            className="projects__cursor-preview-img"
             onError={(e) => {
               e.currentTarget.style.display = "none";
               if (e.currentTarget.nextElementSibling) {
@@ -32,11 +32,11 @@ export default function ProjectPreview({
           />
         ) : null}
         <div
-          className="work__preview-fallback"
+          className="projects__preview-fallback"
           style={{ display: activeProject.image ? "none" : "flex" }}
         >
-          <span className="work__fallback-index">{activeProject.id}</span>
-          <span className="work__fallback-title">{activeProject.title}</span>
+          <span className="projects__fallback-index">{activeProject.id}</span>
+          <span className="projects__fallback-title">{activeProject.title}</span>
         </div>
       </div>
     </div>

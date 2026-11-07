@@ -1,0 +1,29 @@
+.text-type {
+  display: inline;
+  position: relative;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.text-type__cursor {
+  display: inline-block;
+  color: var(--cursor-color, currentColor);
+  margin-left: 2px;
+  animation: textTypeBlink var(--blink-duration, 0.5s) step-start infinite;
+  user-select: none;
+}
+
+@keyframes textTypeBlink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .text-type__cursor {
+    display: none !important;
+  }
+}

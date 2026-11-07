@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Hero from "./components/Hero/Hero";
-import Work from "./components/Work/Work";
 import About from "./components/About/About";
-import Stack from "./components/Stack/Stack";
+import Skills from "./components/Skills/Skills";
+import Experience from "./components/Experience/Experience";
+import Coding from "./components/Coding/Coding";
+import Projects from "./components/Projects/Projects";
+import Summary from "./components/Summary/Summary";
 import Contact from "./components/Contact/Contact";
 import Footer from "./components/Footer/Footer";
 import PillNav from "./components/PillNav/PillNav";
@@ -12,7 +15,16 @@ import logo from "./assets/logo.svg";
 import "./index.css";
 
 /* IDs the observer watches — must match section id= attributes */
-const SECTION_IDS = ["top", "work", "about", "stack", "contact"];
+const SECTION_IDS = [
+  "top",
+  "about",
+  "skills",
+  "experience",
+  "coding",
+  "projects",
+  "summary",
+  "contact",
+];
 
 export default function App() {
   const [activeHref, setActiveHref] = useState("#top");
@@ -116,19 +128,34 @@ export default function App() {
       </ErrorBoundary>
 
       <main id="main-content">
-        {/* Work / Selected Projects Section */}
-        <ErrorBoundary fallbackMessage="Projects section error.">
-          <Work />
-        </ErrorBoundary>
-
-        {/* About / Who I am Section */}
+        {/* About Section */}
         <ErrorBoundary fallbackMessage="About section error.">
           <About />
         </ErrorBoundary>
 
-        {/* Stack / Tools I use Section */}
-        <ErrorBoundary fallbackMessage="Stack section error.">
-          <Stack />
+        {/* Skills Section */}
+        <ErrorBoundary fallbackMessage="Skills section error.">
+          <Skills />
+        </ErrorBoundary>
+
+        {/* Experience Section */}
+        <ErrorBoundary fallbackMessage="Experience section error.">
+          <Experience />
+        </ErrorBoundary>
+
+        {/* Coding Profile Section */}
+        <ErrorBoundary fallbackMessage="Coding section error.">
+          <Coding />
+        </ErrorBoundary>
+
+        {/* Projects Section */}
+        <ErrorBoundary fallbackMessage="Projects section error.">
+          <Projects />
+        </ErrorBoundary>
+
+        {/* Summary Section */}
+        <ErrorBoundary fallbackMessage="Summary section error.">
+          <Summary />
         </ErrorBoundary>
 
         {/* Contact Section */}

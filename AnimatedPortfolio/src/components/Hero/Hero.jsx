@@ -236,9 +236,9 @@ export default function Hero() {
         {/* ── All projects link ─────────────────────────── */}
         <div className="hero__projects">
           <a
-            href="#work"
+            href="#projects"
             className="hero__projects-link"
-            onClick={(e) => smoothScroll(e, "#work")}
+            onClick={(e) => smoothScroll(e, "#projects")}
             aria-label="View all projects"
           >
             {SITE.allProjectsText}
@@ -270,7 +270,7 @@ export default function Hero() {
         <div className="hero__down" aria-hidden="true">
           <button
             className="hero__down-btn"
-            onClick={(e) => smoothScroll(e, "#work")}
+            onClick={(e) => smoothScroll(e, "#about")}
             aria-label="Scroll to next section"
           >
             <svg

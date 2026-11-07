@@ -1,8 +1,8 @@
 // TODO: remove anything I can't explain in an interview
 
-export const STACK = {
+export const SKILLS = {
   header: {
-    title: "Stack",
+    title: "Skills",
     sub: "Tools I use",
     note: "Grouped by what I use them for",
   },

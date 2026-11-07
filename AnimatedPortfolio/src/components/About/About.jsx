@@ -1,10 +1,11 @@
-import React, { useEffect, useRef } from "react";
-import WordReveal from "./WordReveal.jsx";
+import React, { useEffect, useRef, useState } from "react";
+import TextType from "../TextType/TextType.jsx";
 import { ABOUT } from "../../data/about.js";
 import "./About.css";
 
 export default function About() {
   const sectionRef = useRef(null);
+  const [photoError, setPhotoError] = useState(false);
 
   // Check in DEV mode if resume.pdf is missing
   useEffect(() => {
@@ -21,7 +22,7 @@ export default function About() {
     }
   }, []);
 
-  // IntersectionObserver for staggered fade-up of label, facts, timeline, actions
+  // IntersectionObserver for staggered fade-up of label, photo, facts, actions
   useEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
@@ -67,20 +68,57 @@ export default function About() {
       aria-labelledby="about-heading"
     >
       <div className="about__grid">
-        {/* Col 1 to 3: Small top-left label */}
+        {/* Col 1 to 3: Small top-left label + Sticky Portrait Photo */}
         <div className="about__label-col about__reveal-item">
           <h2 id="about-heading" className="about__label">
             About
           </h2>
           <span className="about__label-sub">Who I am</span>
+
+          <div className="about__photo-wrap">
+            {!photoError ? (
+              <picture>
+                <source srcSet="/about.webp" type="image/webp" />
+                <img
+                  src="/about.jpg"
+                  alt="Portrait of Sudhanshu Baberwal"
+                  width="320"
+                  height="400"
+                  className="about__photo"
+                  loading="lazy"
+                  onError={() => setPhotoError(true)}
+                />
+              </picture>
+            ) : (
+              <div className="about__photo-fallback" aria-hidden="true">
+                <span className="about__photo-fallback-initial">S</span>
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* Col 4 to 12: Main Statement with word-by-word reveal */}
+        {/* Col 4 to 12: Main Statement with TextType & Reserved Height */}
         <div className="about__statement-col">
-          <WordReveal
-            text={ABOUT.statement}
-            className="about__statement"
-          />
+          <div className="about__statement-container">
+            {/* Screen reader text & reserved height ghost */}
+            <p className="about__statement-ghost">
+              {ABOUT.statement}
+            </p>
+
+            {/* Visual animated typed text */}
+            <div className="about__statement-typed" aria-hidden="true">
+              <TextType
+                text={[ABOUT.statement]}
+                typingSpeed={20}
+                showCursor={true}
+                cursorCharacter="_"
+                cursorBlinkDuration={0.5}
+                cursorColor="currentColor"
+                loop={false}
+                startOnVisible={true}
+              />
+            </div>
+          </div>
         </div>
 
         {/* Col 4 to 12: Facts Row */}
@@ -93,20 +131,6 @@ export default function About() {
               </div>
             ))}
           </div>
-        </div>
-
-        {/* Col 4 to 12: Education and Path (Timeline) */}
-        <div className="about__timeline-col about__reveal-item">
-          <h3 className="about__timeline-heading">Education & Path</h3>
-          <ol className="about__timeline">
-            {ABOUT.timeline.map((item, idx) => (
-              <li key={idx} className="about__timeline-row about__reveal-item">
-                <span className="about__timeline-period">{item.period}</span>
-                <span className="about__timeline-title">{item.title}</span>
-                <span className="about__timeline-desc">{item.description}</span>
-              </li>
-            ))}
-          </ol>
         </div>
 
         {/* Col 4 to 12: Actions Row */}

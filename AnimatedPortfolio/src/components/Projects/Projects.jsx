@@ -2,14 +2,16 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import ProjectRow from "./ProjectRow";
 import ProjectPreview from "./ProjectPreview";
 import { PROJECTS } from "../../data/projects";
-import "./Work.css";
+import "./Projects.css";
 
 function lerp(a, b, t) {
   return a + (b - a) * t;
 }
 
-export default function Work() {
+export default function Projects() {
   const [openId, setOpenId] = useState(null);
+  const [revealedIds, setRevealedIds] = useState(new Set());
+  const [isHeaderRevealed, setIsHeaderRevealed] = useState(false);
   const [hoveredProject, setHoveredProject] = useState(null);
   const [previewPos, setPreviewPos] = useState({ x: -1000, y: -1000 });
 
@@ -81,32 +83,31 @@ export default function Work() {
     setHoveredProject(null);
   }, []);
 
-  // Scroll reveal with IntersectionObserver
+  // Scroll reveal with IntersectionObserver using React state
   useEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduced) {
-      section.classList.add("is-header-revealed");
-      section.querySelectorAll(".work__row").forEach((el) => {
-        el.classList.add("is-revealed");
-      });
+      setIsHeaderRevealed(true);
+      setRevealedIds(new Set(PROJECTS.map((p) => p.id)));
       return;
     }
 
-    const rows = section.querySelectorAll(".work__row");
+    const rows = section.querySelectorAll(".projects__row");
 
     const observer = new IntersectionObserver(
       (entries, obs) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             if (entry.target === section) {
-              section.classList.add("is-header-revealed");
-            } else if (entry.target.classList.contains("work__row")) {
+              setIsHeaderRevealed(true);
+            } else if (entry.target.classList.contains("projects__row")) {
+              const rowId = entry.target.dataset.rowId;
               const rowIndex = Array.from(rows).indexOf(entry.target);
               setTimeout(() => {
-                entry.target.classList.add("is-revealed");
+                setRevealedIds((prev) => new Set([...prev, rowId]));
               }, rowIndex * 70);
               obs.unobserve(entry.target);
             }
@@ -127,42 +128,43 @@ export default function Work() {
 
   return (
     <section
-      id="work"
+      id="projects"
       ref={sectionRef}
-      className="work"
-      aria-labelledby="work-heading"
+      className={`work ${isHeaderRevealed ? "is-header-revealed" : ""}`}
+      aria-labelledby="projects-heading"
     >
       {/* Header Row */}
-      <div className="work__header">
-        <div className="work__label-wrap">
-          <h2 id="work-heading" className="work__label">
+      <div className="projects__header">
+        <div className="projects__label-wrap">
+          <h2 id="projects-heading" className="projects__label">
             Selected Projects
           </h2>
-          <span className="work__label-sub">2024–2026</span>
+          <span className="projects__label-sub">2024–2026</span>
         </div>
 
         <a
           href="https://github.com/SudhanshuBaberwal"
           target="_blank"
           rel="noopener noreferrer"
-          className="work__all-link"
+          className="projects__all-link"
           aria-label="View all projects on GitHub"
         >
           <span>All on GitHub</span>
-          <span className="work__arrow" aria-hidden="true">
+          <span className="projects__arrow" aria-hidden="true">
             ↗
           </span>
         </a>
       </div>
 
       {/* Projects List */}
-      <ul className="work__list" aria-label="Projects list">
+      <ul className="projects__list" aria-label="Projects list">
         {PROJECTS.map((project, idx) => (
           <ProjectRow
             key={project.id}
             project={project}
             index={idx}
             isOpen={openId === project.id}
+            isRevealed={revealedIds.has(project.id)}
             onToggle={handleToggle}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
