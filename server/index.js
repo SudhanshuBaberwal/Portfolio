@@ -24,7 +24,11 @@ app.use(
       if (!origin) return callback(null, true);
       // In non-production, allow localhost origins
       if (process.env.NODE_ENV !== "production") {
-        if (/^http:\/\/localhost:\d+$/.test(origin) || /^http:\/\/127\.0\.0\.1:\d+$/.test(origin)) {
+        if (
+          /^http:\/\/localhost:\d+$/.test(origin) ||
+          /^http:\/\/127\.0\.0\.1:\d+$/.test(origin) ||
+          origin === "http://localhost:5173"
+        ) {
           return callback(null, true);
         }
       }
