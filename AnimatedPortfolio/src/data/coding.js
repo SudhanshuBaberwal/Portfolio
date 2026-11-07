@@ -1,5 +1,3 @@
-// TODO: fill in my LeetCode and CodeChef usernames. Only add a stat if it is real.
-
 export const CODING = {
   language: "Main language for problem solving: C++.",
   platforms: [
@@ -8,21 +6,33 @@ export const CODING = {
       handle: "SudhanshuBaberwal",
       url: "https://github.com/SudhanshuBaberwal",
       purpose: "Code and projects",
-      stat: "",
+      // TODO: optionally add real stats as a fallback for when the server can't be reached
+      fallback: {
+        stats: [],
+        asOf: "",
+      },
     },
     {
       name: "LeetCode",
-      handle: "",
-      url: "",
+      handle: "sudhanshubaberwal",
+      url: "https://leetcode.com/u/sudhanshubaberwal/",
       purpose: "Practice problems",
-      stat: "",
+      // TODO: optionally add real stats as a fallback for when the server can't be reached
+      fallback: {
+        stats: [],
+        asOf: "",
+      },
     },
     {
       name: "CodeChef",
       handle: "",
       url: "",
       purpose: "Contests",
-      stat: "",
+      // TODO: optionally add real stats as a fallback for when the server can't be reached
+      fallback: {
+        stats: [],
+        asOf: "",
+      },
     },
   ],
 };
