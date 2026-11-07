@@ -191,7 +191,8 @@ export default function ContactForm() {
               type="text"
               id="contact-name"
               name="name"
-              className={`contact__input ${errors.name ? "has-error" : ""}`}
+              className={`contact__input cursor-target ${errors.name ? "has-error" : ""}`}
+              data-cursor-label="Type"
               placeholder="Your name"
               value={formData.name}
               onChange={handleChange}
@@ -221,7 +222,8 @@ export default function ContactForm() {
               type="email"
               id="contact-email"
               name="email"
-              className={`contact__input ${errors.email ? "has-error" : ""}`}
+              className={`contact__input cursor-target ${errors.email ? "has-error" : ""}`}
+              data-cursor-label="Type"
               placeholder="you@domain.com"
               value={formData.email}
               onChange={handleChange}
@@ -251,9 +253,10 @@ export default function ContactForm() {
               id="contact-message"
               name="message"
               rows={4}
-              className={`contact__input contact__textarea ${
+              className={`contact__input contact__textarea cursor-target ${
                 errors.message ? "has-error" : ""
               }`}
+              data-cursor-label="Type"
               placeholder="Tell me about what you're building..."
               value={formData.message}
               onChange={handleChange}
@@ -290,7 +293,8 @@ export default function ContactForm() {
                   Couldn't send. Email me directly at{" "}
                   <a
                     href={`mailto:${SITE.email}`}
-                    className="contact__error-mailto"
+                    className="contact__error-mailto cursor-target"
+                    data-cursor-label="Email"
                   >
                     {SITE.email}
                   </a>
@@ -303,7 +307,8 @@ export default function ContactForm() {
           {/* Submit Button */}
           <button
             type="submit"
-            className="contact__submit-btn"
+            className="contact__submit-btn cursor-target"
+            data-cursor-label="Send"
             disabled={status === "sending"}
           >
             <span>{status === "sending" ? "Sending…" : "Send message"}</span>

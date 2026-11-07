@@ -9,6 +9,7 @@ import Summary from "./components/Summary/Summary";
 import Contact from "./components/Contact/Contact";
 import Footer from "./components/Footer/Footer";
 import PillNav from "./components/PillNav/PillNav";
+import TargetCursor from "./components/TargetCursor/TargetCursor";
 import ErrorBoundary from "./components/common/ErrorBoundary";
 import { NAV_ITEMS } from "./data/site.js";
 import logo from "./assets/logo.svg";
@@ -86,8 +87,27 @@ export default function App() {
 
   return (
     <>
+      {/* ── Global Target Cursor ──────────────────────────── */}
+      <TargetCursor
+        spinDuration={2}
+        hoverDuration={0.2}
+        size={36}
+        cornerSize={12}
+        thickness={3}
+        padding={6}
+        dotSize={4}
+        cursorColor="#ffffff"
+        cursorColorOnTarget="#ffffff"
+        blendMode="difference"
+        parallaxOn
+        matchRadius
+        showLabel
+        clickEffect
+        hideDefaultCursor
+      />
+
       {/* ── Skip to content link for accessibility ────────── */}
-      <a href="#main-content" className="skip-to-content">
+      <a href="#main-content" className="skip-to-content cursor-target" data-cursor-label="Open">
         Skip to content
       </a>
 

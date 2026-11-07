@@ -145,7 +145,8 @@ export default function About() {
                   download={isDownload ? true : undefined}
                   target={link.external ? "_blank" : undefined}
                   rel={link.external ? "noopener noreferrer" : undefined}
-                  className="about__action-link"
+                  className="about__action-link cursor-target"
+                  data-cursor-label="Open"
                   aria-label={`${link.label} (${isDownload ? "download file" : "external link"})`}
                 >
                   <span>{link.label}</span>

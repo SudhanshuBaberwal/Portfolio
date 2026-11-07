@@ -38,7 +38,8 @@ export default function Summary() {
               <a
                 key={idx}
                 href={link.href}
-                className="summary__link"
+                className="summary__link cursor-target"
+                data-cursor-label="Open"
                 target={link.external ? "_blank" : undefined}
                 rel={link.external ? "noopener noreferrer" : undefined}
               >

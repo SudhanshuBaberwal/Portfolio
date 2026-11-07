@@ -108,14 +108,16 @@ export default function Contact() {
             <div className="contact__email-row">
               <a
                 href={`mailto:${SITE.email}`}
-                className="contact__email-link"
+                className="contact__email-link cursor-target"
+                data-cursor-label="Email"
                 aria-label={`Send email to ${SITE.email}`}
               >
                 {SITE.email}
               </a>
               <button
                 type="button"
-                className="contact__copy-btn"
+                className="contact__copy-btn cursor-target"
+                data-cursor-label="Open"
                 onClick={handleCopyEmail}
                 aria-label="Copy email address"
               >
@@ -155,7 +157,8 @@ export default function Contact() {
               href={SITE.linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              className="contact__social-link"
+              className="contact__social-link cursor-target"
+              data-cursor-label="Open"
               aria-label="Sudhanshu Baberwal on LinkedIn"
             >
               <span>LinkedIn</span>
@@ -168,7 +171,8 @@ export default function Contact() {
               href={SITE.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="contact__social-link"
+              className="contact__social-link cursor-target"
+              data-cursor-label="Open"
               aria-label="Sudhanshu Baberwal on GitHub"
             >
               <span>GitHub</span>
@@ -180,7 +184,8 @@ export default function Contact() {
             <a
               href={SITE.resume}
               download
-              className="contact__social-link"
+              className="contact__social-link cursor-target"
+              data-cursor-label="Open"
               aria-label="Download resume PDF"
             >
               <span>Resume</span>

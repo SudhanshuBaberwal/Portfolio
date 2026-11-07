@@ -24,18 +24,12 @@ export default function Hero() {
   const heroRef  = useRef(null);
   const photoRef = useRef(null);
   const nameRef  = useRef(null);
-  const dotRef   = useRef(null);   // red cursor-follower dot
 
   /* Parallax state */
   const mouse    = useRef({ x: 0, y: 0 });
   const photoPos = useRef({ x: 0, y: 0 });
   const namePos  = useRef({ x: 0, y: 0 });
   const rafId    = useRef(null);
-  const dotPos   = useRef({
-    x: typeof window !== "undefined" ? window.innerWidth  / 2 : 0,
-    y: typeof window !== "undefined" ? window.innerHeight / 2 : 0,
-  });
-  const targetDot = useRef({ ...dotPos.current });
 
   /* ── Entrance animations ─────────────────────────────────
      PillNav intro lasts ~560ms (60ms delay + 500ms transition).
@@ -91,10 +85,8 @@ export default function Hero() {
     if (prefersReducedMotion() || isTouchDevice()) return;
 
     const handleMove = (e) => {
-      mouse.current.x       = e.clientX;
-      mouse.current.y       = e.clientY;
-      targetDot.current.x   = e.clientX;
-      targetDot.current.y   = e.clientY;
+      mouse.current.x = e.clientX;
+      mouse.current.y = e.clientY;
     };
     window.addEventListener("mousemove", handleMove, { passive: true });
 
@@ -121,14 +113,6 @@ export default function Hero() {
           `translate(${namePos.current.x}px, ${namePos.current.y}px)`;
       }
 
-      // Cursor-follower dot (lagged)
-      dotPos.current.x = lerp(dotPos.current.x, targetDot.current.x, 0.1);
-      dotPos.current.y = lerp(dotPos.current.y, targetDot.current.y, 0.1);
-      if (dotRef.current) {
-        dotRef.current.style.left = `${dotPos.current.x}px`;
-        dotRef.current.style.top  = `${dotPos.current.y}px`;
-      }
-
       rafId.current = requestAnimationFrame(tick);
     };
     rafId.current = requestAnimationFrame(tick);
@@ -136,27 +120,6 @@ export default function Hero() {
     return () => {
       window.removeEventListener("mousemove", handleMove);
       cancelAnimationFrame(rafId.current);
-    };
-  }, []);
-
-  /* ── Dot hover scaling ───────────────────────────────────── */
-  useEffect(() => {
-    if (isTouchDevice()) return;
-    const dot = dotRef.current;
-    if (!dot) return;
-
-    const enter = () => dot.classList.add("is-hovering");
-    const leave = () => dot.classList.remove("is-hovering");
-    const links = document.querySelectorAll("a, button");
-    links.forEach((el) => {
-      el.addEventListener("mouseenter", enter);
-      el.addEventListener("mouseleave", leave);
-    });
-    return () => {
-      links.forEach((el) => {
-        el.removeEventListener("mouseenter", enter);
-        el.removeEventListener("mouseleave", leave);
-      });
     };
   }, []);
 
@@ -178,15 +141,6 @@ export default function Hero() {
 
   return (
     <>
-      {/* Red cursor-follower dot — hidden on touch & mobile */}
-      {!isTouchDevice() && (
-        <div
-          ref={dotRef}
-          className="hero__dot-follower"
-          aria-hidden="true"
-        />
-      )}
-
       {/* ── Hero section ─────────────────────────────────── */}
       <header
         id="top"
@@ -237,7 +191,8 @@ export default function Hero() {
         <div className="hero__projects">
           <a
             href="#projects"
-            className="hero__projects-link"
+            className="hero__projects-link cursor-target"
+            data-cursor-label="View"
             onClick={(e) => smoothScroll(e, "#projects")}
             aria-label="View all projects"
           >
@@ -262,14 +217,21 @@ export default function Hero() {
           {/* Contact bottom right */}
           <address className="hero__contact">
             <p>Get in touch at</p>
-            <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+            <a
+              href={`mailto:${SITE.email}`}
+              className="cursor-target"
+              data-cursor-label="Email"
+            >
+              {SITE.email}
+            </a>
           </address>
         </div>
 
         {/* ── Down arrow ────────────────────────────────── */}
         <div className="hero__down" aria-hidden="true">
           <button
-            className="hero__down-btn"
+            className="hero__down-btn cursor-target"
+            data-cursor-label="Open"
             onClick={(e) => smoothScroll(e, "#about")}
             aria-label="Scroll to next section"
           >

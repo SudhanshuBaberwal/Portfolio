@@ -71,7 +71,8 @@ export default function Coding() {
                 href={platform.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="coding__card coding__reveal-item"
+                className="coding__card coding__reveal-item cursor-target"
+                data-cursor-label="Open"
                 aria-label={`${platform.name} profile`}
               >
                 <div className="coding__card-header">

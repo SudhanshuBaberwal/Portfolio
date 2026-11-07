@@ -199,26 +199,6 @@ body {
   transform: translate(8px, -8px);
 }
 
-/* ---- Red cursor-follower dot ------------------------------ */
-.hero__dot-follower {
-  position: fixed;
-  z-index: 200;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--red);
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-  top: 0;
-  left: 0;
-  transition: width 0.3s ease, height 0.3s ease;
-}
-
-.hero__dot-follower.is-hovering {
-  width: 18px;
-  height: 18px;
-}
-
 /* ---- Bottom section --------------------------------------- */
 .hero__bottom {
   position: absolute;
@@ -344,9 +324,8 @@ body {
   /* Hide year, keep role text */
   .hero__year { display: none; }
 
-  /* Label + dot-follower hidden on mobile */
+  /* Label hidden on mobile */
   .hero__label        { display: none; }
-  .hero__dot-follower { display: none; }
 
   :root {
     --hero-name-size: clamp(60px, 24vw, 160px);

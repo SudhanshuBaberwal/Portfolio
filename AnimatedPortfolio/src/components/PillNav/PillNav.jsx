@@ -132,7 +132,8 @@ export default function PillNav({
       {logo && (
         <a
           href={items[0]?.href ?? "#top"}
-          className="pillnav__logo"
+          className="pillnav__logo cursor-target"
+          data-cursor-label="Go"
           aria-label={logoAlt}
           onClick={(e) => handleClick(e, items[0]?.href ?? "#top")}
         >
@@ -164,7 +165,8 @@ export default function PillNav({
               ref={(el) => {
                 if (el) itemRefs.current[item.href] = el;
               }}
-              className={`pillnav__item${isActive ? " is-active" : ""}`}
+              className={`pillnav__item cursor-target${isActive ? " is-active" : ""}`}
+              data-cursor-label="Go"
               aria-current={isActive ? "page" : undefined}
               onClick={(e) => handleClick(e, item.href)}
             >
@@ -188,7 +190,8 @@ export default function PillNav({
 
       {/* ── Mobile toggle ─────────────────────────────── */}
       <button
-        className="pillnav__toggle"
+        className="pillnav__toggle cursor-target"
+        data-cursor-label="Open"
         onClick={(e) => {
           e.stopPropagation();
           setMenuOpen((v) => !v);
@@ -217,7 +220,8 @@ export default function PillNav({
               key={item.href}
               href={item.href}
               role="menuitem"
-              className={`pillnav__mobile-item${isActive ? " is-active" : ""}`}
+              className={`pillnav__mobile-item cursor-target${isActive ? " is-active" : ""}`}
+              data-cursor-label="Go"
               aria-current={isActive ? "page" : undefined}
               onClick={(e) => handleClick(e, item.href)}
             >
