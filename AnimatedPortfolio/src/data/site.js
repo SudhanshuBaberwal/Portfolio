@@ -46,12 +46,12 @@ export const SITE = {
 // Nav items used by PillNav (and any other nav consumers)
 // Home targets #top (the hero <header id="top">)
 export const NAV_ITEMS = [
-  { label: "Home", href: "#top" },
-  { label: "About", href: "#about" },
-  { label: "Skills", href: "#skills" },
-  { label: "Experience", href: "#experience" },
-  { label: "Coding", href: "#coding" },
-  { label: "Projects", href: "#projects" },
-  { label: "Summary", href: "#summary" },
-  { label: "Contact", href: "#contact" },
+  { label: "Home", href: "/#top" },
+  { label: "About", href: "/#about" },
+  { label: "Skills", href: "/#skills" },
+  { label: "Experience", href: "/#experience" },
+  { label: "Coding", href: "/#coding" },
+  { label: "Projects", href: "/#projects" },
+  { label: "Summary", href: "/#summary" },
+  { label: "Contact", href: "/#contact" },
 ];

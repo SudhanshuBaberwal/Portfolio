@@ -1,8 +1,9 @@
-// Projects data for Work section
+// Projects data for Projects section and All Projects page
 
 export const PROJECTS = [
   {
     id: "01",
+    featured: true,
     title: "Distributed Car Rental Platform",
     year: "2024", // TODO: verify project year
     tags: ["Java", "Spring", "PostgreSQL", "Redis"],
@@ -21,6 +22,7 @@ export const PROJECTS = [
   },
   {
     id: "02",
+    featured: true,
     title: "Chatify",
     year: "2024", // TODO: verify project year
     tags: ["WebSockets", "Redis Pub/Sub", "Spring"],
@@ -39,6 +41,7 @@ export const PROJECTS = [
   },
   {
     id: "03",
+    featured: true,
     title: "Identity & Auth Engine",
     year: "2024", // TODO: verify project year
     tags: ["JWT", "Redis", "Spring Security"],
@@ -57,6 +60,7 @@ export const PROJECTS = [
   },
   {
     id: "04",
+    featured: false,
     title: "IIIT-DWD Timetable Optimizer",
     year: "2024", // TODO: verify project year
     tags: ["Algorithms", "Java"],

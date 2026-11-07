@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Hero from "./components/Hero/Hero";
 import About from "./components/About/About";
 import Skills from "./components/Skills/Skills";
@@ -11,6 +12,8 @@ import Footer from "./components/Footer/Footer";
 import PillNav from "./components/PillNav/PillNav";
 import TargetCursor from "./components/TargetCursor/TargetCursor";
 import ErrorBoundary from "./components/common/ErrorBoundary";
+import ScrollToTop from "./components/common/ScrollToTop";
+import AllProjectsPage from "./pages/AllProjectsPage";
 import { NAV_ITEMS } from "./data/site.js";
 import logo from "./assets/logo.svg";
 import "./index.css";
@@ -27,8 +30,8 @@ const SECTION_IDS = [
   "contact",
 ];
 
-export default function App() {
-  const [activeHref, setActiveHref] = useState("#top");
+function HomePage() {
+  const [activeHref, setActiveHref] = useState("/#top");
 
   // Fallback for unknown hashes/paths: if invalid hash provided, smooth scroll to #top
   useEffect(() => {
@@ -54,7 +57,7 @@ export default function App() {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            setActiveHref(`#${entry.target.id}`);
+            setActiveHref(`/#${entry.target.id}`);
           }
         });
       },
@@ -71,9 +74,9 @@ export default function App() {
       const atBottom =
         window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 50;
       if (atBottom) {
-        setActiveHref("#contact");
+        setActiveHref("/#contact");
       } else if (window.scrollY < 100) {
-        setActiveHref("#top");
+        setActiveHref("/#top");
       }
     };
 
@@ -87,30 +90,6 @@ export default function App() {
 
   return (
     <>
-      {/* ── Global Target Cursor ──────────────────────────── */}
-      <TargetCursor
-        spinDuration={2}
-        hoverDuration={0.2}
-        size={36}
-        cornerSize={12}
-        thickness={3}
-        padding={6}
-        dotSize={4}
-        cursorColor="#ffffff"
-        cursorColorOnTarget="#ffffff"
-        blendMode="difference"
-        parallaxOn
-        matchRadius
-        showLabel
-        clickEffect
-        hideDefaultCursor
-      />
-
-      {/* ── Skip to content link for accessibility ────────── */}
-      <a href="#main-content" className="skip-to-content cursor-target" data-cursor-label="Open">
-        Skip to content
-      </a>
-
       {/* ── Fixed pill nav ─────────────────────────────────── */}
       <div
         style={{
@@ -189,5 +168,42 @@ export default function App() {
         <Footer />
       </ErrorBoundary>
     </>
+  );
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <ScrollToTop />
+      {/* ── Global Target Cursor ──────────────────────────── */}
+      <TargetCursor
+        spinDuration={2}
+        hoverDuration={0.2}
+        size={36}
+        cornerSize={12}
+        thickness={3}
+        padding={6}
+        dotSize={4}
+        cursorColor="#ffffff"
+        cursorColorOnTarget="#ffffff"
+        blendMode="difference"
+        parallaxOn
+        matchRadius
+        showLabel
+        clickEffect
+        hideDefaultCursor
+      />
+
+      {/* ── Skip to content link for accessibility ────────── */}
+      <a href="#main-content" className="skip-to-content cursor-target" data-cursor-label="Open">
+        Skip to content
+      </a>
+
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/projects" element={<AllProjectsPage />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </BrowserRouter>
   );
 }

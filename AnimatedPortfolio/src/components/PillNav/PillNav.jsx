@@ -50,7 +50,12 @@ export default function PillNav({
   const positionDot = useCallback(() => {
     const dot       = dotRef.current;
     const container = navRef.current?.querySelector(".pillnav__items");
-    const activeEl  = itemRefs.current[activeHref];
+    // Normalize matching: activeHref might be "#top" or "/#top"
+    const activeEl  =
+      itemRefs.current[activeHref] ||
+      itemRefs.current[`/${activeHref}`] ||
+      (activeHref.startsWith("/") ? itemRefs.current[activeHref.slice(1)] : null) ||
+      (activeHref.startsWith("#") ? itemRefs.current[`/${activeHref}`] : null);
     if (!dot || !container || !activeEl) return;
 
     const cRect = container.getBoundingClientRect();
@@ -99,14 +104,26 @@ export default function PillNav({
     return () => document.removeEventListener("keydown", handler);
   }, [menuOpen]);
 
-  /* ── Smooth scroll helper ──────────────────────────────── */
+  /* ── Smooth scroll & route helper ──────────────────────── */
   const handleClick = useCallback((e, href) => {
-    e.preventDefault();
     setMenuOpen(false);
-    const target = document.querySelector(href);
-    if (!target) return;
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    target.scrollIntoView({ behavior: reduced ? "instant" : "smooth" });
+
+    // Extract hash part if href is of form "/#section" or "#section"
+    const hash = href.includes("#") ? href.slice(href.indexOf("#")) : "";
+    const isHome = window.location.pathname === "/";
+
+    if (hash && isHome) {
+      e.preventDefault();
+      const target = document.querySelector(hash);
+      if (!target) return;
+      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      target.scrollIntoView({ behavior: reduced ? "instant" : "smooth" });
+      window.history.pushState(null, "", hash);
+    } else if (href.startsWith("/#") && !isHome) {
+      // From another page (like /projects), let navigation to /#section happen
+      // or use window.location
+      window.location.href = href;
+    }
   }, []);
 
   /* ── Class list ────────────────────────────────────────── */
@@ -156,7 +173,10 @@ export default function PillNav({
         )}
 
         {items.map((item) => {
-          const isActive = activeHref === item.href;
+          const isActive =
+            activeHref === item.href ||
+            `/${activeHref}` === item.href ||
+            activeHref === item.href.replace(/^\//, "");
           return (
             <a
               key={item.href}
@@ -214,7 +234,10 @@ export default function PillNav({
         aria-label="Site navigation"
       >
         {items.map((item) => {
-          const isActive = activeHref === item.href;
+          const isActive =
+            activeHref === item.href ||
+            `/${activeHref}` === item.href ||
+            activeHref === item.href.replace(/^\//, "");
           return (
             <a
               key={item.href}
