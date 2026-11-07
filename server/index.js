@@ -5,6 +5,7 @@ import leetcodeRoute from "./routes/leetcodeRoute.js";
 import CFroute from "./routes/codeforcesRoute.js";
 import githubRoute from "./routes/githubRoute.js";
 import codingStatsRoute from "./routes/codingStatsRoute.js";
+import codechefRoute from "./routes/codechefRoute.js"
 import dotenv from "dotenv";
 
 const app = express();
@@ -41,6 +42,7 @@ app.use("/api", leetcodeRoute);
 app.use("/api", CFroute);
 app.use("/api", githubRoute);
 app.use("/api", codingStatsRoute);
+app.use("/api" , codechefRoute)
 
 const port = process.env.PORT || 5000;
 
