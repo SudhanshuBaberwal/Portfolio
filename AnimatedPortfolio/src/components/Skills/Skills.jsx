@@ -1,236 +1,187 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
-import SkillsItem from "./SkillsItem.jsx";
-import CursorCaption from "./CursorCaption.jsx";
+import React, { useState, useEffect } from "react";
+import Folder from "../Folder/Folder.jsx";
 import { SKILLS } from "../../data/skills.js";
 import "./Skills.css";
 
-function lerp(a, b, t) {
-  return a + (b - a) * t;
-}
+const FOLDER_COLOR = "#e9dcd3";
+const MAX_PAPERS = 6;
 
 export default function Skills() {
-  const [hoveredItem, setHoveredItem] = useState(null);
-  const [pinnedItems, setPinnedItems] = useState({}); // categoryId -> item
-  const [captionPos, setCaptionPos] = useState({ x: -1000, y: -1000 });
-
-  const sectionRef = useRef(null);
-  const mousePos = useRef({ x: -1000, y: -1000 });
-  const currentPos = useRef({ x: -1000, y: -1000 });
-  const rafId = useRef(null);
-  const isHoveringRef = useRef(false);
-
-  // Animation frame loop for cursor caption
-  const startCaptionLoop = useCallback(() => {
-    if (rafId.current) return;
-
-    const animate = () => {
-      if (!isHoveringRef.current) {
-        rafId.current = null;
-        return;
-      }
-
-      currentPos.current.x = lerp(currentPos.current.x, mousePos.current.x, 0.15);
-      currentPos.current.y = lerp(currentPos.current.y, mousePos.current.y, 0.15);
-
-      setCaptionPos({
-        x: Math.round(currentPos.current.x + 16),
-        y: Math.round(currentPos.current.y - 36),
-      });
-
-      rafId.current = requestAnimationFrame(animate);
-    };
-
-    rafId.current = requestAnimationFrame(animate);
-  }, []);
+  const { header, categories } = SKILLS;
+  const [selectedSkill, setSelectedSkill] = useState(null);
+  const [showAsList, setShowAsList] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(false);
 
   useEffect(() => {
-    const handleMouseMove = (e) => {
-      mousePos.current = { x: e.clientX, y: e.clientY };
-      if (currentPos.current.x === -1000) {
-        currentPos.current = { x: e.clientX, y: e.clientY };
-      }
-    };
-
-    window.addEventListener("mousemove", handleMouseMove, { passive: true });
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      if (rafId.current) cancelAnimationFrame(rafId.current);
-    };
+    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReducedMotion(query.matches);
+    const handler = (e) => setReducedMotion(e.matches);
+    query.addEventListener("change", handler);
+    return () => query.removeEventListener("change", handler);
   }, []);
 
-  const handleItemMouseEnter = useCallback(
-    (item) => {
-      const isTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
-      const isReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      if (isTouch || isReduced || window.innerWidth <= 900) return;
-
-      isHoveringRef.current = true;
-      setHoveredItem(item);
-      startCaptionLoop();
-    },
-    [startCaptionLoop]
-  );
-
-  const handleItemMouseLeave = useCallback(() => {
-    isHoveringRef.current = false;
-    setHoveredItem(null);
-  }, []);
-
-  const handleItemClick = useCallback((categoryId, item) => {
-    setPinnedItems((prev) => {
-      if (prev[categoryId]?.name === item.name) {
-        const next = { ...prev };
-        delete next[categoryId];
-        return next;
-      }
-      return {
-        ...prev,
-        [categoryId]: item,
-      };
-    });
-  }, []);
-
-  // Staggered scroll reveal
-  useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-
-    const isReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (isReduced) {
-      section.classList.add("is-header-revealed");
-      section.querySelectorAll(".skills__row").forEach((el) => {
-        el.classList.add("is-revealed");
-      });
-      return;
+  const handleItemClick = (skill, categoryName) => {
+    if (selectedSkill && selectedSkill.name === skill.name) {
+      setSelectedSkill(null);
+    } else {
+      setSelectedSkill({ ...skill, category: categoryName });
     }
-
-    const rows = section.querySelectorAll(".skills__row");
-
-    const observer = new IntersectionObserver(
-      (entries, obs) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            if (entry.target === section) {
-              section.classList.add("is-header-revealed");
-            } else if (entry.target.classList.contains("skills__row")) {
-              const rowIndex = Array.from(rows).indexOf(entry.target);
-              setTimeout(() => {
-                entry.target.classList.add("is-revealed");
-              }, rowIndex * 70);
-              obs.unobserve(entry.target);
-            }
-          }
-        });
-      },
-      {
-        threshold: 0.15,
-        rootMargin: "0px 0px -40px 0px",
-      }
-    );
-
-    observer.observe(section);
-    rows.forEach((r) => observer.observe(r));
-
-    return () => observer.disconnect();
-  }, []);
-
-  const isAnyHovered = hoveredItem !== null;
+  };
 
   return (
-    <section
-      id="skills"
-      ref={sectionRef}
-      className="skills"
-      aria-labelledby="skills-heading"
-    >
-      {/* Header Row */}
-      <div className="skills__header">
-        <div className="skills__label-wrap">
-          <h2 id="skills-heading" className="skills__label">
-            {SKILLS.header.title}
-          </h2>
-          <span className="skills__label-sub">{SKILLS.header.sub}</span>
+    <section id="skills" className="skills" aria-labelledby="skills-heading">
+      <div className="skills__container">
+        {/* Header row */}
+        <div className="skills__header">
+          <div className="skills__header-left">
+            <h2 id="skills-heading" className="skills__title">
+              {header.title}
+            </h2>
+            <span className="skills__sub">{header.sub}</span>
+          </div>
+          <div className="skills__header-right">
+            <p className="skills__note">{header.note}</p>
+          </div>
         </div>
 
-        <span className="skills__header-note">{SKILLS.header.note}</span>
-      </div>
+        {/* Visually hidden full list for screen-reader & accessibility */}
+        <div className="sr-only">
+          <h3>Full Skills Directory</h3>
+          {categories.map((cat) => (
+            <div key={cat.id}>
+              <h4>{cat.name}</h4>
+              <ul>
+                {cat.items.map((item, idx) => (
+                  <li key={idx}>
+                    <strong>{item.name}</strong>: {item.note}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
 
-      {/* Categories List */}
-      <ul className="skills__list">
-        {SKILLS.categories.map((category) => {
-          const count = String(category.items.length).padStart(2, "0");
-          const pinned = pinnedItems[category.id];
+        {/* View toggle button */}
+        <div className="skills__toggle-wrap">
+          <button
+            type="button"
+            className="skills__toggle-btn cursor-target"
+            data-cursor-label="Open"
+            onClick={() => setShowAsList((prev) => !prev)}
+            aria-pressed={showAsList}
+          >
+            {showAsList ? "Show 3D Folders" : "Show as list"}
+          </button>
+        </div>
 
-          return (
-            <li key={category.id} className="skills__row">
-              <div className="skills__row-grid">
-                {/* Col 1 to 3: Category Name & Count */}
-                <div className="skills__category-col">
-                  <span className="skills__category-name">{category.name}</span>
-                  <span className="skills__category-count">{count}</span>
-                </div>
-
-                {/* Col 4 to 12: Items List */}
-                <div className="skills__items-col">
-                  {category.items.map((item, idx) => {
-                    const isHovered = hoveredItem?.name === item.name;
-                    const isPinned = pinned?.name === item.name;
-
-                    return (
-                      <React.Fragment key={item.name}>
-                        <SkillsItem
-                          item={item}
-                          itemIndex={idx}
-                          isHovered={isHovered}
-                          isAnyHovered={isAnyHovered}
-                          isPinned={isPinned}
-                          onMouseEnter={handleItemMouseEnter}
-                          onMouseLeave={handleItemMouseLeave}
-                          onClick={(clickedItem) =>
-                            handleItemClick(category.id, clickedItem)
-                          }
-                        />
-                        {idx < category.items.length - 1 && (
-                          <span className="skills__separator" aria-hidden="true">
-                            /
-                          </span>
-                        )}
-                      </React.Fragment>
-                    );
-                  })}
-                </div>
-
-                {/* Pinned Note Panel if clicked */}
-                {pinned && (
-                  <div
-                    className="skills__pinned-panel"
-                    role="status"
-                    aria-live="polite"
-                  >
-                    <span className="skills__pinned-name">{pinned.name}:</span>
-                    <span className="skills__pinned-text">{pinned.note}</span>
-                    <button
-                      type="button"
-                      className="skills__pinned-close"
-                      onClick={() => handleItemClick(category.id, pinned)}
-                      aria-label={`Unpin note for ${pinned.name}`}
+        {/* Grid or List View */}
+        {showAsList ? (
+          <div className="skills__list-view">
+            {categories.map((cat) => (
+              <div key={cat.id} className="skills__list-category">
+                <h3 className="skills__list-category-title">{cat.name}</h3>
+                <ul className="skills__list-items">
+                  {cat.items.map((item, idx) => (
+                    <li
+                      key={idx}
+                      className="skills__list-item cursor-target"
+                      data-cursor-label="Open"
+                      onClick={() => handleItemClick(item, cat.name)}
                     >
-                      ✕
-                    </button>
-                  </div>
-                )}
+                      <strong className="skills__list-item-name">{item.name}</strong>
+                      <span className="skills__list-item-note">{item.note}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-            </li>
-          );
-        })}
-      </ul>
+            ))}
+          </div>
+        ) : (
+          <div className="skills__folders-grid">
+            {categories.map((category) => {
+              const primaryItems = category.items.slice(0, MAX_PAPERS).map((skill) => ({
+                title: skill.name,
+                raw: skill,
+              }));
+              const extraItems = category.items.slice(MAX_PAPERS);
 
-      {/* Floating Cursor Caption (Desktop only) */}
-      <CursorCaption
-        note={hoveredItem?.note}
-        isVisible={hoveredItem !== null}
-        pos={captionPos}
-      />
+              return (
+                <div key={category.id} className="skills__folder-cell">
+                  <div className="skills__folder-wrap">
+                    <Folder
+                      label={category.name}
+                      items={primaryItems}
+                      mode="flap"
+                      variant="solid"
+                      layout="spread"
+                      color={FOLDER_COLOR}
+                      paperColor="#ffffff"
+                      tabPosition="right"
+                      openOn="click"
+                      size={1.3}
+                      frost={0.25}
+                      tilt={reducedMotion ? 0 : 0.5}
+                      speed={reducedMotion ? 0.4 : 1}
+                      bounce={reducedMotion ? 0 : 0.4}
+                      peek={!reducedMotion}
+                      intro={!reducedMotion}
+                      draggable={!reducedMotion}
+                      zoomOnClick={!reducedMotion}
+                      theme="dark"
+                      onItemClick={(item) => handleItemClick(item.raw, category.name)}
+                    />
+                  </div>
+
+                  {extraItems.length > 0 && (
+                    <div className="skills__folder-extras">
+                      <span className="skills__folder-extras-label">Also: </span>
+                      {extraItems.map((item, i) => (
+                        <button
+                          key={i}
+                          type="button"
+                          className="skills__extra-item-btn cursor-target"
+                          data-cursor-label="Open"
+                          onClick={() => handleItemClick(item, category.name)}
+                        >
+                          {item.name}
+                          {i < extraItems.length - 1 ? ", " : ""}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {/* Single shared info panel under the grid */}
+        <div
+          className={`skills__info-panel ${selectedSkill ? "is-active" : ""}`}
+          aria-live="polite"
+        >
+          {selectedSkill ? (
+            <div className="skills__info-content">
+              <span className="skills__info-category">{selectedSkill.category} /</span>
+              <strong className="skills__info-name">{selectedSkill.name}:</strong>
+              <span className="skills__info-note">{selectedSkill.note}</span>
+              <button
+                type="button"
+                className="skills__info-close cursor-target"
+                data-cursor-label="Open"
+                onClick={() => setSelectedSkill(null)}
+                aria-label="Clear selected skill note"
+              >
+                ×
+              </button>
+            </div>
+          ) : (
+            <p className="skills__info-placeholder">
+              Click any skill paper or item to view details.
+            </p>
+          )}
+        </div>
+      </div>
     </section>
   );
 }
