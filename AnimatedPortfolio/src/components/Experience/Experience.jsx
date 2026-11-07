@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { EXPERIENCE } from "../../data/experience.js";
+import { EXPERIENCE, EXPERIENCE_META } from "../../data/experience.js";
 import "./Experience.css";
 
 export default function Experience() {
@@ -12,29 +12,23 @@ export default function Experience() {
 
     const isReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (isReduced) {
-      section.querySelectorAll(".experience__reveal-item, .experience__row").forEach((el) => {
+      section.querySelectorAll(".experience__reveal-item").forEach((el) => {
         el.classList.add("is-revealed");
       });
       return;
     }
 
     const revealItems = section.querySelectorAll(".experience__reveal-item");
-    const rows = section.querySelectorAll(".experience__row");
 
     const observer = new IntersectionObserver(
       (entries, obs) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            if (entry.target.classList.contains("experience__reveal-item")) {
+            const index = Array.from(revealItems).indexOf(entry.target);
+            setTimeout(() => {
               entry.target.classList.add("is-revealed");
-              obs.unobserve(entry.target);
-            } else if (entry.target.classList.contains("experience__row")) {
-              const rowIndex = Array.from(rows).indexOf(entry.target);
-              setTimeout(() => {
-                entry.target.classList.add("is-revealed");
-              }, rowIndex * 70);
-              obs.unobserve(entry.target);
-            }
+            }, index * 70);
+            obs.unobserve(entry.target);
           }
         });
       },
@@ -45,12 +39,11 @@ export default function Experience() {
     );
 
     revealItems.forEach((el) => observer.observe(el));
-    rows.forEach((r) => observer.observe(r));
 
     return () => observer.disconnect();
   }, []);
 
-  // Filter groups that have entries
+  // Render only groups that have entries
   const activeGroups = EXPERIENCE.filter((g) => g.items && g.items.length > 0);
 
   return (
@@ -66,26 +59,114 @@ export default function Experience() {
           <h2 id="experience-heading" className="experience__label">
             Experience
           </h2>
-          <span className="experience__label-sub">Education and more</span>
+          <span className="experience__label-sub">Where I&apos;ve worked</span>
         </div>
 
         {/* Col 4 to 12: Content groups */}
         <div className="experience__content-col">
+          {/* Availability pill if showAvailability is true */}
+          {EXPERIENCE_META.showAvailability && (
+            <div className="experience__availability-wrap experience__reveal-item">
+              <div className="experience__availability-pill">
+                <span className="experience__pulsing-dot" aria-hidden="true" />
+                <span>{EXPERIENCE_META.availability}</span>
+              </div>
+            </div>
+          )}
+
           {activeGroups.map((group, gIdx) => (
             <div key={gIdx} className="experience__group experience__reveal-item">
               <h3 className="experience__group-heading">{group.group}</h3>
-              <ol className="experience__list">
-                {group.items.map((item, rIdx) => (
-                  <li key={rIdx} className="experience__row">
-                    <span className="experience__period">{item.period}</span>
-                    <div className="experience__title-wrap">
-                      <h4 className="experience__title">{item.title}</h4>
-                      {item.org && <span className="experience__org">{item.org}</span>}
-                    </div>
-                    <p className="experience__desc">{item.description}</p>
-                  </li>
-                ))}
-              </ol>
+
+              {group.group === "Experience" ? (
+                <div className="experience__blocks">
+                  {group.items.map((item, idx) => (
+                    <article key={idx} className="experience__entry-block">
+                      {/* Top Row: Period and Remote */}
+                      <div className="experience__entry-header">
+                        <span className="experience__entry-period">{item.period}</span>
+                        {item.mode && (
+                          <span className="experience__entry-mode">{item.mode}</span>
+                        )}
+                      </div>
+
+                      {/* Title */}
+                      <h4 className="experience__entry-title">{item.title}</h4>
+
+                      {/* Org link */}
+                      {item.org && (
+                        <div className="experience__entry-org-wrap">
+                          {item.orgUrl ? (
+                            <a
+                              href={item.orgUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="experience__entry-org-link cursor-target"
+                              data-cursor-label="Open"
+                            >
+                              <span>{item.org}</span>
+                              <span className="experience__red-arrow" aria-hidden="true">
+                                ↗
+                              </span>
+                            </a>
+                          ) : (
+                            <span className="experience__entry-org">{item.org}</span>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Summary paragraph */}
+                      {item.summary && (
+                        <p className="experience__entry-summary">{item.summary}</p>
+                      )}
+
+                      {/* Highlights grid */}
+                      {item.highlights && item.highlights.length > 0 && (
+                        <div className="experience__highlights-grid">
+                          {item.highlights.map((hl, hIdx) => {
+                            const num = String(hIdx + 1).padStart(2, "0");
+                            return (
+                              <div key={hIdx} className="experience__highlight-item">
+                                <span className="experience__highlight-num">{num}</span>
+                                <p className="experience__highlight-text">{hl}</p>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
+
+                      {/* Tech chips */}
+                      {item.tech && item.tech.length > 0 && (
+                        <div className="experience__tech-chips" aria-label="Technologies used">
+                          {item.tech.map((techItem, tIdx) => (
+                            <span key={tIdx} className="experience__tech-chip">
+                              {techItem}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </article>
+                  ))}
+                </div>
+              ) : (
+                /* Education and other compact groups */
+                <ol className="experience__education-list">
+                  {group.items.map((item, rIdx) => (
+                    <li key={rIdx} className="experience__education-row">
+                      <span className="experience__education-period">{item.period}</span>
+                      <div className="experience__education-main">
+                        <h4 className="experience__education-title">{item.title}</h4>
+                        {item.org && (
+                          <span className="experience__education-org">{item.org}</span>
+                        )}
+                      </div>
+                      {item.description && (
+                        <p className="experience__education-desc">{item.description}</p>
+                      )}
+                    </li>
+                  ))}
+                </ol>
+              )}
             </div>
           ))}
         </div>
