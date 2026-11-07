@@ -11,6 +11,7 @@
   font-family: var(--font, "Inter Tight", sans-serif);
   padding: clamp(64px, 10vw, 160px) clamp(20px, 2.5vw, 44px);
   box-sizing: border-box;
+  overflow: hidden; /* cleanly clip any upward strap overflow at section edge */
 }
 
 /* ---- 12-Column Desktop Grid ------------------------------- */
@@ -23,11 +24,11 @@
   align-items: start;
 }
 
-/* Col 1 to 3: Small top-left label + Sticky Photo */
+/* Col 1 to 3: Small top-left label + Sticky Lanyard / Photo */
 .about__label-col {
   grid-column: 1 / 4;
   position: sticky;
-  top: 120px;
+  top: 100px;
   display: flex;
   flex-direction: column;
 }
@@ -49,7 +50,16 @@
   margin-top: 2px;
 }
 
-/* Sticky Photo */
+/* Lanyard 3D Container */
+.about__lanyard-wrap {
+  width: 100%;
+  height: clamp(480px, 70vh, 640px);
+  margin-top: clamp(16px, 2vw, 32px);
+  position: relative;
+  touch-action: pan-y;
+}
+
+/* Sticky Photo (Fallback & mobile placeholder) */
 .about__photo-wrap {
   width: 100%;
   max-width: 320px;
