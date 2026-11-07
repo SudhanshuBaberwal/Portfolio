@@ -1,0 +1,351 @@
+/* ============================================================
+   PillNav.css — Pill-shaped nav with fill-rise hover,
+   rolling labels, sliding dot, glass surface, intro anim.
+   ============================================================ */
+
+/* ---- CSS custom props (overridable by parent theme) ------- */
+.pillnav {
+  --pn-bg:          rgba(15, 15, 15, 0.45);
+  --pn-border:      rgba(251, 236, 227, 0.14);
+  --pn-text:        #fbece3;
+  --pn-text-alt:    #0b0b0b;
+  --pn-fill:        #fbece3;
+  --pn-dot:         #ff2a1f;
+  --pn-blur:        14px;
+  --pn-radius:      999px;
+  --pn-gap:         2px;
+  --pn-pad-x:       6px;
+  --pn-pad-y:       6px;
+  --pn-logo-size:   36px;
+  --pn-dot-size:    6px;
+  --pn-font:        'Inter Tight', sans-serif;
+  --pn-weight:      500;
+  --pn-font-size:   14px;
+  --pn-item-px:     17px;
+  --pn-item-py:     8px;
+  --pn-spring:      cubic-bezier(0.34, 1.56, 0.64, 1);  /* set by JS (bounce prop) */
+}
+
+/* ---- Container -------------------------------------------- */
+.pillnav {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--pn-gap);
+  padding: var(--pn-pad-y) var(--pn-pad-x);
+  border-radius: var(--pn-radius);
+  font-family: var(--pn-font);
+  font-size: var(--pn-font-size);
+  font-weight: var(--pn-weight);
+  color: var(--pn-text);
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+
+  /* Intro: start hidden, shifted up */
+  opacity: 0;
+  transform: translateY(-10px) scale(0.97);
+  transition:
+    opacity  0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.05s,
+    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.05s;
+}
+
+.pillnav--visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* ---- Glass surface ---------------------------------------- */
+.pillnav--glass {
+  background: var(--pn-bg);
+  backdrop-filter: blur(var(--pn-blur)) saturate(1.6);
+  -webkit-backdrop-filter: blur(var(--pn-blur)) saturate(1.6);
+  border: 1px solid var(--pn-border);
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+/* ---- Logo button (split layout: logo on left) ------------- */
+.pillnav__logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--pn-logo-size);
+  height: var(--pn-logo-size);
+  border-radius: 50%;
+  background: rgba(251, 236, 227, 0.07);
+  border: 1px solid var(--pn-border);
+  flex-shrink: 0;
+  transition: background 0.25s ease, transform 0.3s var(--pn-spring);
+  outline-offset: 3px;
+  margin-right: 6px;
+}
+
+.pillnav__logo:hover {
+  background: rgba(251, 236, 227, 0.14);
+  transform: scale(1.1);
+}
+
+.pillnav__logo:focus-visible {
+  outline: 2px solid var(--pn-text);
+  outline-offset: 3px;
+}
+
+.pillnav__logo img {
+  width: 20px;
+  height: 20px;
+  display: block;
+  pointer-events: none;
+}
+
+/* ---- Items container (holds dot + links) ------------------- */
+.pillnav__items {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--pn-gap);
+}
+
+/* ---- Sliding dot indicator -------------------------------- */
+.pillnav__dot {
+  position: absolute;
+  bottom: 5px;
+  left: 0;
+  width: var(--pn-dot-size);
+  height: var(--pn-dot-size);
+  border-radius: 50%;
+  background: var(--pn-dot);
+  pointer-events: none;
+  /* transform set by JS; transition also set by JS (bounce/spring) */
+  z-index: 2;
+  will-change: transform;
+}
+
+/* ---- Single nav item -------------------------------------- */
+.pillnav__item {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: var(--pn-item-py) var(--pn-item-px);
+  border-radius: var(--pn-radius);
+  color: var(--pn-text);
+  text-decoration: none;
+  overflow: hidden;        /* clips the rising fill + rolling text */
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  outline-offset: 3px;
+  /* no color transition here — text color is handled via two stacked spans */
+}
+
+.pillnav__item:focus-visible {
+  outline: 2px solid var(--pn-text);
+}
+
+/* Fill — starts below, rises on hover */
+.pillnav__item-fill {
+  position: absolute;
+  inset: 0;
+  background: var(--pn-fill);
+  border-radius: inherit;
+  transform: translateY(101%);
+  transition: transform 0.38s cubic-bezier(0.76, 0, 0.24, 1);
+  z-index: 0;
+}
+
+.pillnav__item:hover .pillnav__item-fill,
+.pillnav__item:focus-visible .pillnav__item-fill {
+  transform: translateY(0);
+}
+
+/* Label wrapper — fixed height, clips overflow for the roll */
+.pillnav__item-label {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  height: 1.1em;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Text copies */
+.pillnav__item-text {
+  display: block;
+  line-height: 1.1;
+  transition: transform 0.38s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+/* Second copy: starts pushed below, dark so it reads on cream fill */
+.pillnav__item-text--alt {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: var(--pn-text-alt);
+  transform: translateY(100%);
+}
+
+/* On hover/focus: first text rolls up out, second rolls in */
+.pillnav__item:hover .pillnav__item-text:first-child,
+.pillnav__item:focus-visible .pillnav__item-text:first-child {
+  transform: translateY(-100%);
+}
+
+.pillnav__item:hover .pillnav__item-text--alt,
+.pillnav__item:focus-visible .pillnav__item-text--alt {
+  transform: translateY(0);
+}
+
+/* ---- Mobile toggle button --------------------------------- */
+.pillnav__toggle {
+  display: none;    /* shown via media query */
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(251, 236, 227, 0.07);
+  border: 1px solid var(--pn-border);
+  color: var(--pn-text);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.2s ease;
+  outline-offset: 3px;
+  /* icon transition */
+  position: relative;
+}
+
+.pillnav__toggle:hover {
+  background: rgba(251, 236, 227, 0.14);
+}
+
+.pillnav__toggle:focus-visible {
+  outline: 2px solid var(--pn-text);
+}
+
+.pillnav__toggle-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+}
+
+/* Hamburger lines */
+.pillnav__toggle-line {
+  display: block;
+  width: 14px;
+  height: 1.5px;
+  background: var(--pn-text);
+  border-radius: 1px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.pillnav__toggle-line:nth-child(1) { top: 10px; }
+.pillnav__toggle-line:nth-child(2) { top: 50%; transform: translateX(-50%) translateY(-50%); }
+.pillnav__toggle-line:nth-child(3) { bottom: 10px; }
+
+/* Open state: → X */
+.pillnav--open .pillnav__toggle-line:nth-child(1) {
+  transform: translateX(-50%) translateY(7px) rotate(45deg);
+  top: 10px;
+}
+.pillnav--open .pillnav__toggle-line:nth-child(2) {
+  opacity: 0;
+  transform: translateX(-50%) translateY(-50%) scaleX(0);
+}
+.pillnav--open .pillnav__toggle-line:nth-child(3) {
+  transform: translateX(-50%) translateY(-7px) rotate(-45deg);
+  bottom: 10px;
+}
+
+/* ---- Mobile dropdown -------------------------------------- */
+.pillnav__mobile-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 50%;
+  min-width: 180px;
+  background: rgba(10, 10, 10, 0.92);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  border: 1px solid var(--pn-border);
+  border-radius: 20px;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  z-index: 200;
+
+  /* hidden state */
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-50%) translateY(-6px) scale(0.96);
+  transition:
+    opacity  0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.3s  cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pillnav__mobile-menu.is-open {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateX(-50%) translateY(0) scale(1);
+}
+
+.pillnav__mobile-item {
+  display: block;
+  padding: 11px 18px;
+  border-radius: 14px;
+  color: var(--pn-text);
+  text-decoration: none;
+  font-family: var(--pn-font);
+  font-size: var(--pn-font-size);
+  font-weight: var(--pn-weight);
+  letter-spacing: -0.02em;
+  transition: background 0.2s ease;
+  outline-offset: 3px;
+}
+
+.pillnav__mobile-item:hover {
+  background: rgba(251, 236, 227, 0.09);
+}
+
+.pillnav__mobile-item.is-active {
+  color: var(--pn-dot);
+}
+
+.pillnav__mobile-item:focus-visible {
+  outline: 2px solid var(--pn-text);
+}
+
+/* ---- Size modifier: md (default) -------------------------- */
+.pillnav--md {
+  --pn-font-size: 14px;
+  --pn-item-px:   16px;
+  --pn-item-py:   8px;
+  --pn-logo-size: 36px;
+}
+
+/* ---- Responsive: collapse ≤ 768px ------------------------- */
+@media (max-width: 768px) {
+  .pillnav__items {
+    display: none;   /* hide desktop links, show toggle */
+  }
+
+  .pillnav__toggle {
+    display: flex;
+  }
+}
+
+@media (min-width: 769px) {
+  .pillnav__toggle {
+    display: none;
+  }
+
+  .pillnav__mobile-menu {
+    display: none;  /* never show dropdown on desktop */
+  }
+}
+

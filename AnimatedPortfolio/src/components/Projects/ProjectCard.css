@@ -1,0 +1,213 @@
+/* Project Card (Used in ScrollStack and All Projects page) */
+.project-card {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: clamp(24px, 4vw, 56px);
+  padding: clamp(28px, 4vw, 56px);
+  min-height: clamp(480px, 68vh, 680px);
+  box-sizing: border-box;
+  align-items: center;
+  width: 100%;
+}
+
+.project-card__info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.project-card__meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-family: var(--font-family, "Inter Tight", sans-serif);
+  font-size: 14px;
+  color: rgba(251, 236, 227, 0.6);
+  margin-bottom: 12px;
+}
+
+.project-card__index {
+  font-weight: 600;
+  color: var(--color-red, #ff2a1f);
+  letter-spacing: 0.04em;
+}
+
+.project-card__year {
+  color: rgba(251, 236, 227, 0.5);
+}
+
+.project-card__tags {
+  letter-spacing: -0.01em;
+}
+
+.project-card__title {
+  margin: 0 0 clamp(16px, 2vw, 24px) 0;
+  font-family: var(--font-family, "Inter Tight", sans-serif);
+  font-size: clamp(30px, 4vw, 56px);
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  color: var(--color-cream, #fbece3);
+}
+
+.project-card__problem {
+  margin: 0 0 clamp(16px, 2vw, 24px) 0;
+  font-family: var(--font-family, "Inter Tight", sans-serif);
+  font-size: clamp(14px, 1.2vw, 17px);
+  line-height: 1.5;
+  color: rgba(251, 236, 227, 0.75);
+  letter-spacing: -0.01em;
+}
+
+.project-card__built-wrap {
+  margin-bottom: clamp(16px, 2vw, 24px);
+}
+
+.project-card__built-heading {
+  margin: 0 0 8px 0;
+  font-family: var(--font-family, "Inter Tight", sans-serif);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgba(251, 236, 227, 0.45);
+}
+
+.project-card__built-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.project-card__built-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-family: var(--font-family, "Inter Tight", sans-serif);
+  font-size: clamp(13px, 1.1vw, 15px);
+  line-height: 1.45;
+  color: rgba(251, 236, 227, 0.85);
+}
+
+.project-card__built-dot {
+  color: var(--color-red, #ff2a1f);
+  flex-shrink: 0;
+}
+
+.project-card__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: clamp(20px, 2.5vw, 32px);
+}
+
+.project-card__chip {
+  font-family: var(--font-family, "Inter Tight", sans-serif);
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(251, 236, 227, 0.06);
+  border: 1px solid rgba(251, 236, 227, 0.12);
+  color: rgba(251, 236, 227, 0.8);
+}
+
+.project-card__links {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.project-card__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-family, "Inter Tight", sans-serif);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--color-cream, #fbece3);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(251, 236, 227, 0.3);
+  padding-bottom: 2px;
+  transition: all 0.2s ease;
+}
+
+.project-card__link:hover {
+  border-color: var(--color-cream, #fbece3);
+}
+
+.project-card__link-arrow {
+  color: var(--color-red, #ff2a1f);
+  transition: transform 0.2s ease;
+}
+
+.project-card__link:hover .project-card__link-arrow {
+  transform: translate(3px, -3px);
+}
+
+/* Media (Right Column) */
+.project-card__media {
+  width: 100%;
+  height: 100%;
+  min-height: 280px;
+  max-height: 480px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #181818;
+  border: 1px solid rgba(251, 236, 227, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+}
+
+.project-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.project-card__fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: radial-gradient(circle at 50% 50%, #202020 0%, #101010 100%);
+  padding: 24px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.project-card__fallback-id {
+  font-size: 64px;
+  font-weight: 700;
+  color: rgba(251, 236, 227, 0.15);
+  font-family: var(--font-family, "Inter Tight", sans-serif);
+}
+
+.project-card__fallback-label {
+  font-size: 16px;
+  font-weight: 500;
+  color: rgba(251, 236, 227, 0.5);
+  max-width: 260px;
+}
+
+/* Mobile responsive */
+@media (max-width: 900px) {
+  .project-card {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding: 24px 20px;
+    min-height: auto;
+  }
+
+  .project-card__media {
+    max-height: 240px;
+    min-height: 200px;
+  }
+}

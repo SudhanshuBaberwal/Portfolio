@@ -1,0 +1,226 @@
+/* Skills Section (Folder Grid Layout with logos & in-card details) */
+.skills {
+  background-color: var(--color-bg, #0b0b0b);
+  color: var(--color-cream, #fbece3);
+  padding: clamp(64px, 10vw, 160px) clamp(20px, 2.5vw, 44px);
+  border-bottom: 1px solid rgba(251, 236, 227, 0.18);
+  box-sizing: border-box;
+}
+
+.skills__container {
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.skills__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-bottom: clamp(24px, 3vw, 44px);
+  border-bottom: 1px solid rgba(251, 236, 227, 0.18);
+  margin-bottom: clamp(48px, 6vw, 80px);
+}
+
+.skills__header-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.skills__title {
+  margin: 0;
+  font-family: var(--font-family, "Inter Tight", sans-serif);
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--color-cream, #fbece3);
+  line-height: 1.3;
+}
+
+.skills__sub {
+  display: block;
+  font-family: var(--font-family, "Inter Tight", sans-serif);
+  font-size: 15px;
+  color: rgba(251, 236, 227, 0.65);
+  letter-spacing: -0.02em;
+  margin-top: 2px;
+}
+
+.skills__header-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.skills__note {
+  margin: 0;
+  font-family: var(--font-family, "Inter Tight", sans-serif);
+  font-size: 15px;
+  color: rgba(251, 236, 227, 0.65);
+  letter-spacing: -0.02em;
+}
+
+/* Toggle view pill in header */
+.skills__toggle-btn {
+  background: transparent;
+  border: 1px solid rgba(251, 236, 227, 0.2);
+  color: var(--color-cream, #fbece3);
+  font-family: inherit;
+  font-size: 13px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.skills__toggle-btn:hover {
+  border-color: rgba(251, 236, 227, 0.6);
+  background: rgba(251, 236, 227, 0.05);
+}
+
+/* 3-column desktop folder grid */
+.skills__folders-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(40px, 5vw, 80px) clamp(24px, 3vw, 48px);
+}
+
+.skills__folder-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.skills__folder-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 290px;
+}
+
+/* Paper card styling inside Folder */
+.skills__paper-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.skills__paper-icon {
+  margin-bottom: 2px;
+}
+
+.skills__paper-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: #111111;
+  text-align: center;
+  max-width: 90%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+}
+
+.skills__paper-line {
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.12);
+  margin-top: 1px;
+}
+
+/* Accessible List View */
+.skills__list-view {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px;
+}
+
+.skills__list-category {
+  border-top: 1px solid rgba(251, 236, 227, 0.18);
+  padding-top: 16px;
+}
+
+.skills__list-category-title {
+  font-size: 20px;
+  font-weight: 500;
+  margin: 0 0 16px 0;
+  color: var(--color-cream, #fbece3);
+}
+
+.skills__list-items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.skills__list-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  cursor: pointer;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: rgba(251, 236, 227, 0.03);
+  transition: background 0.2s ease;
+}
+
+.skills__list-item:hover {
+  background: rgba(251, 236, 227, 0.08);
+}
+
+.skills__list-item-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.skills__list-item-name {
+  font-size: 16px;
+  color: var(--color-cream, #fbece3);
+}
+
+.skills__list-item-note {
+  font-size: 14px;
+  color: rgba(251, 236, 227, 0.65);
+}
+
+/* Tablet: 2 columns */
+@media (max-width: 1024px) {
+  .skills__folders-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile: 1 column */
+@media (max-width: 899px) {
+  .skills__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .skills__header-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .skills__folders-grid {
+    grid-template-columns: 1fr;
+    gap: 48px;
+    max-width: 360px;
+    margin: 0 auto;
+  }
+
+  .skills__list-view {
+    grid-template-columns: 1fr;
+  }
+}

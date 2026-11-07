@@ -1,0 +1,161 @@
+/* Folder Front Face (Logo grid and in-card details) */
+.folder-skill-face {
+  position: absolute;
+  inset: 0;
+  box-sizing: border-box;
+  padding: 18px 16px;
+  display: flex;
+  flex-direction: column;
+  color: #111111;
+  font-family: 'Inter Tight', -apple-system, sans-serif;
+  overflow: hidden;
+  user-select: none;
+  pointer-events: auto;
+}
+
+/* Compact Grid of Logo Buttons */
+.folder-skill-face__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px 8px;
+  align-items: center;
+  justify-items: center;
+  width: 100%;
+  height: 100%;
+  padding-top: 4px;
+}
+
+.folder-skill-face__btn {
+  background: none;
+  border: none;
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  color: #111111;
+  border-radius: 8px;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.folder-skill-face__btn:hover,
+.folder-skill-face__btn:focus-visible {
+  transform: translateY(-2px);
+  background: rgba(0, 0, 0, 0.05);
+  outline: none;
+}
+
+.folder-skill-face__btn:focus-visible {
+  box-shadow: 0 0 0 2px #111111;
+}
+
+.folder-skill-face__icon-wrap {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.folder-skill-face__label {
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.1;
+  text-align: center;
+  max-width: 60px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #18181b;
+}
+
+/* In-Card Detail View */
+.folder-skill-face__detail {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  animation: folderDetailFade 0.2s ease forwards;
+}
+
+.folder-skill-face.no-motion .folder-skill-face__detail {
+  animation: none;
+}
+
+@keyframes folderDetailFade {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.folder-skill-face__detail-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.folder-skill-face__detail-badge {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgba(17, 17, 17, 0.55);
+}
+
+.folder-skill-face__back-btn {
+  background: rgba(17, 17, 17, 0.08);
+  border: 1px solid rgba(17, 17, 17, 0.15);
+  color: #111111;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.folder-skill-face__back-btn:hover,
+.folder-skill-face__back-btn:focus-visible {
+  background: #111111;
+  color: #ffffff;
+  outline: none;
+}
+
+.folder-skill-face__detail-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  flex: 1;
+  padding: 0 4px;
+}
+
+.folder-skill-face__detail-icon {
+  margin-bottom: 8px;
+}
+
+.folder-skill-face__detail-name {
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  margin: 0 0 6px 0;
+  color: #111111;
+}
+
+.folder-skill-face__detail-note {
+  font-size: 13px;
+  line-height: 1.35;
+  color: rgba(17, 17, 17, 0.75);
+  margin: 0;
+}
