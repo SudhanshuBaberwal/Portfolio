@@ -788,6 +788,7 @@ const Folder = ({
   theme = 'dark',
   className = '',
   style,
+  frontContent,
   children
 }) => {
   const rootRef = useRef(null);
@@ -1904,7 +1905,9 @@ const Folder = ({
         {book && <span ref={shadeRef} className="folder-layer folder-shade" aria-hidden="true" />}
 
         <div ref={frontRef} className="folder-layer folder-front" data-face="outer" aria-hidden="true">
-          <div className="folder-face folder-face-outer" />
+          <div className="folder-face folder-face-outer">
+            {frontContent && <div className="folder-front-custom">{frontContent}</div>}
+          </div>
           {book && (
             <div className="folder-face folder-face-inner">
               <span className="folder-inner-gutter" />
