@@ -1,6 +1,13 @@
 import React, { useEffect, useRef } from "react";
 import { CODING } from "../../data/coding.js";
+import { siGithub, siLeetcode, siCodechef } from "simple-icons";
 import "./Coding.css";
+
+const PLATFORM_ICONS = {
+  GitHub: siGithub,
+  LeetCode: siLeetcode,
+  CodeChef: siCodechef,
+};
 
 export default function Coding() {
   const sectionRef = useRef(null);
@@ -43,8 +50,13 @@ export default function Coding() {
     return () => observer.disconnect();
   }, []);
 
-  // Filter platforms that have a filled URL
-  const activePlatforms = CODING.platforms.filter((p) => Boolean(p.url && p.url.trim()));
+  const isDev = import.meta.env.DEV;
+
+  // Filter or show DEV fallbacks
+  const displayPlatforms = CODING.platforms.filter((p) => {
+    const hasUrl = Boolean(p.url && p.url.trim());
+    return hasUrl || isDev;
+  });
 
   return (
     <section
@@ -65,33 +77,120 @@ export default function Coding() {
         {/* Col 4 to 12: Platforms Cards & Language note */}
         <div className="coding__content-col">
           <div className="coding__cards">
-            {activePlatforms.map((platform, idx) => (
-              <a
-                key={idx}
-                href={platform.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="coding__card coding__reveal-item cursor-target"
-                data-cursor-label="Open"
-                aria-label={`${platform.name} profile`}
-              >
-                <div className="coding__card-header">
-                  <h3 className="coding__platform-name">{platform.name}</h3>
-                  <span className="coding__arrow" aria-hidden="true">
-                    ↗
-                  </span>
-                </div>
+            {displayPlatforms.map((platform, idx) => {
+              const iconData = PLATFORM_ICONS[platform.name];
+              const hasUrl = Boolean(platform.url && platform.url.trim());
 
-                <div className="coding__card-body">
-                  {platform.handle && (
-                    <span className="coding__handle">@{platform.handle}</span>
+              if (!hasUrl) {
+                // DEV placeholder fallback
+                return (
+                  <div
+                    key={idx}
+                    className="coding__card coding__card--placeholder coding__reveal-item"
+                    title="Add your username in src/data/coding.js"
+                  >
+                    {/* Ghost logo anchored bottom-right */}
+                    {iconData && (
+                      <div className="coding__ghost-logo" aria-hidden="true">
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                          className="coding__ghost-svg"
+                        >
+                          <path d={iconData.path} />
+                        </svg>
+                      </div>
+                    )}
+
+                    <div className="coding__card-top">
+                      <div className="coding__icon-wrap">
+                        {iconData && (
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            className="coding__icon-svg"
+                            aria-hidden="true"
+                          >
+                            <path d={iconData.path} />
+                          </svg>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="coding__card-mid">
+                      <h3 className="coding__platform-name">{platform.name}</h3>
+                      <p className="coding__purpose">{platform.purpose}</p>
+                    </div>
+
+                    <div className="coding__card-bottom">
+                      <span className="coding__dev-hint">
+                        Add your username in src/data/coding.js
+                      </span>
+                    </div>
+                  </div>
+                );
+              }
+
+              return (
+                <a
+                  key={idx}
+                  href={platform.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="coding__card coding__reveal-item cursor-target"
+                  data-cursor-label="Open"
+                  aria-label={`${platform.name} profile`}
+                >
+                  {/* Ghost background logo */}
+                  {iconData && (
+                    <div className="coding__ghost-logo" aria-hidden="true">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        className="coding__ghost-svg"
+                      >
+                        <path d={iconData.path} />
+                      </svg>
+                    </div>
                   )}
-                  {platform.stat && (
-                    <span className="coding__stat">{platform.stat}</span>
-                  )}
-                </div>
-              </a>
-            ))}
+
+                  {/* Top: monochrome logo + red arrow */}
+                  <div className="coding__card-top">
+                    <div className="coding__icon-wrap">
+                      {iconData && (
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                          className="coding__icon-svg"
+                          aria-hidden="true"
+                        >
+                          <path d={iconData.path} />
+                        </svg>
+                      )}
+                    </div>
+                    <span className="coding__arrow" aria-hidden="true">
+                      ↗
+                    </span>
+                  </div>
+
+                  {/* Middle: large title + muted purpose */}
+                  <div className="coding__card-mid">
+                    <h3 className="coding__platform-name">{platform.name}</h3>
+                    <p className="coding__purpose">{platform.purpose}</p>
+                  </div>
+
+                  {/* Bottom: @handle + optional stat */}
+                  <div className="coding__card-bottom">
+                    {platform.handle && (
+                      <span className="coding__handle">@{platform.handle}</span>
+                    )}
+                    {platform.stat && (
+                      <span className="coding__stat">{platform.stat}</span>
+                    )}
+                  </div>
+                </a>
+              );
+            })}
           </div>
 
           {CODING.language && (

@@ -1,6 +1,6 @@
 /* ============================================================
    Coding.css — Coding / Problem solving
-   12-column grid, 3-column card grid, language statement
+   12-column grid, 3-column card grid, ghost logos, language statement
    ============================================================ */
 
 .coding {
@@ -62,15 +62,16 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 160px;
-  padding: 24px;
+  min-height: 240px;
+  padding: clamp(24px, 2.5vw, 32px);
   border-radius: 8px;
   border: 1px solid rgba(251, 236, 227, 0.18);
   background: rgba(251, 236, 227, 0.02);
   text-decoration: none;
   color: var(--cream, #fbece3);
   position: relative;
-  transition: border-color 0.3s ease, background 0.3s ease;
+  overflow: hidden;
+  transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s ease;
   outline-offset: 4px;
 }
 
@@ -83,20 +84,64 @@
   outline: 2px solid var(--cream, #fbece3);
 }
 
-.coding__card-header {
+/* DEV Placeholder card styling */
+.coding__card--placeholder {
+  border-style: dashed;
+  border-color: rgba(251, 236, 227, 0.12);
+  opacity: 0.6;
+}
+
+.coding__card--placeholder:hover {
+  border-color: rgba(251, 236, 227, 0.25);
+  background: rgba(251, 236, 227, 0.03);
+}
+
+/* Ghost Logo anchored bottom-right */
+.coding__ghost-logo {
+  position: absolute;
+  right: -24px;
+  bottom: -24px;
+  width: 220px;
+  height: 220px;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.05;
+  color: var(--cream, #fbece3);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.coding__card:hover .coding__ghost-logo {
+  opacity: 0.08;
+  transform: scale(1.04);
+}
+
+.coding__ghost-svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Card Content Sections (z-index 1 above ghost) */
+.coding__card-top {
+  position: relative;
+  z-index: 1;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 12px;
 }
 
-.coding__platform-name {
-  font-size: clamp(24px, 3vw, 44px);
-  font-weight: 500;
-  letter-spacing: -0.03em;
-  line-height: 1.1;
+.coding__icon-wrap {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: var(--cream, #fbece3);
-  margin: 0;
+}
+
+.coding__icon-svg {
+  width: 28px;
+  height: 28px;
 }
 
 .coding__arrow {
@@ -110,23 +155,60 @@
   transform: translate(4px, -4px);
 }
 
-.coding__card-body {
+.coding__card-mid {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   gap: 6px;
-  margin-top: 16px;
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+
+.coding__platform-name {
+  font-size: clamp(28px, 3.4vw, 48px);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+  color: var(--cream, #fbece3);
+  margin: 0;
+}
+
+.coding__purpose {
+  font-size: 14px;
+  color: rgba(251, 236, 227, 0.65);
+  letter-spacing: -0.01em;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.coding__card-bottom {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .coding__handle {
-  font-size: 15px;
-  color: rgba(251, 236, 227, 0.65);
+  font-size: 16px;
+  color: var(--cream, #fbece3);
   letter-spacing: -0.01em;
+  font-weight: 500;
 }
 
 .coding__stat {
-  font-size: 14px;
+  font-size: 13px;
   color: rgba(251, 236, 227, 0.85);
   letter-spacing: -0.01em;
+}
+
+.coding__dev-hint {
+  font-size: 12px;
+  color: rgba(251, 236, 227, 0.45);
+  font-style: italic;
+  letter-spacing: -0.01em;
+  line-height: 1.4;
 }
 
 .coding__footer-note {
@@ -157,13 +239,14 @@
     transition: none !important;
   }
 
-  .coding__arrow {
+  .coding__arrow,
+  .coding__ghost-logo {
     transition: none !important;
   }
 }
 
-/* ---- Responsive: <= 900px --------------------------------- */
-@media (max-width: 900px) {
+/* ---- Responsive: <= 960px --------------------------------- */
+@media (max-width: 960px) {
   .coding__grid {
     display: flex;
     flex-direction: column;
