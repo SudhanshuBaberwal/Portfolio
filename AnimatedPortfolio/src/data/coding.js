@@ -25,8 +25,8 @@ export const CODING = {
     },
     {
       name: "CodeChef",
-      handle: "",
-      url: "",
+      handle: "Sudhanshubaberwal",
+      url: "https://www.codechef.com/users/aided_care_69",
       purpose: "Contests",
       // TODO: optionally add real stats as a fallback for when the server can't be reached
       fallback: {

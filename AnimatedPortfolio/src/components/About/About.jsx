@@ -164,20 +164,20 @@ export default function About() {
                   aria-label="Interactive ID card with a portrait of Sudhanshu Baberwal. Drag to swing it."
                 >
                   <Lanyard
-                    frontImage="/card-front.png"
-                    backImage="/card-back.png"
+                    frontImage="/hero.jpg"
+                    backImage="/card-back.jpg"
                     strapImage="/band.png"
                     imageFit="cover"
                     cardColor="#ffffff"
                     orientation="portrait"
-                    finish="glossy"
+                    // finish="glossy"
                     cornerRadius={0.3}
                     size={0.6}
                     anchor="center"
                     strapLength={0.5}
                     strapColor="#111111"
                     strapWidth={0.65}
-                    metal="silver"
+                    // metal="silver"
                     gravity={1}
                     damping={0.5}
                     elasticity={0.5}

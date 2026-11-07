@@ -15,7 +15,7 @@ export const PROJECTS = [
       "Implemented transactional reservation workflows backed by PostgreSQL with ACID compliance.",
       "Developed stateless REST APIs for vehicle catalog browsing, pricing calculation, and booking lifecycle management.",
     ],
-    image: "/projects/car-rental.jpg", // TODO: verify screenshot asset
+    image: "/public/951a996c-3aff-4101-8138-ba1400a59248 (1).png", // TODO: verify screenshot asset
     github: "https://github.com/SudhanshuBaberwal/Car-Rental-Project",
     live: "", // TODO: verify if live deployment exists
     result: "", // Left intentionally empty
@@ -34,7 +34,7 @@ export const PROJECTS = [
       "Integrated Redis Pub/Sub message broker to synchronize chat rooms across multiple running application instances.",
       "Implemented secure connection handshakes, user authentication, and message persistence schemas.",
     ],
-    image: "/projects/chatify.jpg", // TODO: verify screenshot asset
+    image: "/public/chatify.jpg", // TODO: verify screenshot asset
     github: "https://github.com/SudhanshuBaberwal/Chatify",
     live: "", // TODO: verify if live deployment exists
     result: "", // Left intentionally empty
@@ -53,7 +53,7 @@ export const PROJECTS = [
       "Utilized Redis as a token blocklist and active session store to enable instantaneous token revocation and logout.",
       "Configured role-based access control (RBAC), refresh token rotation, and secure HTTP-only cookie handling.",
     ],
-    image: "/projects/auth-engine.jpg", // TODO: verify screenshot asset
+    image: "/public/auth-engine.jpg", // TODO: verify screenshot asset
     github: "https://github.com/SudhanshuBaberwal/Auth-with_TSandNext",
     live: "", // TODO: verify if live deployment exists
     result: "", // Left intentionally empty
