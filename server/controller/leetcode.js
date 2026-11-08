@@ -137,12 +137,19 @@ export const getGitHubData = async (req, res) => {
     const username = process.env.GITHUB_USERNAME || "SudhanshuBaberwal";
     const data = await fetchGithubStats(username);
 
+    if (!data) {
+      return res.status(502).json({
+        success: false,
+        message: "Failed to fetch GitHub stats or rate limited",
+      });
+    }
+
     return res.status(200).json({
       success: true,
       data,
     });
   } catch (error) {
-    return res.status(500).json({
+    return res.status(502).json({
       success: false,
       message: "Failed to fetch GitHub stats",
       error: error.message,

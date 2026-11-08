@@ -5,6 +5,7 @@ import { AS_OF, ENDPOINTS, FALLBACK, PROFILES, fetchPlatform } from './codingDat
 import './Coding.css';
 
 const REDUCED = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const RAMP = ['#fbece3', '#ffd2bd', '#ffb59a', '#ff9a73', '#ff6b3d', '#b8452b'];
 
 function CountUp({ value, active, prefix = '', suffix = '' }) {
   const [n, setN] = useState(REDUCED ? value : 0);
@@ -54,17 +55,25 @@ function Card({ cls, i, icon, name, profile, live, children }) {
 }
 
 function Ring({ s, drawn }) {
-  const R = 90, C = 2 * Math.PI * R, gap = 6;
+  const R = 90, C = 2 * Math.PI * R, GAP = 16;
   const total = s.easy + s.medium + s.hard || 1;
+  const arcs = [['easy', '#ffd2bd'], ['medium', '#ff9a73'], ['hard', '#ff3d2a']];
   let off = 0;
   return (
     <svg viewBox="0 0 220 220" role="img" aria-label={`${s.all} problems solved: ${s.easy} easy, ${s.medium} medium, ${s.hard} hard`}>
-      <circle cx="110" cy="110" r={R} style={{ stroke: 'rgba(251,236,227,.08)', transition: 'none' }} />
-      {[['easy', 1], ['medium', 0.6], ['hard', 0.32]].map(([k, o], idx) => {
-        const share = (s[k] / total) * C, len = Math.max(0, share - gap);
+      <circle cx="110" cy="110" r={R} style={{ fill: 'none', stroke: 'rgba(251,236,227,.08)', strokeWidth: 10, transition: 'none' }} />
+      {arcs.map(([k, color], idx) => {
+        const share = (s[k] / total) * C;
+        const len = Math.max(0, share - GAP);
         const el = (
-          <circle key={k} cx="110" cy="110" r={R} strokeDashoffset={-off}
-            style={{ opacity: o, strokeDasharray: drawn ? `${len} ${C - len}` : `0 ${C}`, transitionDelay: `${idx * 0.25}s` }} />
+          <circle key={k} cx="110" cy="110" r={R} strokeDashoffset={-(off + GAP / 2)}
+            style={{
+              fill: 'none', stroke: color, strokeWidth: 10, strokeLinecap: 'round',
+              strokeDasharray: drawn ? `${len} ${C - len}` : `0 ${C}`,
+              opacity: drawn ? 1 : 0,
+              transition: `stroke-dasharray 1.2s cubic-bezier(.2,.7,.2,1) ${idx * 0.25}s, opacity .3s ease ${idx * 0.25}s`,
+              filter: 'drop-shadow(0 0 6px rgba(255,107,61,.35))',
+            }} />
         );
         off += share;
         return el;
@@ -83,12 +92,12 @@ function LeetCode({ d, active, live, i }) {
           <div className="cd-rc"><span className="cd-big"><CountUp value={s.all} active={active} /></span><span className="cd-note">solved</span></div>
         </div>
         <div className="cd-rows">
-          {[['Easy', 'easy', 1], ['Medium', 'medium', 0.6], ['Hard', 'hard', 0.32]].map(([l, k, o]) => (
-            <div className="cd-row" key={k}>
-              <span>{l}</span><b>{s[k]}</b>
-              <i><u style={{ width: `${s.all ? (s[k] / s.all) * 100 : 0}%`, opacity: o }} /></i>
-            </div>
-          ))}
+          {[['Easy', 'easy', '#ffd2bd'], ['Medium', 'medium', '#ff9a73'], ['Hard', 'hard', '#ff3d2a']].map(([l, k, c]) => (
+  <div className="cd-row" key={k}>
+    <span>{l}</span><b style={{ color: c }}>{s[k]}</b>
+    <i><u style={{ width: `${s.all ? (s[k] / s.all) * 100 : 0}%`, background: c }} /></i>
+  </div>
+))}
         </div>
       </div>
       <dl className="cd-stats">
@@ -119,9 +128,13 @@ function GitHub({ d, active, live, i }) {
       {L.length > 0 && (
         <div>
           <div className="cd-lang" role="img" aria-label={'Languages: ' + L.map((l) => `${l.name} ${l.count}`).join(', ')}>
-            {L.map((l, k) => <u key={l.name} style={{ flex: l.count, opacity: Math.max(0.2, 1 - k * 0.16), transitionDelay: `${k * 0.08}s` }} />)}
-          </div>
-          <div className="cd-leg">{L.map((l) => <span key={l.name}>{l.name} <b>{l.count}</b></span>)}</div>
+  {L.map((l, k) => <u key={l.name} style={{ flex: l.count, background: RAMP[k % RAMP.length], transitionDelay: `${k * 0.08}s` }} />)}
+</div>
+<div className="cd-leg">
+  {L.map((l, k) => (
+    <span key={l.name}><i className="cd-ldot" style={{ background: RAMP[k % RAMP.length] }} />{l.name} <b>{l.count}</b></span>
+  ))}
+</div>
         </div>
       )}
     </Card>

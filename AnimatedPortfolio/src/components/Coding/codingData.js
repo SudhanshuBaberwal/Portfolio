@@ -6,11 +6,7 @@
 
 export const AS_OF = "Nov 2026";
 
-// Handles from server controllers & config:
-// - LeetCode: sudhanshubaberwal
-// - GitHub: SudhanshuBaberwal
-// - CodeChef: aided_care_69 (from server/controller/codechefController.js)
-// - Codeforces: Sudhanshu_Baberwal (from server/controller/leetcode.js getCodeForcesData)
+// Handles from server controllers & config
 export const PROFILES = {
   leetcode: {
     handle: "sudhanshubaberwal",
@@ -82,6 +78,9 @@ export const FALLBACK = {
   },
 };
 
+// Module-level session cache for LeetCode contest data
+let sessionLeetcodeContest = null;
+
 // Helper: parse first run of digits
 function parseDigits(val) {
   if (val == null) return null;
@@ -105,8 +104,10 @@ function parseStars(val) {
  */
 export async function fetchPlatform(key, base = "") {
   const url = `${base}${ENDPOINTS[key]}`;
+  const timeoutMs = key === "codechef" ? 15000 : 6000;
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 6000);
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  const t0 = performance.now();
 
   try {
     const res = await fetch(url, {
@@ -114,13 +115,21 @@ export async function fetchPlatform(key, base = "") {
       headers: { Accept: "application/json" },
       signal: controller.signal,
     });
+
+    const elapsed = Math.round(performance.now() - t0);
+    if (import.meta.env.DEV) {
+      console.log(`[Coding] ${key} fetched in ${elapsed}ms -> HTTP ${res.status}`);
+    }
+
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const json = await res.json();
 
     if (key === "leetcode") {
-      // Shape: { status, handle, profileUrl, data: { solved, ranking, totalActiveDays, badgesCount, latestBadge, contest } }
-      // Or directly matchedUser / controller result
       const raw = json.data || json;
+      if (import.meta.env.DEV) {
+        console.log("[Coding] Raw LeetCode JSON:", json);
+      }
+
       if (!raw || (!raw.solved && !raw.submitStats && !raw.submitStatsGlobal)) {
         throw new Error("Invalid leetcode response");
       }
@@ -136,31 +145,44 @@ export async function fetchPlatform(key, base = "") {
         }
       }
 
+      // Check contest data in both contest and contestRanking shapes
+      const cr = raw.contest || raw.contestRanking || json.contestRanking;
       let contest = null;
-      if (raw.contest) {
+      if (cr && (cr.rating != null || cr.attendedContestsCount != null || cr.attended != null)) {
         contest = {
-          rating: Math.round(raw.contest.rating || 0),
-          attended: raw.contest.attendedContestsCount ?? raw.contest.attended ?? 0,
-          top: raw.contest.topPercentage ?? raw.contest.top,
-          globalRanking: raw.contest.globalRanking,
+          rating: Math.round(cr.rating || 0),
+          attended: cr.attendedContestsCount ?? cr.attended ?? 0,
+          top: cr.topPercentage ?? cr.top,
+          globalRanking: cr.globalRanking,
         };
+        sessionLeetcodeContest = contest;
+      } else if (sessionLeetcodeContest) {
+        contest = sessionLeetcodeContest;
+      } else {
+        // Fall back to saved contest block
+        contest = FALLBACK.leetcode.contest;
+      }
+
+      const normalized = {
+        solved: solved || FALLBACK.leetcode.solved,
+        ranking: raw.ranking ?? raw.profile?.ranking ?? null,
+        totalActiveDays: raw.totalActiveDays ?? raw.userCalendar?.totalActiveDays ?? null,
+        badgesCount: raw.badgesCount ?? raw.badges?.length ?? null,
+        latestBadge: raw.latestBadge ?? (raw.badges?.length ? raw.badges[raw.badges.length - 1].displayName : null),
+        contest,
+      };
+
+      if (import.meta.env.DEV) {
+        console.log("[Coding] Normalized LeetCode object:", normalized);
       }
 
       return {
         ok: true,
-        data: {
-          solved: solved || FALLBACK.leetcode.solved,
-          ranking: raw.ranking ?? raw.profile?.ranking ?? null,
-          totalActiveDays: raw.totalActiveDays ?? raw.userCalendar?.totalActiveDays ?? null,
-          badgesCount: raw.badgesCount ?? raw.badges?.length ?? null,
-          latestBadge: raw.latestBadge ?? (raw.badges?.length ? raw.badges[raw.badges.length - 1].displayName : null),
-          contest,
-        },
+        data: normalized,
       };
     }
 
     if (key === "github") {
-      // Shape: { success: true, data: { publicRepos, followers, following, totalStars, totalForks, languagesUsed, ... } }
       const raw = json.data || json;
       if (!raw || typeof raw !== "object") throw new Error("Invalid github response");
 
@@ -173,21 +195,34 @@ export async function fetchPlatform(key, base = "") {
           .sort((a, b) => b.count - a.count);
       }
 
+      const publicRepos = raw.publicRepos ?? 0;
+      const followers = raw.followers ?? 0;
+      const following = raw.following ?? 0;
+      const totalStars = raw.totalStars ?? 0;
+      const totalForks = raw.totalForks ?? 0;
+
+      // Part 1 requirement: return null if all 0 and no languages so card uses saved fallback
+      if (publicRepos === 0 && followers === 0 && following === 0 && totalStars === 0 && languages.length === 0) {
+        if (import.meta.env.DEV) {
+          console.warn("[Coding] GitHub returned all-zero data. Falling back to saved stats.");
+        }
+        return { ok: false, data: FALLBACK.github };
+      }
+
       return {
         ok: true,
         data: {
-          publicRepos: raw.publicRepos ?? 0,
-          followers: raw.followers ?? 0,
-          following: raw.following ?? 0,
-          totalStars: raw.totalStars ?? 0,
-          totalForks: raw.totalForks ?? 0,
+          publicRepos,
+          followers,
+          following,
+          totalStars,
+          totalForks,
           languages,
         },
       };
     }
 
     if (key === "codechef") {
-      // Shape: { success: true, data: { currentRating, highestRating, stars, globalRank, countryRank } }
       const raw = json.data || json;
       if (!raw || typeof raw !== "object") throw new Error("Invalid codechef response");
 
@@ -214,7 +249,6 @@ export async function fetchPlatform(key, base = "") {
     }
 
     if (key === "codeforces") {
-      // Shape: { success: true, data: { rating, maxRating, rank, maxRank, contestsAttended, bestRank } }
       const raw = json.data || json;
       if (!raw || typeof raw !== "object") throw new Error("Invalid codeforces response");
 
@@ -232,6 +266,10 @@ export async function fetchPlatform(key, base = "") {
 
     return { ok: false, data: FALLBACK[key] };
   } catch (err) {
+    const elapsed = Math.round(performance.now() - t0);
+    if (import.meta.env.DEV) {
+      console.warn(`[Coding] ${key} failed after ${elapsed}ms:`, err.message);
+    }
     return { ok: false, data: FALLBACK[key], error: err.message };
   } finally {
     clearTimeout(timer);

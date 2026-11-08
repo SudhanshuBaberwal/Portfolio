@@ -1,9 +1,14 @@
 /* ============================================================
-   Coding.css — Bento Stats Dashboard
-   Monochrome cream on near-black, tight tracking, smooth animation
+   Coding.css — Bento Stats Dashboard with One-Accent Ember Palette
+   Strictly single warm-ember accent hue across all platforms.
+   Near-black background, cream typography, restrained ember data.
    ============================================================ */
 
 .cd {
+  --accent: #ff6b3d;
+  --accent-soft: #ffb59a;
+  --accent-deep: #ff3d2a;
+
   position: relative;
   width: 100%;
   background: var(--bg, #0b0b0b);
@@ -71,14 +76,19 @@
   user-select: none;
 }
 
+/* Status dot: red #ff2a1f when live, muted grey when saved */
 .cd-dot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--red, #ff2a1f);
+  background: rgba(251, 236, 227, 0.4);
+  display: inline-block;
+}
+
+.cd-dot.live {
+  background: #ff2a1f;
   box-shadow: 0 0 8px rgba(255, 42, 31, 0.6);
   animation: cdPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  display: inline-block;
 }
 
 .cd-dot.off {
@@ -154,6 +164,25 @@
   transform: translateY(24px);
 }
 
+/* 1px top hairline gradient */
+.cd-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--accent) 55%, transparent),
+    transparent
+  );
+  opacity: 0.85;
+  pointer-events: none;
+  z-index: 2;
+}
+
 .cd.on .cd-card {
   opacity: 1;
   transform: translateY(0);
@@ -163,11 +192,12 @@
               box-shadow 0.3s ease;
 }
 
-/* Desktop Hover: Spotlight + Lift */
+/* Desktop Hover: 45% border + 10% cursor spotlight + Lift */
 @media (hover: hover) and (pointer: fine) {
   .cd-card:hover {
     transform: translateY(-4px);
-    border-color: rgba(251, 236, 227, 0.4);
+    border-color: rgba(251, 236, 227, 0.35);
+    border-color: color-mix(in srgb, var(--accent) 45%, transparent);
     box-shadow: 0 16px 32px rgba(0, 0, 0, 0.5);
   }
 
@@ -179,11 +209,17 @@
     border-radius: inherit;
     background: radial-gradient(
       300px circle at var(--mx, 50%) var(--my, 50%),
-      rgba(251, 236, 227, 0.06),
+      rgba(251, 236, 227, 0.08),
+      transparent 70%
+    );
+    background: radial-gradient(
+      300px circle at var(--mx, 50%) var(--my, 50%),
+      color-mix(in srgb, var(--accent) 10%, transparent),
       transparent 70%
     );
     opacity: 0;
     transition: opacity 0.25s ease;
+    z-index: 0;
   }
 
   .cd-card:hover::before {
@@ -195,22 +231,22 @@
   }
 }
 
-/* Background ghost watermark logo */
+/* Large ghost watermark logo using var(--accent) at 5% opacity */
 .cd-ghost {
   position: absolute;
   right: -20px;
   bottom: -20px;
   width: 180px;
   height: 180px;
-  opacity: 0.04;
+  opacity: 0.05;
   pointer-events: none;
   z-index: 0;
-  color: var(--cream, #fbece3);
+  color: var(--accent);
   transition: transform 0.4s ease, opacity 0.4s ease;
 }
 
 .cd-card:hover .cd-ghost {
-  opacity: 0.07;
+  opacity: 0.08;
   transform: scale(1.05);
 }
 
@@ -231,7 +267,8 @@
   gap: 12px;
 }
 
-.cd-id svg {
+/* Platform logo in header stays cream */
+.cd-logo {
   width: 28px;
   height: 28px;
   fill: currentColor;
@@ -270,7 +307,7 @@
 }
 
 .cd-ln b {
-  color: var(--red, #ff2a1f);
+  color: #ff2a1f;
   font-size: 14px;
   transition: transform 0.2s ease;
 }
@@ -301,6 +338,25 @@
   letter-spacing: -0.01em;
 }
 
+/* ── Hero Numerals: linear-gradient(#fbece3 0%, var(--accent-soft) 45%, var(--accent) 100%) ── */
+.cd-big {
+  font-size: clamp(32px, 3.5vw, 56px);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: var(--accent-soft);
+}
+
+@supports (-webkit-background-clip: text) or (background-clip: text) {
+  .cd-big {
+    background: linear-gradient(135deg, #fbece3 0%, var(--accent-soft) 45%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+}
+
 /* ── LeetCode Card Specifics ─────────────────────────────── */
 .cd-ringw {
   display: flex;
@@ -326,10 +382,13 @@
 
 .cd-ring circle {
   fill: none;
-  stroke: var(--cream, #fbece3);
   stroke-width: 12;
   stroke-linecap: round;
   transition: stroke-dasharray 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cd-ring-track {
+  stroke: rgba(251, 236, 227, 0.08) !important;
 }
 
 .cd-rc {
@@ -340,14 +399,6 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-}
-
-.cd-big {
-  font-size: clamp(32px, 3.5vw, 56px);
-  font-weight: 500;
-  letter-spacing: -0.04em;
-  line-height: 1;
-  color: var(--cream, #fbece3);
 }
 
 .cd-rows {
@@ -372,7 +423,6 @@
 
 .cd-row b {
   font-weight: 500;
-  color: var(--cream, #fbece3);
   text-align: right;
 }
 
@@ -388,12 +438,11 @@
 .cd-row u {
   display: block;
   height: 100%;
-  background: var(--cream, #fbece3);
   border-radius: 2px;
   transition: width 0.9s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Stats lists / definition lists */
+/* Stats lists / definition lists - Secondary stat values stay CREAM */
 .cd-stats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -436,7 +485,7 @@
   margin-top: 3px;
 }
 
-/* ── GitHub Languages ────────────────────────────────────── */
+/* ── GitHub Languages: Tonal Ramp ────────────────────────── */
 .cd-lang {
   display: flex;
   height: 6px;
@@ -450,7 +499,6 @@
 .cd-lang u {
   display: block;
   height: 100%;
-  background: var(--cream, #fbece3);
   border-radius: 2px;
   transition: flex 0.9s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -461,13 +509,21 @@
   gap: 12px;
   margin-top: 10px;
   font-size: 12px;
-  color: rgba(251, 236, 227, 0.65);
+  color: rgba(251, 236, 227, 0.75);
 }
 
 .cd-leg span {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
+}
+
+.cd-dot-lang {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
 }
 
 .cd-leg b {
@@ -475,7 +531,7 @@
   color: var(--cream, #fbece3);
 }
 
-/* ── Rating Cards (Codeforces & CodeChef) ─────────────────── */
+/* ── Rating Cards: Rank & Star Chips ─────────────────────── */
 .cd-hero {
   display: flex;
   align-items: center;
@@ -488,11 +544,11 @@
   align-items: center;
   padding: 4px 10px;
   border-radius: 9999px;
-  border: 1px solid rgba(251, 236, 227, 0.25);
+  border: 1px solid color-mix(in srgb, var(--accent) 60%, transparent);
   font-size: 12px;
   font-weight: 500;
-  color: var(--cream, #fbece3);
   letter-spacing: -0.01em;
+  color: var(--accent-soft);
   background: rgba(251, 236, 227, 0.04);
 }
 
@@ -529,9 +585,14 @@
   gap: 40px;
 }
 
+.cd-tk span b {
+  color: var(--accent-soft);
+  font-weight: 500;
+}
+
 .cd-tk span::after {
   content: "/";
-  color: rgba(251, 236, 227, 0.3);
+  color: rgba(251, 236, 227, 0.3) !important;
 }
 
 @keyframes cdTicker {
