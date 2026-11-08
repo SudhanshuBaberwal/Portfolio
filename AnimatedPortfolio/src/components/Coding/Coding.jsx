@@ -1,416 +1,224 @@
-import React, { useEffect, useRef } from "react";
-import { CODING } from "../../data/coding.js";
-import { useCodingStats } from "../../hooks/useCodingStats.js";
-import { CountUp } from "./CountUp.jsx";
-import { siGithub, siLeetcode, siCodechef } from "simple-icons";
-import "./Coding.css";
+import { useEffect, useRef, useState } from 'react';
+// If one of these icon names fails to import, reuse the imports your Skills section already uses.
+import { siGithub, siLeetcode, siCodechef, siCodeforces } from 'simple-icons';
+import { AS_OF, ENDPOINTS, FALLBACK, PROFILES, fetchPlatform } from './codingData';
+import './Coding.css';
 
-const PLATFORM_ICONS = {
-  GitHub: siGithub,
-  LeetCode: siLeetcode,
-  CodeChef: siCodechef,
-};
+const REDUCED = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function CountUp({ value, active, prefix = '', suffix = '' }) {
+  const [n, setN] = useState(REDUCED ? value : 0);
+  const from = useRef(0);
+  useEffect(() => {
+    if (!active) return;
+    if (REDUCED) { setN(value); return; }
+    const start = performance.now(), a = from.current;
+    let raf;
+    const tick = (t) => {
+      const p = Math.min(1, (t - start) / 900);
+      setN(Math.round(a + (value - a) * (1 - Math.pow(1 - p, 3))));
+      if (p < 1) raf = requestAnimationFrame(tick); else from.current = value;
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [value, active]);
+  return <>{prefix}{n.toLocaleString('en-US')}{suffix}</>;
+}
+
+const Stat = ({ label, children }) => (
+  <div className="cd-stat"><dt>{label}</dt><dd>{children}</dd></div>
+);
+
+function Card({ cls, i, icon, name, profile, live, children }) {
+  const move = (e) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    e.currentTarget.style.setProperty('--mx', e.clientX - r.left + 'px');
+    e.currentTarget.style.setProperty('--my', e.clientY - r.top + 'px');
+  };
+  return (
+    <article className={`cd-card cursor-target ${cls}`} data-cursor-label="Stats" style={{ '--d': `${i * 90}ms` }} onPointerMove={move}>
+      <svg className="cd-ghost" viewBox="0 0 24 24" aria-hidden="true"><path d={icon.path} fill="currentColor" /></svg>
+      <header className="cd-ch">
+        <div className="cd-id">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d={icon.path} /></svg>
+          <div><h3>{name}</h3><small>@{profile.handle}</small></div>
+        </div>
+        <a className="cd-ln cursor-target" data-cursor-label="Open" href={profile.url} target="_blank" rel="noopener noreferrer">
+          View profile <b>↗</b>
+        </a>
+      </header>
+      <div className="cd-body">{children}</div>
+      {!live && <p className="cd-note">Last updated {AS_OF}</p>}
+    </article>
+  );
+}
+
+function Ring({ s, drawn }) {
+  const R = 90, C = 2 * Math.PI * R, gap = 6;
+  const total = s.easy + s.medium + s.hard || 1;
+  let off = 0;
+  return (
+    <svg viewBox="0 0 220 220" role="img" aria-label={`${s.all} problems solved: ${s.easy} easy, ${s.medium} medium, ${s.hard} hard`}>
+      <circle cx="110" cy="110" r={R} style={{ stroke: 'rgba(251,236,227,.08)', transition: 'none' }} />
+      {[['easy', 1], ['medium', 0.6], ['hard', 0.32]].map(([k, o], idx) => {
+        const share = (s[k] / total) * C, len = Math.max(0, share - gap);
+        const el = (
+          <circle key={k} cx="110" cy="110" r={R} strokeDashoffset={-off}
+            style={{ opacity: o, strokeDasharray: drawn ? `${len} ${C - len}` : `0 ${C}`, transitionDelay: `${idx * 0.25}s` }} />
+        );
+        off += share;
+        return el;
+      })}
+    </svg>
+  );
+}
+
+function LeetCode({ d, active, live, i }) {
+  const s = d.solved, c = d.contest;
+  return (
+    <Card cls="cd-lc" i={i} icon={siLeetcode} name="LeetCode" profile={PROFILES.leetcode} live={live}>
+      <div className="cd-ringw">
+        <div className="cd-ring">
+          <Ring s={s} drawn={active} />
+          <div className="cd-rc"><span className="cd-big"><CountUp value={s.all} active={active} /></span><span className="cd-note">solved</span></div>
+        </div>
+        <div className="cd-rows">
+          {[['Easy', 'easy', 1], ['Medium', 'medium', 0.6], ['Hard', 'hard', 0.32]].map(([l, k, o]) => (
+            <div className="cd-row" key={k}>
+              <span>{l}</span><b>{s[k]}</b>
+              <i><u style={{ width: `${s.all ? (s[k] / s.all) * 100 : 0}%`, opacity: o }} /></i>
+            </div>
+          ))}
+        </div>
+      </div>
+      <dl className="cd-stats">
+        {d.ranking != null && <Stat label="Global ranking"><CountUp value={d.ranking} active={active} prefix="#" /></Stat>}
+        {c && <Stat label="Contest rating"><CountUp value={c.rating} active={active} /></Stat>}
+        {c && <Stat label="Contests attended"><CountUp value={c.attended} active={active} /></Stat>}
+        {c?.top != null && <Stat label="Contest percentile">Top {c.top}%</Stat>}
+        {d.totalActiveDays != null && <Stat label="Active days"><CountUp value={d.totalActiveDays} active={active} /></Stat>}
+        {d.badgesCount != null && (
+          <Stat label="Badges"><CountUp value={d.badgesCount} active={active} />{d.latestBadge && <small>{d.latestBadge}</small>}</Stat>
+        )}
+      </dl>
+    </Card>
+  );
+}
+
+function GitHub({ d, active, live, i }) {
+  const L = d.languages || [];
+  return (
+    <Card cls="cd-gh" i={i} icon={siGithub} name="GitHub" profile={PROFILES.github} live={live}>
+      <dl className="cd-stats cd-top">
+        {d.publicRepos != null && <Stat label="Repositories"><span className="cd-big"><CountUp value={d.publicRepos} active={active} /></span></Stat>}
+        {d.followers != null && <Stat label="Followers"><span className="cd-big"><CountUp value={d.followers} active={active} /></span></Stat>}
+        {d.following != null && <Stat label="Following"><span className="cd-big"><CountUp value={d.following} active={active} /></span></Stat>}
+        {d.totalStars != null && <Stat label="Stars"><span className="cd-big"><CountUp value={d.totalStars} active={active} /></span></Stat>}
+        {d.totalForks > 0 && <Stat label="Forks"><span className="cd-big"><CountUp value={d.totalForks} active={active} /></span></Stat>}
+      </dl>
+      {L.length > 0 && (
+        <div>
+          <div className="cd-lang" role="img" aria-label={'Languages: ' + L.map((l) => `${l.name} ${l.count}`).join(', ')}>
+            {L.map((l, k) => <u key={l.name} style={{ flex: l.count, opacity: Math.max(0.2, 1 - k * 0.16), transitionDelay: `${k * 0.08}s` }} />)}
+          </div>
+          <div className="cd-leg">{L.map((l) => <span key={l.name}>{l.name} <b>{l.count}</b></span>)}</div>
+        </div>
+      )}
+    </Card>
+  );
+}
+
+function Rating({ cls, i, icon, name, profile, live, active, big, chip, stats }) {
+  return (
+    <Card cls={cls} i={i} icon={icon} name={name} profile={profile} live={live}>
+      <div className="cd-hero">
+        {big != null && <span className="cd-big"><CountUp value={big} active={active} /></span>}
+        {chip && <span className="cd-chip">{chip}</span>}
+      </div>
+      <dl className="cd-stats">
+        {stats.filter(([, v]) => v != null).map(([label, v, prefix]) => (
+          <Stat key={label} label={label}><CountUp value={v} active={active} prefix={prefix} /></Stat>
+        ))}
+      </dl>
+    </Card>
+  );
+}
 
 export default function Coding() {
-  const sectionRef = useRef(null);
-  const { status, data: statsData } = useCodingStats(sectionRef);
+  const ref = useRef(null);
+  const [active, setActive] = useState(REDUCED);
+  const [data, setData] = useState(FALLBACK);
+  const [live, setLive] = useState({});
+  const [updated, setUpdated] = useState(null);
 
-  // Staggered scroll reveal
   useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-
-    const isReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (isReduced) {
-      section.querySelectorAll(".coding__reveal-item").forEach((el) => {
-        el.classList.add("is-revealed");
-      });
-      return;
-    }
-
-    const revealItems = section.querySelectorAll(".coding__reveal-item");
-
-    const observer = new IntersectionObserver(
-      (entries, obs) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const index = Array.from(revealItems).indexOf(entry.target);
-            setTimeout(() => {
-              entry.target.classList.add("is-revealed");
-            }, index * 70);
-            obs.unobserve(entry.target);
-          }
-        });
-      },
-      {
-        threshold: 0.15,
-        rootMargin: "0px 0px -40px 0px",
-      }
-    );
-
-    revealItems.forEach((el) => observer.observe(el));
-
-    return () => observer.disconnect();
+    if (REDUCED) return;
+    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setActive(true); io.disconnect(); } }, { threshold: 0.15 });
+    io.observe(ref.current);
+    return () => io.disconnect();
   }, []);
 
-  const isDev = import.meta.env.DEV;
+  useEffect(() => {
+    let off = false;
+    const base = import.meta.env.VITE_API_URL || '';
+    Promise.all(Object.keys(ENDPOINTS).map((k) => fetchPlatform(k, base).then((r) => [k, r]))).then((rs) => {
+      if (off) return;
+      const nd = {}, nl = {};
+      rs.forEach(([k, r]) => { nl[k] = r.ok; nd[k] = r.ok ? r.data : FALLBACK[k]; });
+      setData(nd); setLive(nl);
+      if (Object.values(nl).some(Boolean)) setUpdated(new Date());
+    });
+    return () => { off = true; };
+  }, []);
 
-  // Filter platforms: in production, if CodeChef is unconfigured on server OR handle is empty, hide it
-  const codechefServerStatus = statsData?.codechef?.status;
-  const isCodechefConfigured = Boolean(
-    CODING.platforms.find((p) => p.name === "CodeChef")?.handle ||
-    (codechefServerStatus && codechefServerStatus !== "unconfigured")
-  );
-
-  const displayPlatforms = CODING.platforms.filter((p) => {
-    if (p.name === "CodeChef") {
-      if (!isCodechefConfigured && !isDev) {
-        return false;
-      }
-    }
-    return true;
-  });
+  const { leetcode: L, github: G, codechef: C, codeforces: F } = data;
+  const anyLive = Object.values(live).some(Boolean);
+  const items = [];
+  if (L?.solved?.all) items.push(`${L.solved.all} problems solved`);
+  if (L?.contest) items.push(`${L.contest.rating} LeetCode contest rating`);
+  if (C?.currentRating) items.push(`${C.currentRating} CodeChef rating`);
+  if (G?.publicRepos) items.push(`${G.publicRepos} public repositories`);
+  if (F?.contests) items.push(`${F.contests} Codeforces contest${F.contests > 1 ? 's' : ''}`);
+  const cap = (s) => (s ? s[0].toUpperCase() + s.slice(1) : s);
 
   return (
-    <section
-      id="coding"
-      ref={sectionRef}
-      className="coding"
-      aria-labelledby="coding-heading"
-    >
-      <div className="coding__grid">
-        {/* Col 1 to 3: Small top-left label */}
-        <div className="coding__label-col coding__reveal-item">
-          <h2 id="coding-heading" className="coding__label">
-            Coding
-          </h2>
-          <span className="coding__label-sub">Problem solving</span>
+    <section id="coding" ref={ref} className={`cd${active ? ' on' : ''}`} aria-labelledby="coding-h">
+      <div className="cd-in">
+        <div className="cd-head">
+          <h2 id="coding-h" className="cd-label">Coding<span>Problem solving</span></h2>
+          <div className="cd-head-right">
+            <span className="cd-pill">
+              <i className={`cd-dot${anyLive ? '' : ' off'}`} />
+              {anyLive ? 'Live from my servers' : 'Showing saved stats'}
+              {updated && ` · Updated ${updated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`}
+            </span>
+            {import.meta.env.DEV && (
+              <span className="cd-dev-diag">
+                {`github: ${live.github ? 'live' : 'saved'} · leetcode: ${live.leetcode ? 'live' : 'saved'} · codechef: ${live.codechef ? 'live' : 'saved'} · codeforces: ${live.codeforces ? 'live' : 'saved'}`}
+              </span>
+            )}
+          </div>
         </div>
 
-        {/* Col 4 to 12: Platforms Cards & Language note */}
-        <div className="coding__content-col">
-          {/* aria-live region to announce updates */}
-          <div className="sr-only" aria-live="polite">
-            {status === "ok" ? "Coding stats updated from server." : ""}
-          </div>
-
-          <div
-            className={`coding__cards ${displayPlatforms.length === 2 ? "coding__cards--two-cols" : ""}`}
-            aria-busy={status === "loading"}
-          >
-            {displayPlatforms.map((platform, idx) => {
-              const iconData = PLATFORM_ICONS[platform.name];
-              const keyName = platform.name.toLowerCase();
-              const serverPlatform = statsData ? statsData[keyName] : null;
-
-              // Check if CodeChef is unconfigured
-              const isUnconfigured =
-                platform.name === "CodeChef" &&
-                (!platform.handle && (!serverPlatform || serverPlatform.status === "unconfigured"));
-
-              if (isUnconfigured) {
-                // In DEV: render dashed placeholder card
-                return (
-                  <div
-                    key={idx}
-                    className="coding__card coding__card--placeholder coding__reveal-item"
-                    title="Set CODECHEF_USERNAME on the server"
-                  >
-                    {iconData && (
-                      <div className="coding__ghost-logo" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" fill="currentColor" className="coding__ghost-svg">
-                          <path d={iconData.path} />
-                        </svg>
-                      </div>
-                    )}
-                    <div className="coding__card-top">
-                      <div className="coding__icon-wrap">
-                        {iconData && (
-                          <svg viewBox="0 0 24 24" fill="currentColor" className="coding__icon-svg" aria-hidden="true">
-                            <path d={iconData.path} />
-                          </svg>
-                        )}
-                      </div>
-                    </div>
-                    <div className="coding__card-mid">
-                      <h3 className="coding__platform-name">{platform.name}</h3>
-                      <p className="coding__purpose">{platform.purpose}</p>
-                    </div>
-                    <div className="coding__card-bottom">
-                      <span className="coding__dev-hint">
-                        Set CODECHEF_USERNAME on the server
-                      </span>
-                    </div>
-                  </div>
-                );
-              }
-
-              // Determine stats state
-              const hasServerOk = serverPlatform && serverPlatform.status === "ok" && serverPlatform.data;
-              const isServerErr = status === "error" || (serverPlatform && serverPlatform.status === "error");
-              const targetUrl = serverPlatform?.profileUrl || platform.url;
-
-              return (
-                <div
-                  key={idx}
-                  className="coding__card coding__reveal-item"
-                >
-                  {/* Ghost background logo */}
-                  {iconData && (
-                    <div className="coding__ghost-logo" aria-hidden="true">
-                      <svg viewBox="0 0 24 24" fill="currentColor" className="coding__ghost-svg">
-                        <path d={iconData.path} />
-                      </svg>
-                    </div>
-                  )}
-
-                  {/* Top: monochrome logo */}
-                  <div className="coding__card-top">
-                    <div className="coding__icon-wrap">
-                      {iconData && (
-                        <svg viewBox="0 0 24 24" fill="currentColor" className="coding__icon-svg" aria-hidden="true">
-                          <path d={iconData.path} />
-                        </svg>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Middle: name + purpose */}
-                  <div className="coding__card-mid">
-                    <h3 className="coding__platform-name">{platform.name}</h3>
-                    <p className="coding__purpose">{platform.purpose}</p>
-                  </div>
-
-                  {/* Stats Area */}
-                  <div className="coding__stats-area">
-                    {status === "loading" && (
-                      <div className="coding__skeleton-wrap" aria-hidden="true">
-                        <div className="coding__skeleton coding__skeleton--row" />
-                        <div className="coding__skeleton coding__skeleton--bar" />
-                      </div>
-                    )}
-
-                    {status !== "loading" && hasServerOk && platform.name === "GitHub" && (
-                      <div className="coding__github-stats">
-                        <div className="coding__stat-row">
-                          <div className="coding__stat-block">
-                            <span className="coding__stat-val">
-                              <CountUp end={serverPlatform.data.publicRepos ?? 0} />
-                            </span>
-                            <span className="coding__stat-lbl">Repositories</span>
-                          </div>
-                          <div className="coding__stat-block">
-                            <span className="coding__stat-val">
-                              <CountUp end={serverPlatform.data.followers ?? 0} />
-                            </span>
-                            <span className="coding__stat-lbl">Followers</span>
-                          </div>
-                          <div className="coding__stat-block">
-                            <span className="coding__stat-val">
-                              <CountUp end={serverPlatform.data.totalStars ?? 0} />
-                            </span>
-                            <span className="coding__stat-lbl">Stars</span>
-                          </div>
-                        </div>
-
-                        {/* Top 3 languages segmented bar */}
-                        {serverPlatform.data.topLanguages && serverPlatform.data.topLanguages.length > 0 && (
-                          <div className="coding__lang-section">
-                            <div className="coding__lang-bar">
-                              {serverPlatform.data.topLanguages.map((l, lIdx) => {
-                                const total = serverPlatform.data.topLanguages.reduce((a, b) => a + b.count, 0);
-                                const pct = total > 0 ? (l.count / total) * 100 : 33;
-                                return (
-                                  <div
-                                    key={lIdx}
-                                    className="coding__lang-segment"
-                                    style={{ width: `${pct}%`, opacity: 1 - lIdx * 0.25 }}
-                                    title={`${l.language}: ${l.count} repos`}
-                                  />
-                                );
-                              })}
-                            </div>
-                            <div className="coding__lang-labels">
-                              {serverPlatform.data.topLanguages.map((l, lIdx) => (
-                                <span key={lIdx} className="coding__lang-tag">
-                                  {l.language} ({l.count})
-                                </span>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Contributions bar if available */}
-                        {serverPlatform.data.totalContributions != null && (
-                          <div className="coding__contrib-section">
-                            <span className="coding__contrib-text">
-                              <CountUp end={serverPlatform.data.totalContributions} /> contributions in the last year
-                            </span>
-                            {serverPlatform.data.recentWeeklyContributions && (
-                              <div className="coding__weekly-strip" aria-hidden="true">
-                                {(() => {
-                                  const weeks = serverPlatform.data.recentWeeklyContributions;
-                                  const max = Math.max(...weeks, 1);
-                                  return weeks.map((wCount, wIdx) => {
-                                    const hPct = Math.max(12, Math.round((wCount / max) * 100));
-                                    return (
-                                      <div
-                                        key={wIdx}
-                                        className="coding__weekly-bar"
-                                        style={{ height: `${hPct}%`, opacity: wCount > 0 ? 0.9 : 0.2 }}
-                                        title={`${wCount} contributions`}
-                                      />
-                                    );
-                                  });
-                                })()}
-                              </div>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    )}
-
-                    {status !== "loading" && hasServerOk && platform.name === "LeetCode" && (
-                      <div className="coding__leetcode-stats">
-                        <div className="coding__stat-row">
-                          <div className="coding__stat-block">
-                            <span className="coding__stat-val">
-                              <CountUp end={serverPlatform.data.solved?.all ?? 0} />
-                            </span>
-                            <span className="coding__stat-lbl">Problems solved</span>
-                          </div>
-                          {serverPlatform.data.ranking && (
-                            <div className="coding__stat-block">
-                              <span className="coding__stat-val">
-                                ~<CountUp end={serverPlatform.data.ranking} />
-                              </span>
-                              <span className="coding__stat-lbl">Global rank</span>
-                            </div>
-                          )}
-                        </div>
-
-                        {/* Easy / Medium / Hard Segmented Bar */}
-                        {serverPlatform.data.solved && (
-                          <div className="coding__difficulty-section">
-                            <div className="coding__difficulty-bar">
-                              {(() => {
-                                const all = serverPlatform.data.solved.all || 1;
-                                const easyPct = ((serverPlatform.data.solved.easy || 0) / all) * 100;
-                                const medPct = ((serverPlatform.data.solved.medium || 0) / all) * 100;
-                                const hardPct = ((serverPlatform.data.solved.hard || 0) / all) * 100;
-                                return (
-                                  <>
-                                    <div className="coding__diff-seg coding__diff-seg--easy" style={{ width: `${easyPct}%` }} />
-                                    <div className="coding__diff-seg coding__diff-seg--med" style={{ width: `${medPct}%` }} />
-                                    <div className="coding__diff-seg coding__diff-seg--hard" style={{ width: `${hardPct}%` }} />
-                                  </>
-                                );
-                              })()}
-                            </div>
-                            <div className="coding__difficulty-labels">
-                              <span>Easy: {serverPlatform.data.solved.easy ?? 0}</span>
-                              <span>Med: {serverPlatform.data.solved.medium ?? 0}</span>
-                              <span>Hard: {serverPlatform.data.solved.hard ?? 0}</span>
-                            </div>
-                          </div>
-                        )}
-
-                        {serverPlatform.data.contestRating && (
-                          <div className="coding__contest-row">
-                            <span className="coding__contest-stat">
-                              Contest rating: <strong>{serverPlatform.data.contestRating}</strong>
-                            </span>
-                            {serverPlatform.data.attendedContests && (
-                              <span className="coding__contest-stat">
-                                Contests: <strong>{serverPlatform.data.attendedContests}</strong>
-                              </span>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    )}
-
-                    {status !== "loading" && hasServerOk && platform.name === "CodeChef" && (
-                      <div className="coding__codechef-stats">
-                        <div className="coding__stat-row">
-                          {serverPlatform.data.rating && (
-                            <div className="coding__stat-block">
-                              <span className="coding__stat-val">
-                                <CountUp end={serverPlatform.data.rating} />
-                              </span>
-                              <span className="coding__stat-lbl">Rating {serverPlatform.data.stars ? `(${serverPlatform.data.stars})` : ""}</span>
-                            </div>
-                          )}
-                          {serverPlatform.data.globalRank && (
-                            <div className="coding__stat-block">
-                              <span className="coding__stat-val">
-                                <CountUp end={serverPlatform.data.globalRank} />
-                              </span>
-                              <span className="coding__stat-lbl">Global rank</span>
-                            </div>
-                          )}
-                        </div>
-                        {serverPlatform.data.problemsSolved && (
-                          <div className="coding__codechef-problems">
-                            <span>Problems solved: {serverPlatform.data.problemsSolved}</span>
-                          </div>
-                        )}
-                      </div>
-                    )}
-
-                    {/* Fallback state when server fails or has error */}
-                    {status !== "loading" && (!hasServerOk || isServerErr) && (
-                      <div className="coding__fallback-msg">
-                        {platform.fallback?.stats && platform.fallback.stats.length > 0 ? (
-                          <div className="coding__manual-fallback">
-                            <div className="coding__stat-row">
-                              {platform.fallback.stats.map((st, sIdx) => (
-                                <div key={sIdx} className="coding__stat-block">
-                                  <span className="coding__stat-val">{st.value}</span>
-                                  <span className="coding__stat-lbl">{st.label}</span>
-                                </div>
-                              ))}
-                            </div>
-                            {platform.fallback.asOf && (
-                              <span className="coding__as-of">Last updated {platform.fallback.asOf}</span>
-                            )}
-                          </div>
-                        ) : (
-                          <span className="coding__unavailable">Stats unavailable right now.</span>
-                        )}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Bottom: handle and real View profile ↗ link */}
-                  <div className="coding__card-bottom">
-                    {platform.handle && (
-                      <span className="coding__handle">@{platform.handle}</span>
-                    )}
-                    {targetUrl ? (
-                      <a
-                        href={targetUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="coding__profile-link cursor-target"
-                        data-cursor-label="Open"
-                      >
-                        <span>View profile</span>
-                        <span className="coding__red-arrow" aria-hidden="true">↗</span>
-                      </a>
-                    ) : null}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          {CODING.language && (
-            <p className="coding__footer-note coding__reveal-item">
-              {CODING.language}
-            </p>
-          )}
+        <div className="cd-grid">
+          {L && <LeetCode d={L} active={active} live={live.leetcode} i={0} />}
+          {G && <GitHub d={G} active={active} live={live.github} i={1} />}
+          {F && <Rating cls="cd-cf" i={2} icon={siCodeforces} name="Codeforces" profile={PROFILES.codeforces} live={live.codeforces} active={active}
+            big={F.rating} chip={cap(F.rank)} stats={[['Max rating', F.maxRating], ['Contests', F.contests], ['Best rank', F.bestRank, '#']]} />}
+          {C && <Rating cls="cd-cc" i={3} icon={siCodechef} name="CodeChef" profile={PROFILES.codechef} live={live.codechef} active={active}
+            big={C.currentRating} chip={C.stars ? `${C.stars}★` : null} stats={[['Highest', C.highestRating], ['Global rank', C.globalRank, '#'], ['Country rank', C.countryRank, '#']]} />}
         </div>
+
+        {items.length > 0 && (
+          <div className="cd-tk cursor-target" data-cursor-label="Stats">
+            <div>
+              {items.map((t) => <span key={t}>{t}</span>)}
+              {items.map((t) => <span key={t + '2'} aria-hidden="true">{t}</span>)}
+            </div>
+          </div>
+        )}
+        <p className="cd-foot">Main language for problem solving: C++.</p>
+        <p className="cd-sr" aria-live="polite">{anyLive ? 'Coding stats updated.' : ''}</p>
       </div>
     </section>
   );
