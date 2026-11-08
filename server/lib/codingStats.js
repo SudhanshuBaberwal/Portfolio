@@ -1,345 +1,311 @@
 /**
  * server/lib/codingStats.js
- * Plain reusable module for fetching coding stats from GitHub, LeetCode, and CodeChef.
+ * Aggregate endpoint logic.
+ * Reuses existing controllers – no duplicated fetch code.
+ * Platforms: github, leetcode, codechef, codeforces.
  */
 
-// In-memory cache: 1 hour fresh, 24 hours stale
-const memoryCache = {
-  data: null,
-  cachedAt: 0,
-};
+import fetchGithubStats from "../controller/github.js";
+import { fetchCodeChefStats } from "../controller/codechefController.js";
+import { getCodeforcesStats } from "../controller/codeforces.js";
 
+// In-memory cache: 1 hour fresh, serve stale up to 24 h
+const cache = { data: null, cachedAt: 0 };
 const ONE_HOUR = 60 * 60 * 1000;
-const TWENTY_FOUR_HOURS = 24 * 60 * 60 * 1000;
+const TWENTY_FOUR_HOURS = 24 * ONE_HOUR;
 
-async function fetchWithTimeout(url, options = {}, timeoutMs = 6000) {
-  const controller = new AbortController();
-  const id = setTimeout(() => controller.abort(), timeoutMs);
-  try {
-    const res = await fetch(url, { ...options, signal: controller.signal });
-    return res;
-  } finally {
-    clearTimeout(id);
-  }
+// ── helpers ──────────────────────────────────────────────────────────────────
+
+function withAbort(promise, signal) {
+  return new Promise((resolve, reject) => {
+    signal.addEventListener("abort", () => reject(Object.assign(new Error("timeout"), { name: "AbortError" })), { once: true });
+    promise.then(resolve, reject);
+  });
 }
 
-async function fetchGitHubStats(username, token) {
-  if (!username) {
-    return { status: "unconfigured", handle: "", profileUrl: "" };
-  }
+function makeTimer(ms) {
+  const ctrl = new AbortController();
+  const id = setTimeout(() => ctrl.abort(), ms);
+  return { signal: ctrl.signal, clear: () => clearTimeout(id) };
+}
 
+function firstDigits(raw) {
+  if (raw == null) return undefined;
+  const s = String(raw).replace(/\s+/g, " ").trim();
+  const m = s.match(/^(\d+)/);
+  if (!m) return undefined;
+  return parseInt(m[1], 10);
+}
+
+function countStars(raw) {
+  if (raw == null) return undefined;
+  const count = (String(raw).match(/★/g) || []).length;
+  return count > 0 ? count : undefined;
+}
+
+function sortedLanguages(languagesUsed) {
+  if (!languagesUsed || typeof languagesUsed !== "object") return [];
+  return Object.entries(languagesUsed)
+    .map(([name, count]) => ({ name, count }))
+    .sort((a, b) => b.count - a.count);
+}
+
+// ── per-platform fetchers (all return { status, errorCode?, handle, profileUrl, data? }) ──
+
+async function fetchGitHub(env, signal) {
+  const username = env.GITHUB_USERNAME || "SudhanshuBaberwal";
+  const token = env.GITHUB_TOKEN || "";
   const profileUrl = `https://github.com/${username}`;
+  const t0 = Date.now();
   try {
-    const headers = {
-      "User-Agent": "Portfolio-Coding-Stats-Server",
-    };
-    if (token) {
-      headers["Authorization"] = `bearer ${token}`;
-    }
-
-    // 1. User profile
-    const userRes = await fetchWithTimeout(`https://api.github.com/users/${username}`, { headers });
-    if (!userRes.ok) {
-      return { status: "error", handle: username, profileUrl };
-    }
-    const user = await userRes.json();
-
-    // 2. Repos (up to 300)
-    let repos = [];
-    for (let page = 1; page <= 3; page++) {
-      const repoRes = await fetchWithTimeout(
-        `https://api.github.com/users/${username}/repos?per_page=100&type=owner&page=${page}`,
-        { headers }
-      );
-      if (!repoRes.ok) break;
-      const batch = await repoRes.json();
-      if (!Array.isArray(batch) || batch.length === 0) break;
-      repos.push(...batch);
-      if (batch.length < 100) break;
-    }
-
-    const nonForkRepos = repos.filter((r) => !r.fork);
-    const totalStars = nonForkRepos.reduce((acc, r) => acc + (r.stargazers_count || 0), 0);
-
-    // Language counts across non-fork repos
-    const langCounts = {};
-    for (const r of nonForkRepos) {
-      if (r.language) {
-        langCounts[r.language] = (langCounts[r.language] || 0) + 1;
-      }
-    }
-    const sortedLangs = Object.entries(langCounts)
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 3)
-      .map(([lang, count]) => ({ language: lang, count }));
-
+    const raw = await withAbort(fetchGithubStats(username), signal);
+    if (!raw) throw Object.assign(new Error("null response"), { code: "parse_error" });
     const data = {
-      publicRepos: user.public_repos ?? nonForkRepos.length,
-      followers: user.followers ?? 0,
-      totalStars,
-      topLanguages: sortedLangs,
+      publicRepos: raw.publicRepos,
+      followers: raw.followers,
+      following: raw.following,
+      totalStars: raw.totalStars,
+      totalForks: raw.totalForks,
+      languages: sortedLanguages(raw.languagesUsed),
     };
-
-    // 3. GraphQL contributions if token is set
-    if (token) {
-      try {
-        const query = `
-          query($username: String!) {
-            user(login: $username) {
-              contributionsCollection {
-                contributionCalendar {
-                  totalContributions
-                  weeks {
-                    contributionDays {
-                      contributionCount
-                    }
-                  }
-                }
-              }
-            }
-          }
-        `;
-        const gqlRes = await fetchWithTimeout("https://api.github.com/graphql", {
-          method: "POST",
-          headers: {
-            "Authorization": `bearer ${token}`,
-            "User-Agent": "Portfolio-Coding-Stats-Server",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ query, variables: { username } }),
-        });
-
-        if (gqlRes.ok) {
-          const gqlData = await gqlRes.json();
-          const calendar = gqlData.data?.user?.contributionsCollection?.contributionCalendar;
-          if (calendar) {
-            data.totalContributions = calendar.totalContributions;
-            const weeks = calendar.weeks || [];
-            // Last 20 weekly counts
-            data.recentWeeklyContributions = weeks.slice(-20).map((w) =>
-              (w.contributionDays || []).reduce((acc, d) => acc + (d.contributionCount || 0), 0)
-            );
-          }
-        }
-      } catch {
-        // Token might be invalid or expired; keep REST data without GraphQL
-      }
+    if (token && raw.totalContributions != null) {
+      data.contributionsLastYear = raw.totalContributions;
     }
-
-    return {
-      status: "ok",
-      handle: username,
-      profileUrl,
-      data,
-    };
-  } catch {
-    return { status: "error", handle: username, profileUrl };
+    return { status: "ok", handle: username, profileUrl, data, _durationMs: Date.now() - t0 };
+  } catch (err) {
+    console.error("[codingStats] GitHub error:", err.message);
+    const code = err.name === "AbortError" ? "timeout"
+      : err.code === "parse_error" ? "parse_error"
+      : err.response?.status ? `upstream_status_${err.response.status}`
+      : "network";
+    return { status: "error", errorCode: code, handle: username, profileUrl, _durationMs: Date.now() - t0 };
   }
 }
 
-async function fetchLeetCodeStats(username) {
-  if (!username) {
-    return { status: "unconfigured", handle: "", profileUrl: "" };
-  }
-
+async function fetchLeetCode(env, signal) {
+  const username = env.LEETCODE_USERNAME || "sudhanshubaberwal";
   const profileUrl = `https://leetcode.com/u/${username}/`;
+  const t0 = Date.now();
   try {
-    const query = `
-      query getUserProfile($username: String!) {
-        matchedUser(username: $username) {
-          profile {
-            ranking
+    const query = {
+      query: `
+        query getUserProfile($username: String!) {
+          matchedUser(username: $username) {
+            profile { ranking }
+            submitStatsGlobal { acSubmissionNum { difficulty count } }
+            badges { displayName creationDate }
+            userCalendar { totalActiveDays streak }
           }
-          submitStatsGlobal {
-            acSubmissionNum {
-              difficulty
-              count
-            }
+          userContestRanking(username: $username) {
+            attendedContestsCount
+            rating
+            globalRanking
+            topPercentage
           }
         }
-        userContestRanking(username: $username) {
-          attendedContestsCount
-          rating
-          topPercentage
-        }
-      }
-    `;
+      `,
+      variables: { username },
+    };
 
-    const res = await fetchWithTimeout("https://leetcode.com/graphql", {
+    const fetchPromise = fetch("https://leetcode.com/graphql", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "Referer": "https://leetcode.com",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
       },
-      body: JSON.stringify({ query, variables: { username } }),
+      body: JSON.stringify(query),
     });
 
+    const res = await withAbort(fetchPromise, signal);
     if (!res.ok) {
-      return { status: "error", handle: username, profileUrl };
+      return { status: "error", errorCode: `upstream_status_${res.status}`, handle: username, profileUrl, _durationMs: Date.now() - t0 };
     }
 
     const json = await res.json();
-    const matchedUser = json.data?.matchedUser;
-    if (!matchedUser) {
-      return { status: "error", handle: username, profileUrl };
+    const mu = json.data?.matchedUser;
+    if (!mu) {
+      return { status: "error", errorCode: "parse_error", handle: username, profileUrl, _durationMs: Date.now() - t0 };
     }
 
-    const acSubmissions = matchedUser.submitStatsGlobal?.acSubmissionNum || [];
+    // solved counts
     const solved = {};
-    for (const item of acSubmissions) {
-      if (item.difficulty === "All") solved.all = item.count;
-      else if (item.difficulty === "Easy") solved.easy = item.count;
-      else if (item.difficulty === "Medium") solved.medium = item.count;
-      else if (item.difficulty === "Hard") solved.hard = item.count;
+    for (const it of (mu.submitStatsGlobal?.acSubmissionNum || [])) {
+      if (it.difficulty === "All") solved.all = it.count;
+      else if (it.difficulty === "Easy") solved.easy = it.count;
+      else if (it.difficulty === "Medium") solved.medium = it.count;
+      else if (it.difficulty === "Hard") solved.hard = it.count;
     }
 
-    const data = {
-      solved,
-    };
+    // badges
+    const badges = mu.badges || [];
+    const badgesCount = badges.length || undefined;
+    const latestBadge = badges.length > 0 ? badges[badges.length - 1].displayName : undefined;
 
-    if (matchedUser.profile?.ranking) {
-      data.ranking = matchedUser.profile.ranking;
+    // calendar
+    const cal = mu.userCalendar;
+    const totalActiveDays = cal?.totalActiveDays ?? undefined;
+    const streak = (cal?.streak != null && typeof cal.streak === "number") ? cal.streak : undefined;
+
+    // ranking
+    const ranking = mu.profile?.ranking ?? undefined;
+
+    // contest (only if attended)
+    let contest = undefined;
+    const cr = json.data?.userContestRanking;
+    if (cr && cr.attendedContestsCount > 0) {
+      contest = {
+        rating: cr.rating != null ? Math.round(cr.rating) : undefined,
+        globalRanking: cr.globalRanking ?? undefined,
+        attendedContestsCount: cr.attendedContestsCount,
+        topPercentage: cr.topPercentage ?? undefined,
+      };
     }
 
-    const contest = json.data?.userContestRanking;
-    if (contest && typeof contest.attendedContestsCount === "number" && contest.attendedContestsCount > 0) {
-      data.contestRating = Math.round(contest.rating || 0);
-      data.attendedContests = contest.attendedContestsCount;
-      if (contest.topPercentage) {
-        data.topPercentage = contest.topPercentage;
-      }
-    }
+    const data = { solved };
+    if (ranking != null) data.ranking = ranking;
+    if (totalActiveDays != null) data.totalActiveDays = totalActiveDays;
+    if (streak != null) data.streak = streak;
+    if (badgesCount != null) data.badgesCount = badgesCount;
+    if (latestBadge != null) data.latestBadge = latestBadge;
+    if (contest != null) data.contest = contest;
 
-    return {
-      status: "ok",
-      handle: username,
-      profileUrl,
-      data,
-    };
-  } catch {
-    return { status: "error", handle: username, profileUrl };
+    return { status: "ok", handle: username, profileUrl, data, _durationMs: Date.now() - t0 };
+  } catch (err) {
+    console.error("[codingStats] LeetCode error:", err.message);
+    const code = err.name === "AbortError" ? "timeout" : "network";
+    return { status: "error", errorCode: code, handle: username, profileUrl, _durationMs: Date.now() - t0 };
   }
 }
 
-async function fetchCodeChefStats(username) {
-  if (!username) {
-    return { status: "unconfigured", handle: "", profileUrl: "" };
-  }
-
+async function fetchCodeChef(env, signal) {
+  const username = env.CODECHEF_USERNAME || "aided_care_69";
   const profileUrl = `https://www.codechef.com/users/${username}`;
+  const t0 = Date.now();
   try {
-    const res = await fetchWithTimeout(profileUrl, {
-      headers: {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
-        "Accept": "text/html,application/xhtml+xml",
-      },
-    });
-
-    if (!res.ok) {
-      return { status: "error", handle: username, profileUrl };
+    const raw = await withAbort(fetchCodeChefStats(username), signal);
+    if (!raw || raw.status === "error") {
+      const code = raw?.status === "error" ? "upstream_status_200" : "network";
+      return { status: "error", errorCode: code, handle: username, profileUrl, _durationMs: Date.now() - t0 };
     }
-
-    const html = await res.text();
+    // Normalize the data returned by the existing controller
+    const d = raw.data || {};
+    const stars = countStars(d.stars);
+    const globalRank = firstDigits(d.globalRank);
+    const countryRank = firstDigits(d.countryRank);
     const data = {};
-
-    // Rating (e.g. <div class="rating-number">1542</div>)
-    const ratingMatch = html.match(/class=["']rating-number["'][^>]*>(\d+)</i);
-    if (ratingMatch) {
-      data.rating = parseInt(ratingMatch[1], 10);
-    }
-
-    // Stars (e.g. <span class="rating">2★</span> or div class="rating-star">...★...)
-    const starsMatch = html.match(/(\d+)★/) || html.match(/class=["']rating-star["'][^>]*>([^<]+)</i);
-    if (starsMatch) {
-      data.stars = starsMatch[1].trim();
-    }
-
-    // Global Rank (e.g. <strong class="global-rank">12345</strong> or href="/ratings/all">12345</a>)
-    const globalRankMatch = html.match(/class=["']global-rank["'][^>]*>(\d+)</i) ||
-      html.match(/href=["']\/ratings\/all["'][^>]*>(\d+)</i);
-    if (globalRankMatch) {
-      data.globalRank = parseInt(globalRankMatch[1], 10);
-    }
-
-    // Problems Solved (e.g. Total Problems Solved: <strong>120</strong>)
-    const problemsMatch = html.match(/Total Problems Solved:\s*<strong>(\d+)<\/strong>/i) ||
-      html.match(/Problems Solved\s*\((\d+)\)/i);
-    if (problemsMatch) {
-      data.problemsSolved = parseInt(problemsMatch[1], 10);
-    }
-
-    if (Object.keys(data).length === 0) {
-      return { status: "error", handle: username, profileUrl };
-    }
-
-    return {
-      status: "ok",
-      handle: username,
-      profileUrl,
-      data,
-    };
-  } catch {
-    return { status: "error", handle: username, profileUrl };
+    if (d.currentRating != null) data.currentRating = d.currentRating;
+    if (d.highestRating != null) data.highestRating = d.highestRating;
+    if (stars != null) data.stars = stars;
+    if (globalRank != null) data.globalRank = globalRank;
+    if (countryRank != null) data.countryRank = countryRank;
+    return { status: "ok", handle: username, profileUrl, data, _durationMs: Date.now() - t0 };
+  } catch (err) {
+    console.error("[codingStats] CodeChef error:", err.message);
+    const code = err.name === "AbortError" ? "timeout" : "network";
+    return { status: "error", errorCode: code, handle: username, profileUrl, _durationMs: Date.now() - t0 };
   }
 }
 
-export async function getCodingStats(env = process.env) {
+async function fetchCodeforces(env, signal) {
+  const handle = env.CODEFORCES_HANDLE || "";
+  const profileUrl = handle ? `https://codeforces.com/profile/${handle}` : "";
+  if (!handle) return { status: "unconfigured", errorCode: "unconfigured", handle: "", profileUrl: "" };
+  const t0 = Date.now();
+  try {
+    const raw = await withAbort(getCodeforcesStats(handle), signal);
+    if (!raw) throw new Error("null response");
+    const data = {};
+    if (raw.rating != null) data.rating = raw.rating;
+    if (raw.maxRating != null) data.maxRating = raw.maxRating;
+    if (raw.rank != null) data.rank = raw.rank;
+    if (raw.maxRank != null) data.maxRank = raw.maxRank;
+    if (raw.contestsAttended != null) data.contests = raw.contestsAttended;
+    if (raw.bestRank != null && isFinite(raw.bestRank)) data.bestRank = raw.bestRank;
+    return { status: "ok", handle, profileUrl, data, _durationMs: Date.now() - t0 };
+  } catch (err) {
+    console.error("[codingStats] Codeforces error:", err.message);
+    const code = err.name === "AbortError" ? "timeout" : "network";
+    return { status: "error", errorCode: code, handle, profileUrl, _durationMs: Date.now() - t0 };
+  }
+}
+
+// ── Main export ───────────────────────────────────────────────────────────────
+
+export async function getCodingStats(env = process.env, { debug = false } = {}) {
   const now = Date.now();
 
-  // If memory cache is fresh (less than 1 hour old), return cached data
-  if (memoryCache.data && now - memoryCache.cachedAt < ONE_HOUR) {
-    return { ...memoryCache.data, stale: false };
+  // Serve from fresh cache if < 1 hour old (unless debug)
+  if (!debug && cache.data && now - cache.cachedAt < ONE_HOUR) {
+    return { ...cache.data, stale: false };
   }
 
-  const githubUser = env.GITHUB_USERNAME || "SudhanshuBaberwal";
-  const leetcodeUser = env.LEETCODE_USERNAME || "sudhanshubaberwal";
-  const codechefUser = env.CODECHEF_USERNAME || ""; // Defaults to unconfigured
-  const githubToken = env.GITHUB_TOKEN || "";
+  const timer = makeTimer(6000);
+  const { signal } = timer;
 
   try {
-    const [githubRes, leetcodeRes, codechefRes] = await Promise.allSettled([
-      fetchGitHubStats(githubUser, githubToken),
-      fetchLeetCodeStats(leetcodeUser),
-      fetchCodeChefStats(codechefUser),
+    const [ghRes, lcRes, ccRes, cfRes] = await Promise.allSettled([
+      fetchGitHub(env, signal),
+      fetchLeetCode(env, signal),
+      fetchCodeChef(env, signal),
+      fetchCodeforces(env, signal),
     ]);
 
-    const github = githubRes.status === "fulfilled"
-      ? githubRes.value
-      : { status: "error", handle: githubUser, profileUrl: `https://github.com/${githubUser}` };
+    const pick = (res, fallback) =>
+      res.status === "fulfilled" ? res.value : fallback;
 
-    const leetcode = leetcodeRes.status === "fulfilled"
-      ? leetcodeRes.value
-      : { status: "error", handle: leetcodeUser, profileUrl: `https://leetcode.com/u/${leetcodeUser}/` };
+    const github     = pick(ghRes, { status: "error", errorCode: "network", handle: env.GITHUB_USERNAME || "SudhanshuBaberwal", profileUrl: `https://github.com/${env.GITHUB_USERNAME || "SudhanshuBaberwal"}` });
+    const leetcode   = pick(lcRes, { status: "error", errorCode: "network", handle: env.LEETCODE_USERNAME || "sudhanshubaberwal", profileUrl: `https://leetcode.com/u/${env.LEETCODE_USERNAME || "sudhanshubaberwal"}/` });
+    const codechef   = pick(ccRes, { status: "error", errorCode: "network", handle: env.CODECHEF_USERNAME || "aided_care_69", profileUrl: `https://www.codechef.com/users/${env.CODECHEF_USERNAME || "aided_care_69"}` });
+    const codeforces = pick(cfRes, { status: env.CODEFORCES_HANDLE ? "error" : "unconfigured", errorCode: env.CODEFORCES_HANDLE ? "network" : "unconfigured", handle: env.CODEFORCES_HANDLE || "", profileUrl: env.CODEFORCES_HANDLE ? `https://codeforces.com/profile/${env.CODEFORCES_HANDLE}` : "" });
 
-    const codechef = codechefRes.status === "fulfilled"
-      ? codechefRes.value
-      : { status: "error", handle: codechefUser, profileUrl: codechefUser ? `https://www.codechef.com/users/${codechefUser}` : "" };
-
-    const freshResult = {
+    const result = {
       updatedAt: new Date().toISOString(),
       github,
       leetcode,
       codechef,
+      codeforces,
     };
 
-    // Update memory cache
-    memoryCache.data = freshResult;
-    memoryCache.cachedAt = now;
+    // Strip internal _durationMs from cached copy but keep for debug
+    const forCache = JSON.parse(JSON.stringify(result, (k, v) => k === "_durationMs" ? undefined : v));
+    cache.data = forCache;
+    cache.cachedAt = now;
 
-    return { ...freshResult, stale: false };
-  } catch {
-    // If upstream call fails, serve stale if under 24 hours
-    if (memoryCache.data && now - memoryCache.cachedAt < TWENTY_FOUR_HOURS) {
-      return { ...memoryCache.data, stale: true };
+    if (debug && process.env.NODE_ENV !== "production") {
+      return {
+        ...forCache,
+        stale: false,
+        debugInfo: {
+          github:     { url: `https://api.github.com/users/${env.GITHUB_USERNAME || "SudhanshuBaberwal"}`, httpStatus: github.status === "ok" ? 200 : null, durationMs: github._durationMs, errorCode: github.errorCode },
+          leetcode:   { url: "https://leetcode.com/graphql", httpStatus: leetcode.status === "ok" ? 200 : null, durationMs: leetcode._durationMs, errorCode: leetcode.errorCode },
+          codechef:   { url: `https://www.codechef.com/users/${env.CODECHEF_USERNAME || "aided_care_69"}`, httpStatus: codechef.status === "ok" ? 200 : null, durationMs: codechef._durationMs, errorCode: codechef.errorCode },
+          codeforces: { url: env.CODEFORCES_HANDLE ? `https://codeforces.com/api/user.info?handles=${env.CODEFORCES_HANDLE}` : null, httpStatus: codeforces.status === "ok" ? 200 : null, durationMs: codeforces._durationMs, errorCode: codeforces.errorCode },
+        },
+      };
     }
 
-    // Otherwise return clean error shape
+    return { ...forCache, stale: false };
+
+  } catch (err) {
+    console.error("[codingStats] aggregate error:", err.message);
+    // Serve stale if under 24 hours
+    if (cache.data && now - cache.cachedAt < TWENTY_FOUR_HOURS) {
+      return { ...cache.data, stale: true };
+    }
+    // Otherwise return error shape
+    const u = env.GITHUB_USERNAME || "SudhanshuBaberwal";
+    const l = env.LEETCODE_USERNAME || "sudhanshubaberwal";
+    const cc = env.CODECHEF_USERNAME || "aided_care_69";
+    const cf = env.CODEFORCES_HANDLE || "";
     return {
       updatedAt: new Date().toISOString(),
-      github: { status: "error", handle: githubUser, profileUrl: `https://github.com/${githubUser}` },
-      leetcode: { status: "error", handle: leetcodeUser, profileUrl: `https://leetcode.com/u/${leetcodeUser}/` },
-      codechef: { status: codechefUser ? "error" : "unconfigured", handle: codechefUser, profileUrl: "" },
+      github:     { status: "error", errorCode: "network", handle: u, profileUrl: `https://github.com/${u}` },
+      leetcode:   { status: "error", errorCode: "network", handle: l, profileUrl: `https://leetcode.com/u/${l}/` },
+      codechef:   { status: "error", errorCode: "network", handle: cc, profileUrl: `https://www.codechef.com/users/${cc}` },
+      codeforces: { status: cf ? "error" : "unconfigured", errorCode: cf ? "network" : "unconfigured", handle: cf, profileUrl: cf ? `https://codeforces.com/profile/${cf}` : "" },
     };
+  } finally {
+    timer.clear();
   }
 }

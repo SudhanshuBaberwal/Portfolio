@@ -5,6 +5,7 @@ import leetcodeRoute from "./routes/leetcodeRoute.js";
 import CFroute from "./routes/codeforcesRoute.js";
 import githubRoute from "./routes/githubRoute.js";
 import codingStatsRoute from "./routes/codingStatsRoute.js";
+import codechefRoute from "./routes/codechefRoute.js"
 import dotenv from "dotenv";
 
 const app = express();
@@ -23,7 +24,11 @@ app.use(
       if (!origin) return callback(null, true);
       // In non-production, allow localhost origins
       if (process.env.NODE_ENV !== "production") {
-        if (/^http:\/\/localhost:\d+$/.test(origin) || /^http:\/\/127\.0\.0\.1:\d+$/.test(origin)) {
+        if (
+          /^http:\/\/localhost:\d+$/.test(origin) ||
+          /^http:\/\/127\.0\.0\.1:\d+$/.test(origin) ||
+          origin === "http://localhost:5173"
+        ) {
           return callback(null, true);
         }
       }
@@ -41,6 +46,7 @@ app.use("/api", leetcodeRoute);
 app.use("/api", CFroute);
 app.use("/api", githubRoute);
 app.use("/api", codingStatsRoute);
+app.use("/api" , codechefRoute)
 
 const port = process.env.PORT || 5000;
 
