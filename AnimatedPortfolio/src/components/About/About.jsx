@@ -6,16 +6,30 @@ import "./About.css";
 
 const Lanyard = lazy(() => import("../Lanyard/Lanyard.jsx"));
 
+// Checked ONCE (creating a WebGL context on every resize leaks contexts).
+let webglCache = null;
 function hasWebGLSupport() {
+  if (webglCache !== null) return webglCache;
   try {
     const canvas = document.createElement("canvas");
-    return Boolean(
+    webglCache = Boolean(
       window.WebGLRenderingContext &&
         (canvas.getContext("webgl") || canvas.getContext("experimental-webgl"))
     );
   } catch {
-    return false;
+    webglCache = false;
   }
+  return webglCache;
+}
+
+// The 3D card runs on ALL screen sizes. It is skipped only when the visitor
+// asked for reduced motion, WebGL is missing, the device is very low-memory,
+// or the browser is in data-saver mode.
+function canRun3D() {
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const lowMemory = typeof navigator.deviceMemory === "number" && navigator.deviceMemory <= 2;
+  const saveData = Boolean(navigator.connection?.saveData);
+  return !reduced && !lowMemory && !saveData && hasWebGLSupport();
 }
 
 export default function About() {
@@ -24,99 +38,71 @@ export default function About() {
   const [nearViewport, setNearViewport] = useState(false);
   const [canUse3D, setCanUse3D] = useState(false);
 
-  // Determine if device / user preferences support 3D Lanyard
+  // Decide whether the 3D card may run (re-check if the motion preference changes)
   useEffect(() => {
-    const check3D = () => {
-      const isMobile = window.innerWidth < 900;
-      const isReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const webgl = hasWebGLSupport();
-      setCanUse3D(!isMobile && !isReduced && webgl);
-    };
-
-    check3D();
-    window.addEventListener("resize", check3D);
+    const update = () => setCanUse3D(canRun3D());
+    update();
     const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    motionQuery.addEventListener("change", check3D);
-
-    return () => {
-      window.removeEventListener("resize", check3D);
-      motionQuery.removeEventListener("change", check3D);
-    };
+    motionQuery.addEventListener("change", update);
+    return () => motionQuery.removeEventListener("change", update);
   }, []);
 
-  // IntersectionObserver with rootMargin 200px to lazy mount Lanyard only when near viewport
+  // Mount the Lanyard only when the section is near the viewport
   useEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
-
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setNearViewport(true);
-        }
+        if (entry.isIntersecting) setNearViewport(true);
       },
       { rootMargin: "200px" }
     );
-
     observer.observe(section);
     return () => observer.disconnect();
   }, []);
 
-  // Check in DEV mode if resume.pdf is missing
+  // DEV: warn if resume.pdf is missing
   useEffect(() => {
     if (import.meta.env?.DEV) {
       fetch("/resume.pdf", { method: "HEAD" })
         .then((res) => {
-          if (!res.ok) {
-            console.warn("[About] public/resume.pdf was not found (HTTP " + res.status + ")");
-          }
+          if (!res.ok) console.warn("[About] public/resume.pdf was not found (HTTP " + res.status + ")");
         })
-        .catch(() => {
-          console.warn("[About] Failed to check for public/resume.pdf");
-        });
+        .catch(() => console.warn("[About] Failed to check for public/resume.pdf"));
     }
   }, []);
 
-  // IntersectionObserver for staggered fade-up of label, photo, facts, actions
+  // Staggered fade-up of label, facts, actions
   useEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
 
-    const isReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (isReduced) {
-      section.querySelectorAll(".about__reveal-item").forEach((el) => {
-        el.classList.add("is-revealed");
-      });
+    const revealItems = section.querySelectorAll(".about__reveal-item");
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      revealItems.forEach((el) => el.classList.add("is-revealed"));
       return;
     }
-
-    const revealItems = section.querySelectorAll(".about__reveal-item");
 
     const observer = new IntersectionObserver(
       (entries, obs) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             const index = Array.from(revealItems).indexOf(entry.target);
-            setTimeout(() => {
-              entry.target.classList.add("is-revealed");
-            }, index * 70);
+            setTimeout(() => entry.target.classList.add("is-revealed"), index * 70);
             obs.unobserve(entry.target);
           }
         });
       },
-      {
-        threshold: 0.15,
-        rootMargin: "0px 0px -40px 0px",
-      }
+      { threshold: 0.15, rootMargin: "0px 0px -40px 0px" }
     );
 
     revealItems.forEach((item) => observer.observe(item));
-
     return () => observer.disconnect();
   }, []);
 
-  // Static photo fallback element (used for mobile, reduced motion, fallback, or during lazy loading)
-  const renderStaticPhoto = () => (
+  // Static photo (fallback, and the placeholder while the 3D module loads)
+  const photo = (
     <div className="about__photo-wrap">
       {!photoError ? (
         <picture>
@@ -140,68 +126,61 @@ export default function About() {
   );
 
   return (
-    <section
-      id="about"
-      ref={sectionRef}
-      className="about"
-      aria-labelledby="about-heading"
-    >
+    <section id="about" ref={sectionRef} className="about" aria-labelledby="about-heading">
       <div className="about__grid">
-        {/* Col 1 to 3: Small top-left label + Lanyard / Sticky Portrait Photo */}
+        {/* Left column: label + ID card. Spans the paragraph, facts and links rows so it can stay in view. */}
         <div className="about__label-col about__reveal-item">
-          <h2 id="about-heading" className="about__label">
-            About
-          </h2>
+          <h2 id="about-heading" className="about__label">About</h2>
           <span className="about__label-sub">Who I am</span>
 
-          {canUse3D && nearViewport ? (
-            <ErrorBoundary fallback={renderStaticPhoto()}>
-              <Suspense fallback={renderStaticPhoto()}>
-                <div
-                  className="about__lanyard-wrap cursor-target"
-                  data-cursor-label="Drag"
-                  role="img"
-                  aria-label="Interactive ID card with a portrait of Sudhanshu Baberwal. Drag to swing it."
-                >
-                  <Lanyard
-                    frontImage="/hero.jpg"
-                    backImage="/card-back.jpg"
-                    strapImage="/band.png"
-                    imageFit="cover"
-                    cardColor="#ffffff"
-                    orientation="portrait"
-                    // finish="glossy"
-                    cornerRadius={0.3}
-                    size={0.6}
-                    anchor="center"
-                    strapLength={0.5}
-                    strapColor="#111111"
-                    strapWidth={0.65}
-                    // metal="silver"
-                    gravity={1}
-                    damping={0.5}
-                    elasticity={0.5}
-                    breeze={0.5}
-                    interactive
-                    intro
-                  />
-                </div>
-              </Suspense>
-            </ErrorBoundary>
+          {canUse3D ? (
+            // The block keeps its size from the start, so nothing jumps when the 3D card loads.
+            <div
+              className="about__lanyard-wrap cursor-target"
+              data-cursor-label="Drag"
+              role="img"
+              aria-label="Interactive ID card with a portrait of Sudhanshu Baberwal. Drag to swing it."
+            >
+              {nearViewport ? (
+                <ErrorBoundary fallback={photo}>
+                  <Suspense fallback={photo}>
+                    <Lanyard
+                      frontImage="/hero.jpg"
+                      backImage="/card-back.jpg"
+                      strapImage="/band.png"
+                      imageFit="cover"
+                      cardColor="#ffffff"
+                      orientation="portrait"
+                      // finish="glossy"
+                      cornerRadius={0.3}
+                      size={0.6}
+                      anchor="center"
+                      strapLength={0.5}
+                      strapColor="#111111"
+                      strapWidth={0.65}
+                      // metal="silver"
+                      gravity={1}
+                      damping={0.5}
+                      elasticity={0.5}
+                      breeze={0.5}
+                      interactive
+                      intro
+                    />
+                  </Suspense>
+                </ErrorBoundary>
+              ) : (
+                photo
+              )}
+            </div>
           ) : (
-            renderStaticPhoto()
+            photo
           )}
         </div>
 
-        {/* Col 4 to 12: Main Statement with TextType & Reserved Height */}
+        {/* Main statement with TextType and reserved height */}
         <div className="about__statement-col">
           <div className="about__statement-container">
-            {/* Screen reader text & reserved height ghost */}
-            <p className="about__statement-ghost">
-              {ABOUT.statement}
-            </p>
-
-            {/* Visual animated typed text */}
+            <p className="about__statement-ghost">{ABOUT.statement}</p>
             <div className="about__statement-typed" aria-hidden="true">
               <TextType
                 text={[ABOUT.statement]}
@@ -217,7 +196,7 @@ export default function About() {
           </div>
         </div>
 
-        {/* Col 4 to 12: Facts Row */}
+        {/* Facts row */}
         <div className="about__facts-col about__reveal-item">
           <div className="about__facts">
             {ABOUT.facts.map((fact, idx) => (
@@ -229,7 +208,7 @@ export default function About() {
           </div>
         </div>
 
-        {/* Col 4 to 12: Actions Row */}
+        {/* Actions row */}
         <div className="about__actions-col about__reveal-item">
           <div className="about__actions">
             {ABOUT.links.map((link, idx) => {
@@ -247,9 +226,7 @@ export default function About() {
                 >
                   <span>{link.label}</span>
                   <span
-                    className={`about__action-arrow ${
-                      link.arrow === "↓" ? "about__action-arrow--down" : ""
-                    }`}
+                    className={`about__action-arrow ${link.arrow === "↓" ? "about__action-arrow--down" : ""}`}
                     aria-hidden="true"
                   >
                     {link.arrow}

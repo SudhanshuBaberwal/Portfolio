@@ -1,6 +1,6 @@
 /* ============================================================
    About.css — About / Who I am section
-   12-column desktop grid, sticky photo, TextType, facts, actions
+   12-column desktop grid, sticky ID card, TextType, facts, actions
    ============================================================ */
 
 .about {
@@ -11,7 +11,9 @@
   font-family: var(--font, "Inter Tight", sans-serif);
   padding: clamp(64px, 10vw, 160px) clamp(20px, 2.5vw, 44px);
   box-sizing: border-box;
-  overflow: hidden; /* cleanly clip any upward strap overflow at section edge */
+  /* `clip` (not `hidden`): clips any overflow but does NOT turn the section into a
+     scroll container, so position: sticky keeps working. */
+  overflow: clip;
 }
 
 /* ---- 12-Column Desktop Grid ------------------------------- */
@@ -24,11 +26,14 @@
   align-items: start;
 }
 
-/* Col 1 to 3: Small top-left label + Sticky Lanyard / Photo */
+/* Left column: label + ID card. Spans the three content rows (statement, facts,
+   actions) so the sticky card has room to stay beside them while you scroll. */
 .about__label-col {
   grid-column: 1 / 4;
+  grid-row: 1 / 4;
   position: sticky;
-  top: 100px;
+  top: 96px;
+  align-self: start;
   display: flex;
   flex-direction: column;
 }
@@ -50,16 +55,27 @@
   margin-top: 2px;
 }
 
-/* Lanyard 3D Container */
+/* ---- 3D ID card block (reserves its size from the start) --- */
 .about__lanyard-wrap {
-  width: 100%;
-  height: clamp(480px, 70vh, 640px);
-  margin-top: clamp(16px, 2vw, 32px);
   position: relative;
+  width: 100%;
+  height: clamp(420px, 62vh, 600px);
+  margin-top: clamp(16px, 2vw, 28px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* The strap fades in at the top so it looks like it hangs from the section */
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 12%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 12%);
+  /* Vertical swipes scroll the page; horizontal drags swing the card */
   touch-action: pan-y;
 }
 
-/* Sticky Photo (Fallback & mobile placeholder) */
+.about__lanyard-wrap canvas {
+  touch-action: pan-y;
+}
+
+/* ---- Static photo (fallback and loading placeholder) ------ */
 .about__photo-wrap {
   width: 100%;
   max-width: 320px;
@@ -71,6 +87,12 @@
   border: 1px solid rgba(251, 236, 227, 0.15);
   position: relative;
   box-shadow: 0 16px 32px rgba(0, 0, 0, 0.4);
+}
+
+/* When it sits inside the 3D block (placeholder), centre it and drop the extra margin */
+.about__lanyard-wrap .about__photo-wrap {
+  margin-top: 0;
+  max-width: 78%;
 }
 
 .about__photo {
@@ -87,7 +109,6 @@
   transform: scale(1.02);
 }
 
-/* Photo Fallback */
 .about__photo-fallback {
   width: 100%;
   height: 100%;
@@ -104,9 +125,10 @@
   opacity: 0.85;
 }
 
-/* Col 4 to 12: Main Statement (Height reserved for TextType) */
+/* ---- Main statement (height reserved for TextType) --------- */
 .about__statement-col {
   grid-column: 4 / 13;
+  grid-row: 1;
 }
 
 .about__statement-container {
@@ -140,9 +162,10 @@
   margin: 0;
 }
 
-/* Col 4 to 12: Facts Row (3 columns) */
+/* ---- Facts row (3 columns) --------------------------------- */
 .about__facts-col {
   grid-column: 4 / 13;
+  grid-row: 2;
   opacity: 0;
   transform: translateY(24px);
 }
@@ -184,9 +207,10 @@
   line-height: 1.3;
 }
 
-/* Col 4 to 12: Actions Row */
+/* ---- Actions row ------------------------------------------- */
 .about__actions-col {
   grid-column: 4 / 13;
+  grid-row: 3;
   opacity: 0;
   transform: translateY(24px);
 }
@@ -224,17 +248,9 @@
   transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.about__action-link:hover::after {
-  width: 100%;
-}
-
-.about__action-link:hover {
-  opacity: 0.85;
-}
-
-.about__action-link:focus-visible {
-  outline: 2px solid var(--cream, #fbece3);
-}
+.about__action-link:hover::after { width: 100%; }
+.about__action-link:hover { opacity: 0.85; }
+.about__action-link:focus-visible { outline: 2px solid var(--cream, #fbece3); }
 
 .about__action-arrow {
   color: var(--red, #ff2a1f);
@@ -243,16 +259,10 @@
   transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.about__action-link:hover .about__action-arrow {
-  transform: translate(3px, -3px);
-}
+.about__action-link:hover .about__action-arrow { transform: translate(3px, -3px); }
+.about__action-link:hover .about__action-arrow--down { transform: translateY(4px); }
 
-/* Arrow down on download link */
-.about__action-link:hover .about__action-arrow--down {
-  transform: translateY(4px);
-}
-
-/* ---- Reveal Transition Classes ---------------------------- */
+/* ---- Reveal transition classes ----------------------------- */
 .about__reveal-item {
   opacity: 0;
   transform: translateY(24px);
@@ -265,7 +275,7 @@
     transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* ---- Reduced Motion Overrides ----------------------------- */
+/* ---- Reduced motion ---------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
   .about__label-col,
   .about__facts-col,
@@ -277,32 +287,36 @@
     transition: none !important;
   }
 
-  .about__statement-ghost {
-    visibility: visible !important;
-  }
-
-  .about__statement-typed {
-    display: none !important;
-  }
-
-  .about__action-arrow {
-    transition: none !important;
-  }
+  .about__statement-ghost { visibility: visible !important; }
+  .about__statement-typed { display: none !important; }
+  .about__action-arrow { transition: none !important; }
 }
 
-/* ---- Responsive: <= 900px --------------------------------- */
+/* ---- Responsive: <= 900px (phones and small tablets) ------- */
 @media (max-width: 900px) {
   .about__grid {
     display: flex;
     flex-direction: column;
-    gap: 48px;
+    gap: 40px;
   }
 
   .about__label-col {
     position: static;
-    grid-column: 1 / -1;
+    grid-column: auto;
+    grid-row: auto;
   }
 
+  /* The ID card now shows on phones too, in its own block above the paragraph */
+  .about__lanyard-wrap {
+    height: clamp(400px, 62svh, 520px);
+    max-width: 420px;
+    margin-top: 12px;
+    margin-inline: auto;
+  }
+
+  .about__lanyard-wrap .about__photo-wrap { max-width: 70%; }
+
+  /* Fallback photo (reduced motion, no WebGL, low-memory devices) */
   .about__photo-wrap {
     max-width: 240px;
     aspect-ratio: 4 / 3;
@@ -312,7 +326,8 @@
   .about__statement-col,
   .about__facts-col,
   .about__actions-col {
-    grid-column: 1 / -1;
+    grid-column: auto;
+    grid-row: auto;
   }
 
   .about__facts {
@@ -334,7 +349,5 @@
     gap: 20px;
   }
 
-  .about__action-link {
-    font-size: 22px;
-  }
+  .about__action-link { font-size: 22px; }
 }

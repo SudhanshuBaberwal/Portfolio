@@ -109,6 +109,22 @@
   height: 100%;
   padding: 10px;
   box-sizing: border-box;
+  container-type: inline-size;
+  overflow: hidden;
+}
+.skills__paper-desc {
+  margin: 4px 0 0;
+  width: 100%;
+  font-size: clamp(7px, 5.2cqw, 11px);
+  line-height: 1.4;
+  letter-spacing: 0;
+  text-align: center;
+  color: rgba(17, 17, 17, 0.72);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 9;
+  line-clamp: 9;
+  overflow: hidden;
 }
 
 .skills__paper-icon {

@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
+// import useFitText from "../../hooks/useFitText";
 import "./Hero.css";
 import { SITE } from "../../data/site.js";
 
@@ -24,6 +25,8 @@ export default function Hero() {
   const heroRef  = useRef(null);
   const photoRef = useRef(null);
   const nameRef  = useRef(null);
+  // Fit hero name on mobile using max desktop size (320px)
+  // useFitText(nameRef, { max: 320 });
 
   /* Parallax state */
   const mouse    = useRef({ x: 0, y: 0 });
@@ -168,23 +171,26 @@ export default function Hero() {
           <div className="hero__gradient" />
         </div>
 
-        {/* ── Top row: role (left) + year (right) ──────── */}
-        {/* PillNav floats fixed above this row in the center */}
+       {/* ── Top row: year only (right) ──────── */}
         <div className="hero__top">
-          {/* Role + location */}
-          <div className="hero__meta" aria-label="Role and location">
-            <p>{SITE.role}</p>
-            <p>{SITE.location}</p>
-          </div>
-
           {/* Year — hidden on small screens */}
           <span className="hero__year">{SITE.year}</span>
         </div>
 
         {/* ── Middle floating label ─────────────────────── */}
-        <div className="hero__label" aria-hidden="true">
-          <p>{SITE.labelLine1}</p>
-          <p>{SITE.labelLine2}</p>
+        {/* ... (Keep label and projects link unchanged) ... */}
+
+        {/* ── Bottom area ───────────────────────────────── */}
+        <div className="hero__bottom">
+          <div className="hero__name-wrap">
+            <h1
+              ref={nameRef}
+              className="hero__name"
+              aria-label={SITE.heroName}
+            >
+              {letters}
+            </h1>
+          </div>
         </div>
 
         {/* ── All projects link ─────────────────────────── */}

@@ -65,7 +65,7 @@ export default function FolderSkillFace({
               {activeSkill.name}
             </h4>
             <p className="folder-skill-face__detail-note">
-              {activeSkill.note}
+              {activeSkill.description || activeSkill.note}
             </p>
           </div>
         </div>

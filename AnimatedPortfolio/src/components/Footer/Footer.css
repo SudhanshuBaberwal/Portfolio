@@ -90,27 +90,33 @@
   outline: 2px solid var(--cream, #fbece3);
 }
 
-/* ---- Oversized Signature Name ----------------------------- */
+/* ---- Oversized Signature Name (SVG, scales with the width) - */
 .footer__signature {
   width: 100%;
-  overflow: hidden;
-  padding: 0 clamp(10px, 1.5vw, 24px);
+  max-width: 2400px;
+  margin: 0 auto;
+  /* same side padding as the top row, so the name lines up with the content above */
+  padding: 0 clamp(20px, 2.5vw, 44px);
   box-sizing: border-box;
-  display: flex;
-  justify-content: center;
+  line-height: 0;
   user-select: none;
   pointer-events: none;
-  line-height: 0.76;
 }
 
+.footer__signature-svg {
+  display: block;
+  width: 100%;
+  height: auto; /* height follows the viewBox ratio, so nothing jumps or shakes */
+}
+
+/* font-size is in viewBox units: 116 units ≈ the natural width of the name
+   at 1000 units. textLength in the JSX fits it exactly to the width.      */
 .footer__signature-text {
-  font-size: clamp(48px, 11vw, 220px);
+  font-family: var(--font, "Inter Tight", sans-serif);
+  font-size: 116px;
   font-weight: 500;
   letter-spacing: -0.05em;
-  color: var(--cream, #fbece3);
-  white-space: nowrap;
-  display: block;
-  transform: translateY(12%); /* clipped slightly at the bottom edge */
+  fill: var(--cream, #fbece3);
 }
 
 /* ---- Responsive: <= 900px --------------------------------- */
@@ -118,21 +124,24 @@
   .footer__row {
     flex-direction: column;
     align-items: flex-start;
-    gap: 20px;
+    gap: 12px;
     padding: 32px clamp(20px, 2.5vw, 44px) 24px;
   }
 
   .footer__top-btn {
     padding: 0;
+    min-height: 44px;
   }
 
   .footer__links {
-    gap: 16px;
+    gap: 8px 20px;
     flex-wrap: wrap;
   }
 
-  .footer__signature-text {
-    font-size: clamp(40px, 13vw, 120px);
-    transform: translateY(10%);
+  /* comfortable tap targets */
+  .footer__link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
   }
 }
