@@ -11,6 +11,7 @@
   --pad:   clamp(20px, 2.5vw, 44px);
   --font:  "Inter Tight", sans-serif;
   --hero-name-size: clamp(80px, 17vw, 320px);
+  --hero-proj-size: clamp(48px, 5.5vw, 80px);
 }
 
 /* ---- Global base ------------------------------------------ */
@@ -60,10 +61,9 @@ body {
   object-fit: cover;
   object-position: 70% center;
   display: block;
-  /* parallax applied via inline transform */
 }
 
-/* Gradient overlay: left near-black for text contrast, right lightened so face is visible */
+/* Left near-black for text contrast, right lightened so the face is visible */
 .hero__gradient {
   position: absolute;
   inset: 0;
@@ -76,10 +76,7 @@ body {
   );
 }
 
-/* Fallback when photo is absent */
-.hero__bg--fallback .hero__photo {
-  display: none;
-}
+.hero__bg--fallback .hero__photo { display: none; }
 
 .hero__bg--fallback::after {
   content: "";
@@ -88,8 +85,7 @@ body {
   background: radial-gradient(ellipse 80% 80% at 70% 50%, #1a1210 0%, #0b0b0b 70%);
 }
 
-/* ---- Top row: meta (left) · year (right) ------------------ */
-/* PillNav lives in the center at fixed position in App.jsx    */
+/* ---- Top row: role + location (left) · year (right) ------- */
 .hero__top {
   position: relative;
   z-index: 10;
@@ -99,7 +95,6 @@ body {
   width: 100%;
 }
 
-/* Role + location */
 .hero__meta {
   display: flex;
   flex-direction: column;
@@ -111,22 +106,19 @@ body {
   font-size: 15px;
   font-weight: 400;
   line-height: 1.4;
-  /* entrance: starts hidden */
   opacity: 0;
   transform: translateY(10px);
 }
 
-/* Year */
 .hero__year {
   font-size: 15px;
   font-weight: 400;
   color: var(--cream);
-  /* entrance: starts hidden */
   opacity: 0;
   transform: translateY(10px);
 }
 
-/* ---- Middle floating label -------------------------------- */
+/* ---- Middle floating label (kept for later use) ----------- */
 .hero__label {
   position: absolute;
   z-index: 10;
@@ -147,12 +139,14 @@ body {
 }
 
 /* ---- All projects link ------------------------------------ */
+/* Desktop: absolutely placed. margin-top centres it vertically,
+   so the entrance animation's transform can't shift it.        */
 .hero__projects {
   position: absolute;
   z-index: 10;
   right: var(--pad);
   top: 60%;
-  transform: translateY(-50%);
+  margin-top: calc(var(--hero-proj-size) / -2);
   opacity: 0;
 }
 
@@ -161,7 +155,7 @@ body {
   display: inline-flex;
   align-items: flex-start;
   gap: 6px;
-  font-size: clamp(48px, 5.5vw, 80px);
+  font-size: var(--hero-proj-size);
   font-weight: 500;
   color: var(--cream);
   text-decoration: none;
@@ -169,7 +163,6 @@ body {
   line-height: 1;
 }
 
-/* underline draw on hover */
 .hero__projects-link::after {
   content: "";
   position: absolute;
@@ -181,11 +174,8 @@ body {
   transition: width 0.4s cubic-bezier(0.76, 0, 0.24, 1);
 }
 
-.hero__projects-link:hover::after {
-  width: 100%;
-}
+.hero__projects-link:hover::after { width: 100%; }
 
-/* Red arrow */
 .hero__arrow-icon {
   color: var(--red);
   font-size: 0.65em;
@@ -199,21 +189,18 @@ body {
   transform: translate(8px, -8px);
 }
 
-/* ---- Bottom section --------------------------------------- */
+/* ---- Bottom section: giant name + contact ----------------- */
+/* The hero already has padding, so no extra horizontal padding here. */
 .hero__bottom {
-  position: absolute;
+  position: static;
   z-index: 10;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 0 var(--pad) var(--pad);
+  margin-top: auto;
   display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 24px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
 }
 
-/* Giant name */
 .hero__name-wrap {
   overflow: hidden;
   line-height: 0.82;
@@ -225,28 +212,34 @@ body {
   line-height: 0.82;
   letter-spacing: -0.05em;
   color: var(--cream);
-  display: flex;
-  flex-wrap: wrap;
+  display: inline-flex;
+  white-space: nowrap;
+  word-break: keep-all;
+  overflow-wrap: normal;
+  hyphens: none;
+  flex-wrap: nowrap;
   gap: 0;
 }
 
 .hero__name-letter {
   display: inline-block;
-  /* initial hidden state: translated down inside overflow-hidden parent */
-  transform: translateY(110%);
+  transform: translateY(110%); /* starts below the mask */
 }
 
 /* Contact block */
 .hero__contact {
-  text-align: right;
+  text-align: left;
   flex-shrink: 0;
   font-style: normal;
   opacity: 0;
   transform: translateY(10px);
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.hero__contact p  { font-size: 18px; font-weight: 400; line-height: 1.4; }
-.hero__contact a  {
+.hero__contact p { font-size: 18px; font-weight: 400; line-height: 1.4; }
+.hero__contact a {
   font-size: 18px;
   font-weight: 400;
   color: var(--cream);
@@ -255,7 +248,7 @@ body {
 }
 .hero__contact a:hover { opacity: 0.7; }
 
-/* Down arrow — aligned horizontally with left edge of 'All projects' link at bottom */
+/* Down arrow, aligned with the left edge of the 'All projects' link */
 .hero__down {
   position: absolute;
   z-index: 10;
@@ -273,24 +266,22 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 44px;
+  height: 44px;
   padding: 0;
   outline-offset: 4px;
 }
 
-.hero__down-btn:focus-visible {
-  outline: 2px solid var(--cream);
-}
+.hero__down-btn:focus-visible { outline: 2px solid var(--cream); }
 
-.hero__down-btn svg {
-  animation: downBob 2s ease-in-out infinite;
-}
+.hero__down-btn svg { animation: downBob 2s ease-in-out infinite; }
 
 @keyframes downBob {
-  0%, 100% { transform: translateY(0);   }
-  50%       { transform: translateY(6px); }
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(6px); }
 }
 
-/* ---- Reduced-motion: skip all animations ------------------ */
+/* ---- Reduced motion --------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
   .hero__meta p,
   .hero__year,
@@ -303,66 +294,77 @@ body {
     transition: none !important;
   }
 
-  .hero__name-letter {
-    transform: none !important;
-    transition: none !important;
-  }
-
-  .hero__down-btn svg {
-    animation: none !important;
-  }
-
-  .hero__photo {
-    transform: none !important;
-    opacity: 1 !important;
-    transition: none !important;
-  }
+  .hero__name-letter { transform: none !important; transition: none !important; }
+  .hero__down-btn svg { animation: none !important; }
+  .hero__photo { transform: none !important; opacity: 1 !important; transition: none !important; }
 }
 
-/* ---- Responsive: ≤ 900px ---------------------------------- */
+/* ---- Mobile: 900px and below ------------------------------ */
+/* Visual order, top to bottom:
+   role/location  →  (flexible space)  →  All projects ↗  →  NAME  →  email + arrow
+   Nothing is absolutely positioned here, so nothing can overlap.   */
 @media (max-width: 900px) {
-  /* Hide year, keep role text */
-  .hero__year { display: none; }
-
-  /* Label hidden on mobile */
-  .hero__label        { display: none; }
-
-  :root {
-    --hero-name-size: clamp(60px, 24vw, 160px);
+  .hero {
+    height: auto;
+    min-height: 100svh;
+    min-height: max(100svh, 560px);
   }
 
+  /* Clear the fixed pill nav (it sits at the top centre) */
+  .hero__top { padding-top: 64px; }
+
+  .hero__year,
+  .hero__label { display: none; }
+
+  /* All projects joins the normal flow, right-aligned, just above the name */
   .hero__projects {
-    right: var(--pad);
+    position: static;
+    align-self: flex-end;
+    margin-top: auto;
+    right: auto;
     top: auto;
-    bottom: calc(var(--hero-name-size) + var(--pad) * 2.5);
-    transform: none;
   }
 
-  .hero__projects-link {
-    font-size: clamp(32px, 10vw, 48px);
-  }
+  .hero__projects-link { font-size: clamp(32px, 10vw, 44px); }
 
   .hero__bottom {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
+    margin-top: 12px;
+    gap: 12px;
+    width: 100%;
   }
 
+  /* The name fills the container width: ~92% of it at 20.5cqw.
+     The vw line is only a fallback for browsers without cqw.  */
+  .hero__name-wrap {
+    container-type: inline-size;
+    width: 100%;
+  }
+
+  .hero__name {
+    font-size: clamp(48px, 19vw, 160px);
+    font-size: 20.5cqw;
+  }
+
+  /* Email under the name, leaving room for the arrow on the right */
   .hero__contact {
-    text-align: left;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    max-width: calc(100% - 56px);
   }
 
   .hero__contact p,
   .hero__contact a { font-size: 15px; }
 
+  .hero__contact a { overflow-wrap: anywhere; }
+
   .hero__down {
     left: auto;
     right: var(--pad);
-    bottom: var(--pad);
+    bottom: calc(var(--pad) - 10px);
   }
 
-  /* Photo centres face on narrow screens */
-  .hero__photo { object-position: center center; }
+  .hero__photo { object-position: center 20%; }
 
   .hero__gradient {
     background: linear-gradient(
@@ -372,9 +374,4 @@ body {
       rgba(11, 11, 11, 0.2)  100%
     );
   }
-}
-
-/* ---- Very small screens: hide meta to avoid pill overlap -- */
-@media (max-width: 540px) {
-  .hero__meta { display: none; }
 }

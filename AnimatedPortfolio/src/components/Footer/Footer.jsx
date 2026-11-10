@@ -64,9 +64,29 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Oversized Signature Name */}
+      {/* Oversized signature name.
+          Drawn as SVG text: the viewBox scales it to the exact width of the footer,
+          so it always fits edge to edge, with no JavaScript measuring (no shaking).
+          textLength fixes the text to 990 of the 1000 units of width.
+          The baseline (y=106) sits below the viewBox height (100), which gives the
+          small bottom-edge clip of the original design. */}
       <div className="footer__signature" aria-hidden="true">
-        <span className="footer__signature-text">{SITE.fullName}</span>
+        <svg
+          className="footer__signature-svg"
+          viewBox="0 0 1000 100"
+          role="presentation"
+          focusable="false"
+        >
+          <text
+            className="footer__signature-text"
+            x="5"
+            y="106"
+            textLength="990"
+            lengthAdjust="spacingAndGlyphs"
+          >
+            {SITE.fullName}
+          </text>
+        </svg>
       </div>
     </footer>
   );

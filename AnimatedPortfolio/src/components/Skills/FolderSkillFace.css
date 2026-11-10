@@ -135,12 +135,18 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   text-align: center;
   flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
   padding: 0 4px;
 }
 
+.folder-skill-face__detail { min-height: 0; }
+.folder-skill-face__detail-icon { margin-top: auto; margin-bottom: 8px; }
+.folder-skill-face__detail-note { margin: 0 0 auto; font-size: 12px; line-height: 1.4; }
 .folder-skill-face__detail-icon {
   margin-bottom: 8px;
 }

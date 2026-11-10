@@ -49,7 +49,6 @@ export default function Skills() {
 
           <div className="skills__header-right">
             <p className="skills__note">{header.note}</p>
-            {/* Accessible view toggle pill */}
             <button
               type="button"
               className="skills__toggle-btn cursor-target"
@@ -62,7 +61,7 @@ export default function Skills() {
           </div>
         </div>
 
-        {/* Visually hidden full list for screen-reader & accessibility */}
+        {/* Visually hidden full list for screen readers */}
         <div className="sr-only">
           <h3>Full Skills Directory</h3>
           {categories.map((cat) => (
@@ -71,7 +70,7 @@ export default function Skills() {
               <ul>
                 {cat.items.map((item, idx) => (
                   <li key={idx}>
-                    <strong>{item.name}</strong>: {item.note}
+                    <strong>{item.name}</strong>: {item.description || item.note}
                   </li>
                 ))}
               </ul>
@@ -97,7 +96,9 @@ export default function Skills() {
                         <SkillLogo name={item.name} size={20} onWhite={false} />
                         <strong className="skills__list-item-name">{item.name}</strong>
                       </div>
-                      <span className="skills__list-item-note">{item.note}</span>
+                      <span className="skills__list-item-note">
+                        {item.description || item.note}
+                      </span>
                     </li>
                   ))}
                 </ul>
@@ -107,7 +108,7 @@ export default function Skills() {
         ) : (
           <div className="skills__folders-grid">
             {categories.map((category) => {
-              // Custom paper content with SkillLogo next to name
+              // Paper content: logo, name and a short paragraph about the skill
               const papers = category.items.slice(0, MAX_PAPERS).map((skill) => ({
                 key: skill.name,
                 content: (
@@ -116,8 +117,9 @@ export default function Skills() {
                       <SkillLogo name={skill.name} size={28} onWhite={true} />
                     </div>
                     <span className="skills__paper-title">{skill.name}</span>
-                    <span className="skills__paper-line" style={{ width: "80%" }} />
-                    <span className="skills__paper-line" style={{ width: "60%" }} />
+                    <p className="skills__paper-desc">
+                      {skill.description || skill.note}
+                    </p>
                   </div>
                 ),
                 raw: skill,

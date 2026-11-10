@@ -10,7 +10,7 @@ export const SITE = {
   heroName: "Sudhanshu",
 
   // Role / location
-  role: "Backend software engineer",
+  role: "Full stack Developer",
   location: "Based in India",
 
   // College
@@ -20,7 +20,7 @@ export const SITE = {
   year: "© 2026",
 
   // Email
-  email: "baberwalsudhanshu34@gmail.com", // TODO: confirm email (resume says baberwalsudhanshu16@gmail.com)
+  email: "baberwalsudhanshu096@gmail.com", // TODO: confirm email (resume says baberwalsudhanshu16@gmail.com)
 
   // Socials / External links
   github: "https://github.com/SudhanshuBaberwal",
