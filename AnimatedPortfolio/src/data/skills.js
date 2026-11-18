@@ -1,5 +1,3 @@
-// TODO: remove anything I can't explain in an interview
-// TODO: review the descriptions below and edit them in my own words
 
 export const SKILLS = {
   header: {
@@ -14,27 +12,33 @@ export const SKILLS = {
       items: [
         {
           name: "Java",
-          note: "Primary language for backend services, OOP and concurrency.",
+          note: "My primary language for backend development, OOP and DSA.",
           description:
-            "A statically typed, object-oriented language that runs on the JVM. Widely used for backend services, with strong support for multithreading and a mature library ecosystem.",
-        },
-        {
-          name: "C++",
-          note: "Systems programming, algorithms and problem solving.",
-          description:
-            "A compiled, high-performance language with fine control over memory. Commonly used for competitive programming, data structures and algorithms, and performance-critical systems.",
+            "A statically typed, object-oriented programming language that runs on the JVM. I use Java to build backend applications, implement object-oriented concepts, solve DSA problems and develop Spring Boot services.",
         },
         {
           name: "JavaScript",
-          note: "Frontend interactivity and full-stack web tooling.",
+          note: "Building interactive frontend and full-stack web applications.",
           description:
-            "The language of the web. It runs in the browser for interactivity and on servers through Node.js, and it powers most modern frontend frameworks.",
+            "A versatile programming language used for frontend and backend development. I use JavaScript with React, Next.js and Node.js to build interactive user interfaces and full-stack web applications.",
+        },
+        {
+          name: "TypeScript",
+          note: "Type-safe development for scalable React and Next.js applications.",
+          description:
+            "A strongly typed superset of JavaScript that adds static type checking. I use TypeScript to write more maintainable application code, define interfaces and improve reliability in frontend and backend projects.",
+        },
+        {
+          name: "Python",
+          note: "Scripting, data processing and AI-related development.",
+          description:
+            "A high-level programming language used for automation, data processing and AI development. I have worked with Python libraries such as Pandas, BeautifulSoup and Selenium for data analysis and web scraping.",
         },
         {
           name: "SQL",
-          note: "Relational queries, schema design, indexes and transactions.",
+          note: "Relational database queries and data management.",
           description:
-            "The standard language for querying relational databases. It covers selecting and joining data, defining schemas, indexing for speed, and running transactions safely.",
+            "A language used to communicate with relational databases. I use SQL to retrieve, insert, update and manage structured data, work with relationships between tables and understand database constraints.",
         },
       ],
     },
@@ -44,27 +48,39 @@ export const SKILLS = {
       items: [
         {
           name: "Spring Boot",
-          note: "Framework for building production-ready REST microservices.",
+          note: "Building Java REST APIs and modular microservices.",
           description:
-            "A Java framework that sets up a Spring application with sensible defaults. It is used to build REST APIs and microservices with built-in support for configuration and security.",
+            "A Java framework for developing backend applications and RESTful services. I use Spring Boot for building microservices, implementing controllers and services, managing dependencies, integrating databases and developing secure APIs.",
+        },
+        {
+          name: "Node.js / Express.js",
+          note: "Building server-side applications and RESTful backend services.",
+          description:
+            "Node.js provides a JavaScript runtime for server-side development, while Express.js simplifies HTTP routing and middleware management. I use them to build REST APIs, handle requests, implement authentication and connect applications with databases.",
         },
         {
           name: "REST APIs",
-          note: "Stateless HTTP service contracts and JSON data exchange.",
+          note: "Designing endpoints and handling JSON-based client-server communication.",
           description:
-            "An architectural style for web services where resources are exposed over HTTP using standard methods and status codes, usually exchanging JSON between client and server.",
+            "An architectural approach for building web services using HTTP methods and status codes. I develop REST APIs with structured request and response formats, validation, error handling and database integration.",
         },
         {
           name: "JWT / Spring Security",
-          note: "Authentication, authorization and stateless token validation.",
+          note: "Implementing authentication, authorization and protected API endpoints.",
           description:
-            "JWT is a compact signed token used to prove identity without server-side sessions. Spring Security is the Java framework that handles authentication and access control around it.",
+            "JWT provides a signed token-based approach to authentication, while Spring Security handles application security and access control. I have implemented JWT authentication, security filters, protected endpoints and role-based authorization in Spring Boot applications.",
         },
         {
-          name: "WebSockets",
-          note: "Full-duplex real-time client-server communication channels.",
+          name: "Microservices Architecture",
+          note: "Designing independent services with distributed communication.",
           description:
-            "A protocol that keeps a single connection open between client and server so both sides can send messages at any time. Used for chat, live updates and notifications.",
+            "An architectural approach where an application is divided into smaller independent services. I have worked with Spring Boot microservices, API gateways, service discovery, independent databases and asynchronous communication between services.",
+        },
+        {
+          name: "DTO / MVC Architecture",
+          note: "Organizing backend applications with structured layers and data transfer objects.",
+          description:
+            "MVC separates application responsibilities into models, views and controllers, while DTOs define structured objects for transferring data between application layers. I use DTO-based request and response handling to keep backend APIs organized and maintainable.",
         },
       ],
     },
@@ -74,21 +90,27 @@ export const SKILLS = {
       items: [
         {
           name: "PostgreSQL",
-          note: "Primary relational database for ACID transactional storage.",
+          note: "Relational database management for structured application data.",
           description:
-            "An open-source relational database known for reliability, SQL compliance and ACID transactions. It supports indexes, joins and JSON columns for structured application data.",
+            "An open-source relational database management system that supports SQL, relationships, constraints and transactions. I have used PostgreSQL in backend microservices for storing and managing structured application data.",
         },
         {
           name: "MongoDB",
-          note: "Document store for flexible and unstructured data models.",
+          note: "NoSQL document database for flexible application data.",
           description:
-            "A document database that stores data as flexible JSON-like documents. It suits data whose shape changes over time and scales by spreading data across servers.",
+            "A document-oriented NoSQL database that stores data in flexible BSON documents. I use MongoDB with Spring Boot and Mongoose to design schemas, perform CRUD operations and manage application data.",
+        },
+        {
+          name: "MySQL",
+          note: "Relational database queries, tables and schema management.",
+          description:
+            "A relational database management system used to store structured data in tables. I have worked with SQL queries, table relationships, primary keys, foreign keys and database operations.",
         },
         {
           name: "Redis",
-          note: "In-memory store for distributed caching, sessions and locks.",
+          note: "In-memory data storage and caching for backend applications.",
           description:
-            "An in-memory data store with very fast reads and writes. Commonly used for caching, session storage, rate limiting and publish/subscribe messaging.",
+            "An in-memory data store commonly used for caching and fast data access. I have explored Redis for backend microservices and retrieval-augmented generation architectures.",
         },
       ],
     },
@@ -98,27 +120,33 @@ export const SKILLS = {
       items: [
         {
           name: "Kafka",
-          note: "Distributed event streaming and high-throughput messaging.",
+          note: "Asynchronous event-driven communication between microservices.",
           description:
-            "A distributed event-streaming platform that stores messages in ordered logs. Services publish and consume events independently, which helps decouple systems and handle high volumes.",
+            "Apache Kafka is a distributed event-streaming platform that enables services to exchange messages through topics. I have used Kafka for event-driven communication between Spring Boot microservices.",
         },
         {
           name: "Docker",
-          note: "Containerization for consistent build and runtime environments.",
+          note: "Containerizing applications and managing development environments.",
           description:
-            "A tool that packages an application and its dependencies into a container, so it runs the same way on a laptop, a test server or in production.",
+            "A containerization platform that packages applications and their dependencies into portable containers. I have worked with Docker for building, running and managing application containers during backend development.",
         },
         {
-          name: "Kubernetes",
-          note: "Container orchestration, workload deployment and scaling.",
+          name: "Eureka Service Discovery",
+          note: "Service registration and discovery in Spring Boot microservices.",
           description:
-            "An orchestration system that runs and manages containers across many machines. It handles deployment, scaling, restarts and service discovery for containerized applications.",
+            "Netflix Eureka is a service discovery tool used in distributed systems. I have integrated Eureka clients into Spring Boot microservices to enable service registration and discovery between independent services.",
         },
         {
-          name: "AWS",
-          note: "Cloud compute, object storage and managed service deployment.",
+          name: "AWS EC2",
+          note: "Cloud-based virtual machine deployment and server management.",
           description:
-            "Amazon's cloud platform, offering virtual servers, storage, managed databases and networking on demand, so applications can be deployed without owning hardware.",
+            "Amazon EC2 provides scalable virtual computing instances in the AWS cloud. I have explored EC2 for hosting backend applications and understanding cloud deployment and server management.",
+        },
+        {
+          name: "Vercel / Render",
+          note: "Deploying frontend applications and backend services.",
+          description:
+            "Vercel and Render are cloud deployment platforms used to host web applications and backend services. I have worked with Vercel for frontend deployment and Render for deploying backend applications.",
         },
       ],
     },
@@ -128,21 +156,39 @@ export const SKILLS = {
       items: [
         {
           name: "React",
-          note: "Component-driven user interface development.",
+          note: "Building reusable, component-driven user interfaces.",
           description:
-            "A JavaScript library for building user interfaces from reusable components. It updates only the parts of the page whose data has changed.",
+            "A JavaScript library for building interactive user interfaces using reusable components and state management. I use React to develop responsive frontend applications and integrate them with backend REST APIs.",
         },
         {
-          name: "HTML / CSS",
-          note: "Semantic page structuring, accessible layouts and styling.",
+          name: "Next.js",
+          note: "Developing modern full-stack applications with the App Router.",
           description:
-            "HTML gives a page its structure and meaning, and CSS controls layout, color and responsiveness. Together they are the foundation of every website.",
+            "A React framework that provides routing, server-side rendering and full-stack development capabilities. I use Next.js with TypeScript to build structured web applications, implement authentication and integrate backend services.",
+        },
+        {
+          name: "HTML / CSS / Tailwind CSS",
+          note: "Creating responsive layouts and modern user interfaces.",
+          description:
+            "HTML provides page structure, CSS handles styling and layouts, and Tailwind CSS offers utility-first styling. I use these technologies to build responsive interfaces, reusable UI components and modern website designs.",
         },
         {
           name: "Vite",
-          note: "Fast frontend development server and bundling environment.",
+          note: "Fast frontend development and production build tooling.",
           description:
-            "A fast build tool and development server for frontend projects. It starts instantly, reloads changes as you edit, and bundles the app for production.",
+            "A modern frontend build tool that provides a fast development server and optimized production builds. I have used Vite to set up and develop React applications.",
+        },
+        {
+          name: "GSAP / Framer Motion",
+          note: "Creating interactive animations and smooth user experiences.",
+          description:
+            "GSAP and Framer Motion are animation libraries for web applications. I use them to create scroll-triggered animations, interactive transitions, motion effects and engaging portfolio experiences.",
+        },
+        {
+          name: "Three.js / React Three Fiber",
+          note: "Building interactive 3D scenes and immersive web experiences.",
+          description:
+            "Three.js is a JavaScript 3D graphics library, while React Three Fiber provides a React-based approach to working with Three.js. I have used them to create procedural 3D scenes, camera animations and immersive portfolio experiences.",
         },
       ],
     },
@@ -152,21 +198,27 @@ export const SKILLS = {
       items: [
         {
           name: "Git / GitHub",
-          note: "Distributed version control, branching and code collaboration.",
+          note: "Version control, branching and collaborative development.",
           description:
-            "Git tracks every change to a codebase and lets teams branch and merge safely. GitHub hosts repositories and adds pull requests, reviews and automation.",
+            "Git is a distributed version control system used to track code changes, manage branches and merge updates. GitHub provides remote repositories and collaboration features for managing development projects.",
         },
         {
           name: "Postman",
-          note: "API testing, request debugging and environment management.",
+          note: "Testing REST APIs and debugging backend requests.",
           description:
-            "An application for building, sending and testing API requests. It is used to inspect responses, save collections of calls and share them with a team.",
+            "An API development and testing platform used to send HTTP requests, inspect responses and debug backend services. I use Postman to test endpoints, validate API responses and troubleshoot application issues.",
         },
         {
-          name: "Linux",
-          note: "Server operating system, bash scripting and CLI navigation.",
+          name: "Linux / Fedora",
+          note: "Working with Linux environments, terminal commands and development tools.",
           description:
-            "An open-source operating system that runs most servers. Working with it means using the command line, managing files and processes, and writing shell scripts.",
+            "Linux is an open-source operating system widely used in software development and server environments. I work with Fedora Linux, use terminal commands, manage development environments and configure my Hyprland desktop.",
+        },
+        {
+          name: "IntelliJ IDEA / VS Code",
+          note: "Development environments for Java, frontend and backend projects.",
+          description:
+            "IntelliJ IDEA and Visual Studio Code are development environments used for writing, debugging and managing code. I use them for Java Spring Boot development, React, Next.js and other full-stack projects.",
         },
       ],
     },
