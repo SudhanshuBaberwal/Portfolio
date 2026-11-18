@@ -1,80 +1,215 @@
+
 // Projects data for Projects section and All Projects page
 
 export const PROJECTS = [
   {
     id: "01",
     featured: true,
-    title: "Distributed Car Rental Platform",
-    year: "2024", // TODO: verify project year
-    tags: ["Java", "Spring", "PostgreSQL", "Redis"],
-    tech: ["Java 17", "Spring Boot", "PostgreSQL", "Redis", "Distributed Locking", "REST APIs"], // TODO: verify full tech stack
+    title: "Car Rental Platform",
+    year: "",
+    tags: ["MERN Stack", "MongoDB", "Node.js", "ImageKit"],
+    tech: ["MongoDB", "Express.js", "React", "Node.js", "Mongoose", "Multer", "ImageKit", "REST APIs"],
     problem:
-      "Preventing double-booking and inventory inconsistencies when multiple concurrent users attempt to reserve the same vehicle simultaneously during peak demand.", // TODO: verify problem statement
+      "Building a full-stack car rental application that allows users to explore vehicles and manage rental-related operations through a responsive interface and backend APIs.",
     built: [
-      "Designed distributed concurrency control using Redis locks to eliminate race conditions on car inventory.", // TODO: verify implementation details
-      "Implemented transactional reservation workflows backed by PostgreSQL with ACID compliance.",
-      "Developed stateless REST APIs for vehicle catalog browsing, pricing calculation, and booking lifecycle management.",
+      "Developed a full-stack application using React, Node.js and Express.js with MongoDB for persistent data storage.",
+      "Implemented backend APIs and MongoDB models using Mongoose to manage application data and rental-related operations.",
+      "Integrated ImageKit with Multer for vehicle image uploads and image URL management.",
+      "Connected frontend forms with backend APIs using multipart form data and handled file upload and API integration issues.",
     ],
-    image: "/951a996c-3aff-4101-8138-ba1400a59248 (1).png", // TODO: verify screenshot asset
+    image: "/951a996c-3aff-4101-8138-ba1400a59248 (1).png",
     github: "https://github.com/SudhanshuBaberwal/Car-Rental-Project",
-    live: "", // TODO: verify if live deployment exists
-    result: "", // Left intentionally empty
+    live: "",
+    result: "",
   },
   {
     id: "02",
     featured: true,
-    title: "Chatify",
-    year: "2024", // TODO: verify project year
-    tags: ["WebSockets", "Redis Pub/Sub", "Spring"],
-    tech: ["Java", "Spring Boot", "STOMP / WebSockets", "Redis Pub/Sub", "Spring Security"], // TODO: verify full tech stack
+    title: "KrishiMitra AI",
+    year: "2026",
+    tags: ["Java", "Spring Boot", "Microservices", "Gemini AI"],
+    tech: ["Java 21", "Spring Boot", "MongoDB", "PostgreSQL", "Spring Security", "JWT", "DTOs", "Gemini API", "REST APIs"],
     problem:
-      "Delivering real-time messages reliably across horizontally scaled backend nodes without duplicate delivery or dropped connections.", // TODO: verify problem statement
+      "Building an intelligent agricultural advisory system that provides farmers with a digital platform for profile management, secure authentication and AI-powered agricultural assistance.",
     built: [
-      "Engineered a WebSocket communication layer using STOMP protocol for low-latency bidirectional messaging.", // TODO: verify implementation details
-      "Integrated Redis Pub/Sub message broker to synchronize chat rooms across multiple running application instances.",
-      "Implemented secure connection handshakes, user authentication, and message persistence schemas.",
+      "Designed a modular Spring Boot backend architecture for an intelligent agricultural advisory application.",
+      "Implemented authentication and authorization using Spring Security, JWT authentication filters and custom user details services.",
+      "Developed a Farmer Profile module with create, retrieve and update operations using MongoDB repositories.",
+      "Used DTO-based request and response objects to separate API contracts from database entities.",
+      "Integrated MongoDB for farmer profile management and configured PostgreSQL for relational user-service data.",
+      "Integrated Gemini API configuration as the foundation for AI-powered agricultural advisory capabilities.",
     ],
-    image: "/chatify.jpg", // TODO: verify screenshot asset
-    github: "https://github.com/SudhanshuBaberwal/Chatify",
-    live: "", // TODO: verify if live deployment exists
-    result: "", // Left intentionally empty
+    image: "",
+    github: "https://github.com/SudhanshuBaberwal/KrishiMitra",
+    live: "",
+    result: "",
   },
   {
     id: "03",
     featured: true,
-    title: "Identity & Auth Engine",
-    year: "2024", // TODO: verify project year
-    tags: ["JWT", "Redis", "Spring Security"],
-    tech: ["Java", "Spring Security", "JWT (JSON Web Tokens)", "Redis", "TypeScript / Next.js"], // TODO: verify full tech stack
+    title: "AI Fitness Microservices",
+    year: "",
+    tags: ["Spring Boot", "Kafka", "Microservices"],
+    tech: ["Java", "Spring Boot", "Apache Kafka", "MongoDB", "PostgreSQL", "Spring Cloud Eureka", "REST APIs"],
     problem:
-      "Providing a centralized, reusable authentication and session service with stateless token verification and immediate session revocation.", // TODO: verify problem statement
+      "Developing a modular fitness application that separates user management, activity tracking and AI-powered recommendations into independent backend services.",
     built: [
-      "Built asymmetric JWT issuance and verification pipeline ensuring decoupled verification across dependent services.", // TODO: verify implementation details
-      "Utilized Redis as a token blocklist and active session store to enable instantaneous token revocation and logout.",
-      "Configured role-based access control (RBAC), refresh token rotation, and secure HTTP-only cookie handling.",
+      "Developed independent Spring Boot microservices for user management, activity tracking and AI-powered recommendations.",
+      "Integrated MongoDB for activity and AI recommendation data, with PostgreSQL for user-related data.",
+      "Implemented Apache Kafka event-driven communication using the activity-events topic to exchange activity information between services.",
+      "Integrated Netflix Eureka for service registration and discovery across microservices.",
+      "Designed REST API endpoints and service-layer components for managing fitness activities and recommendation workflows.",
     ],
-    image: "/auth-engine.jpg", // TODO: verify screenshot asset
-    github: "https://github.com/SudhanshuBaberwal/Auth-with_TSandNext",
-    live: "", // TODO: verify if live deployment exists
-    result: "", // Left intentionally empty
+    image: "",
+    github: "https://github.com/SudhanshuBaberwal/Fitness-App",
+    live: "",
+    result: "",
   },
   {
     id: "04",
     featured: false,
-    title: "IIIT-DWD Timetable Optimizer",
-    year: "2024", // TODO: verify project year
-    tags: ["Algorithms", "Java"],
-    tech: ["Java", "Constraint Satisfaction", "Backtracking / Heuristics", "Data Structures"], // TODO: verify full tech stack
+    title: "IIIT-DWD Automated Timetable System",
+    year: "",
+    tags: ["Python", "FastAPI", "React", "Automation"],
+    tech: ["Python", "FastAPI", "React", "Pandas", "OpenPyXL", "JavaScript", "JSON", "Excel Automation"],
     problem:
-      "Generating conflict-free academic timetables across multiple batches, faculty members, and limited classrooms while satisfying institutional constraints.", // TODO: verify problem statement
+      "Automating academic timetable generation for IIIT Dharwad while handling different academic semesters, branches, faculty schedules and classroom constraints.",
     built: [
-      "Formulated schedule allocation as a constraint satisfaction problem with hard constraints (no room or instructor clashes) and soft preferences.", // TODO: verify implementation details
-      "Developed an algorithmic backtracking engine with heuristic pruning to resolve dense schedule conflicts efficiently.",
-      "Structured data models for courses, student batches, faculty availability slots, and lecture hall capacities.",
+      "Developed a timetable generation system using Python to organize academic scheduling data and generate structured timetable outputs.",
+      "Implemented scheduling logic for different semesters and branches, including separate timetables for CSE, ECE and DSAI batches.",
+      "Used Pandas and OpenPyXL to process scheduling data and generate downloadable Excel timetable files.",
+      "Developed a FastAPI backend with an /api/generate endpoint to connect timetable generation functionality with the frontend.",
+      "Integrated a React frontend with the backend to trigger timetable generation and manage generated Excel outputs.",
     ],
-    image: "/timetable.jpg", // TODO: verify screenshot asset
+    image: "/timetable.jpg",
     github: "https://github.com/SudhanshuBaberwal/Automated-Time-Table-IIIT-DWD",
-    live: "", // TODO: verify if live deployment exists
-    result: "", // Left intentionally empty
+    live: "",
+    result: "",
   },
+  {
+    id: "05",
+    featured: true,
+    title: "Clutu-APP",
+    year: "",
+    tags: ["MERN Stack", "Social Media", "Full Stack"],
+    tech: ["MongoDB", "Express.js", "React", "Node.js", "Mongoose", "REST APIs"],
+    problem:
+      "Building a social media application that provides users with a platform to interact and manage social content through a full-stack web application.",
+    built: [
+      "Developed a social media application using the MERN stack.",
+      "Built React-based frontend components for the application's user interface.",
+      "Implemented Node.js and Express.js backend functionality for handling application requests.",
+      "Integrated MongoDB and Mongoose for persistent application data management.",
+    ],
+    image: "",
+    github: "",
+    live: "",
+    result: "",
+  },
+  {
+    id: "06",
+    featured: true,
+    title: "MultiCart E-Commerce",
+    year: "",
+    tags: ["E-Commerce", "Web Development", "Deployment"],
+    tech: ["React", "JavaScript", "HTML", "CSS", "Vercel"],
+    problem:
+      "Developing an online shopping platform with a user-friendly interface for browsing and interacting with e-commerce products.",
+    built: [
+      "Developed a web-based e-commerce application with a product-focused user interface.",
+      "Implemented frontend components to organize and display shopping-related content.",
+      "Worked on responsive layouts and user interface interactions.",
+      "Deployed the application using Vercel.",
+    ],
+    image: "",
+    github: "https://github.com/SudhanshuBaberwal/SwiftCart",
+    live: "https://multicart-e-commerce.vercel.app/",
+    result: "",
+  },
+  {
+    id: "07",
+    featured: true,
+    title: "True Feedback",
+    year: "",
+    tags: ["Next.js", "AI Integration", "MongoDB"],
+    tech: ["Next.js", "React", "TypeScript", "MongoDB", "NextAuth", "Groq API"],
+    problem:
+      "Building an AI-powered feedback platform that combines user authentication, database integration and generative AI capabilities in a modern web application.",
+    built: [
+      "Developed a full-stack application using Next.js and TypeScript.",
+      "Integrated MongoDB for storing and managing application data.",
+      "Implemented authentication functionality using NextAuth.",
+      "Integrated Groq API to incorporate AI-powered functionality into the application.",
+      "Built frontend components and connected them with application backend functionality.",
+    ],
+    image: "",
+    github: "https://github.com/SudhanshuBaberwal/MSTRYmessage",
+    live: "",
+    result: "",
+  },
+  {
+    id: "08",
+    featured: true,
+    title: "Cinematic 3D Portfolio",
+    year: "2026",
+    tags: ["Next.js", "Three.js", "GSAP", "3D Web Development"],
+    tech: ["Next.js", "TypeScript", "Tailwind CSS", "Three.js", "@react-three/fiber", "@react-three/drei", "GSAP", "Framer Motion"],
+    problem:
+      "Creating a distinctive developer portfolio that goes beyond traditional static layouts through immersive 3D environments, cinematic animations and interactive storytelling.",
+    built: [
+      "Developed a modern portfolio using Next.js App Router, TypeScript and Tailwind CSS.",
+      "Created procedural 3D ship and ocean environments using Three.js, React Three Fiber and Drei.",
+      "Implemented cinematic camera movements and scroll-based animations using GSAP and ScrollTrigger.",
+      "Integrated Framer Motion for interactive transitions and component animations.",
+      "Built reusable portfolio sections including Hero, About, Voyage, Events and project showcases.",
+      "Focused on responsive layouts, visual storytelling and immersive user experiences.",
+    ],
+    image: "",
+    github: "https://github.com/SudhanshuBaberwal/Portfolio",
+    live: "https://animatedportfolio-new.vercel.app/",
+    result: "",
+  },
+  {
+    id: "09",
+    featured: false,
+    title: "RescrapX",
+    year: "",
+    tags: ["Software Development", "System Architecture"],
+    tech: [],
+    problem:
+      "Exploring a software solution with a focus on application architecture and designing a structured foundation for development.",
+    built: [
+      "Worked on the project's initial concept and application architecture.",
+      "Explored architectural approaches for organizing application components and backend functionality.",
+    ],
+    image: "",
+    github: "https://github.com/SudhanshuBaberwal/RescrapX",
+    live: "www.rescrapX.com",
+    result: "",
+  },
+
+  {
+    id: "10",
+    featured: true,
+    title: "AVINYA 2027 - Cinematic Festival Landing Page",
+    year: "2026",
+    tags: ["Next.js", "GSAP", "Canvas Animation", "Hackathon"],
+    tech: ["Next.js", "React", "TypeScript", "Tailwind CSS", "GSAP", "ScrollTrigger", "HTML Canvas"],
+    problem:
+      "Creating an immersive landing page for AVINYA 2027, the techno-cultural festival of IIIT Dharwad, using cinematic visual storytelling and scroll-controlled animations instead of a conventional static festival website.",
+    built: [
+      "Developed a cinematic, hero-first landing page for AVINYA 2027, scheduled from 12–14 March 2027 at IIIT Dharwad.",
+      "Implemented a full-screen ship-and-ocean voyage experience using HTML Canvas and a sequence of 72 pre-rendered image frames.",
+      "Integrated GSAP and ScrollTrigger to synchronize animation frames with scroll progress, supporting forward and reverse scrolling.",
+      "Used a stabilized frame sequence generated through OpenCV feature matching, ORB, affine motion estimation and smoothing.",
+      "Designed festival identity and hero content around three themed islands: The Last Outpost, The Pandemonium and The Carnival Island.",
+      "Integrated Hack2Future, IIIT Dharwad's flagship national-level hackathon, into the hero experience through dedicated calls to action.",
+      "Built the application using Next.js App Router, React, TypeScript and Tailwind CSS with a focus on cinematic presentation and responsive layouts.",
+    ],
+    image: "",
+    github: "",
+    live: "",
+    result: "",
+  },
+
 ];
